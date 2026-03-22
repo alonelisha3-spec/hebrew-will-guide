@@ -1,7 +1,5 @@
 import { useState, useMemo } from "react";
 import { getLeads, type LeadData } from "@/lib/store";
-import { calculateResults } from "@/lib/resultsEngine";
-import { questions } from "@/lib/questions";
 import { ArrowRight, Trash2, Eye, EyeOff, Users, Phone, Mail, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
@@ -28,19 +26,6 @@ export default function AdminPage() {
     localStorage.setItem("will_check_leads", JSON.stringify(updated));
   }
 
-  function getQuestionLabel(id: string): string {
-    return questions.find((q) => q.id === id)?.text || id;
-  }
-
-  function getResultSummary(lead: LeadData) {
-    if (!lead.answers || Object.keys(lead.answers).length === 0) return null;
-    try {
-      return calculateResults(lead.answers);
-    } catch {
-      return null;
-    }
-  }
-
   if (leads.length === 0) {
     return (
       <>
@@ -49,14 +34,9 @@ export default function AdminPage() {
           <Users className="w-16 h-16 text-muted-foreground/20" />
           <div className="text-center">
             <h1 className="text-2xl font-bold mb-2">אין לידים במערכת</h1>
-            <p className="text-muted-foreground text-sm">
-              לידים יופיעו כאן לאחר שמשתמשים ישלימו את הבדיקה.
-            </p>
+            <p className="text-muted-foreground text-sm">לידים יופיעו כאן לאחר שמשתמשים ישלימו את התהליך.</p>
           </div>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
-          >
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-primary hover:underline">
             <ArrowRight className="w-4 h-4" />
             חזרה לדף הראשי
           </Link>
@@ -70,24 +50,17 @@ export default function AdminPage() {
       <Header />
       <div className="min-h-screen py-8">
         <div className="container max-w-4xl px-4 md:px-6">
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-xl md:text-2xl font-bold">ניהול לידים</h1>
-              <p className="text-sm text-muted-foreground mt-1">
-                {leads.length} פניות סה״כ
-              </p>
+              <p className="text-sm text-muted-foreground mt-1">{leads.length} פניות סה״כ</p>
             </div>
-            <Link
-              to="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-            >
+            <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
               <ArrowRight className="w-4 h-4" />
               חזרה
             </Link>
           </div>
 
-          {/* Search */}
           <div className="mb-6">
             <input
               type="text"
@@ -98,19 +71,14 @@ export default function AdminPage() {
             />
           </div>
 
-          {/* Leads */}
           <div className="space-y-3">
             {filteredLeads.map((lead, index) => {
               const originalIndex = leads.indexOf(lead);
               const isExpanded = expandedId === originalIndex;
-              const result = getResultSummary(lead);
               const date = new Date(lead.timestamp);
 
               return (
-                <div
-                  key={originalIndex}
-                  className="bg-card rounded-xl border border-border/50 shadow-sm overflow-hidden transition-shadow hover:shadow-md"
-                >
+                <div key={originalIndex} className="bg-card rounded-xl border border-border/50 shadow-sm overflow-hidden transition-shadow hover:shadow-md">
                   <div
                     className="p-4 md:p-5 flex items-center justify-between cursor-pointer"
                     onClick={() => setExpandedId(isExpanded ? null : originalIndex)}
@@ -135,75 +103,34 @@ export default function AdminPage() {
                         </div>
                       </div>
                     </div>
-
                     <div className="flex items-center gap-2 md:gap-3 shrink-0">
-                      {result && (
-                        <span className="text-xs px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium hidden sm:inline-block">
-                          {result.willType}
-                        </span>
-                      )}
                       <span className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Clock className="w-3 h-3" />
                         {date.toLocaleDateString("he-IL")}
                       </span>
-                      {isExpanded ? (
-                        <EyeOff className="w-4 h-4 text-muted-foreground" />
-                      ) : (
-                        <Eye className="w-4 h-4 text-muted-foreground" />
-                      )}
+                      {isExpanded ? <EyeOff className="w-4 h-4 text-muted-foreground" /> : <Eye className="w-4 h-4 text-muted-foreground" />}
                     </div>
                   </div>
 
                   {isExpanded && (
                     <div className="border-t border-border/30 px-4 md:px-5 py-5 bg-secondary/20 space-y-5 animate-fade-in">
-                      {result && (
-                        <div className="space-y-2">
-                          <h3 className="text-sm font-bold">תוצאות הבדיקה</h3>
-                          <div className="flex flex-wrap gap-2 text-xs">
-                            <span className="px-2.5 py-1 rounded-full bg-primary/10 text-primary font-medium">
-                              {result.willType}
-                            </span>
-                            <span className="px-2.5 py-1 rounded-full bg-risk-medium/15 text-risk-medium font-medium">
-                              רמת סיכון: {result.riskLevel}
-                            </span>
-                          </div>
-                          {result.riskItems.length > 0 && (
-                            <ul className="mt-2 space-y-1">
-                              {result.riskItems.map((item, i) => (
-                                <li key={i} className="text-xs text-muted-foreground flex items-start gap-2">
-                                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                                  {item}
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-                        </div>
-                      )}
-
                       {lead.answers && Object.keys(lead.answers).length > 0 && (
                         <div className="space-y-2">
-                          <h3 className="text-sm font-bold">תשובות השאלון</h3>
+                          <h3 className="text-sm font-bold">תשובות</h3>
                           <div className="grid gap-2">
                             {Object.entries(lead.answers).map(([key, value]) => (
                               <div key={key} className="flex justify-between items-start gap-4 text-xs">
-                                <span className="text-muted-foreground">{getQuestionLabel(key)}</span>
+                                <span className="text-muted-foreground">{key}</span>
                                 <span className="font-medium shrink-0">{value}</span>
                               </div>
                             ))}
                           </div>
                         </div>
                       )}
-
                       <div className="flex items-center justify-between pt-2 border-t border-border/30">
-                        <span className="text-xs text-muted-foreground">
-                          {date.toLocaleString("he-IL")}
-                        </span>
+                        <span className="text-xs text-muted-foreground">{date.toLocaleString("he-IL")}</span>
                         <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            deleteLead(originalIndex);
-                            setExpandedId(null);
-                          }}
+                          onClick={(e) => { e.stopPropagation(); deleteLead(originalIndex); setExpandedId(null); }}
                           className="flex items-center gap-1.5 text-xs text-destructive hover:underline transition-colors"
                         >
                           <Trash2 className="w-3.5 h-3.5" />

@@ -1,5 +1,4 @@
 import { supabase } from "@/integrations/supabase/client";
-import type { ResultData } from "./resultsEngine";
 
 export interface LeadData {
   fullName: string;
@@ -9,11 +8,19 @@ export interface LeadData {
   timestamp: string;
 }
 
+export interface ResultDataForLead {
+  willType: string;
+  riskLevel: string;
+  headline: string;
+  riskItems: string[];
+  fullDraft?: string;
+}
+
 const STORAGE_KEY = "will_check_leads";
 
 export async function saveLead(
   lead: LeadData,
-  result?: ResultData
+  result?: ResultDataForLead
 ): Promise<{ success: boolean; error?: string }> {
   // Save locally as backup
   try {
@@ -26,7 +33,7 @@ export async function saveLead(
 
   // Send to backend
   try {
-    const { data, error } = await supabase.functions.invoke("notify-lead", {
+    const { error } = await supabase.functions.invoke("notify-lead", {
       body: {
         fullName: lead.fullName,
         phone: lead.phone,
@@ -35,6 +42,7 @@ export async function saveLead(
         willType: result?.willType,
         riskLevel: result?.riskLevel,
         riskItems: result?.riskItems,
+        fullDraft: result?.fullDraft,
       },
     });
 

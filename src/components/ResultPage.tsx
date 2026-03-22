@@ -1,40 +1,52 @@
 import { useState } from "react";
-import { ResultData } from "@/lib/resultsEngine";
-import { AlertTriangle, CheckCircle, Info, XCircle, Mail, Phone } from "lucide-react";
+import { Download, Phone, Mail, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface Props {
-  result: ResultData;
+  mode: "draft" | "review";
+  willType: string;
+  fullDraft?: string;
+  reviewHeadline?: string;
+  reviewIssues?: string[];
+  reviewRiskLevel?: string;
+  leadName: string;
+  leadPhone: string;
   leadEmail?: string;
-  leadName?: string;
-  leadPhone?: string;
 }
 
-const riskConfig = {
-  "נמוכה": { color: "text-risk-low", bg: "bg-risk-low/10", border: "border-risk-low/30", icon: CheckCircle },
-  "בינונית": { color: "text-risk-medium", bg: "bg-risk-medium/10", border: "border-risk-medium/30", icon: Info },
-  "גבוהה": { color: "text-risk-high", bg: "bg-risk-high/10", border: "border-risk-high/30", icon: AlertTriangle },
-  "גבוהה מאוד": { color: "text-risk-critical", bg: "bg-risk-critical/10", border: "border-risk-critical/30", icon: XCircle },
-};
-
-export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
-  const config = riskConfig[result.riskLevel];
-  const RiskIcon = config.icon;
-
+export function ResultPage({
+  mode,
+  willType,
+  fullDraft,
+  reviewHeadline,
+  reviewIssues,
+  reviewRiskLevel,
+  leadName,
+  leadPhone,
+  leadEmail,
+}: Props) {
   const [showCallbackForm, setShowCallbackForm] = useState(false);
-  const [cbName, setCbName] = useState(leadName || "");
-  const [cbPhone, setCbPhone] = useState(leadPhone || "");
   const [cbSubmitted, setCbSubmitted] = useState(false);
   const [cbSubmitting, setCbSubmitting] = useState(false);
+  const [cbName, setCbName] = useState(leadName);
+  const [cbPhone, setCbPhone] = useState(leadPhone);
 
-  const [emailInput, setEmailInput] = useState(leadEmail || "");
-  const [emailSent, setEmailSent] = useState(false);
+  function handleDownload() {
+    if (!fullDraft) return;
+    const blob = new Blob([fullDraft], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   async function handleCallbackSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!cbName.trim() || !cbPhone.trim()) {
-      toast.error("נא למלא שם מלא וטלפון");
+      toast.error("נא למלא שם וטלפון");
       return;
     }
     setCbSubmitting(true);
@@ -44,82 +56,80 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
           fullName: cbName.trim(),
           phone: cbPhone.trim(),
           answers: {},
-          willType: result.willType,
-          riskLevel: result.riskLevel,
-          riskItems: result.riskItems,
+          willType,
+          riskLevel: reviewRiskLevel || "",
+          riskItems: reviewIssues || [],
         },
       });
       setCbSubmitted(true);
       toast.success("הפרטים התקבלו — ניצור קשר בהקדם.");
     } catch {
-      toast.error("שגיאה בשליחת הפרטים. נסו שוב.");
+      toast.error("שגיאה בשליחת הפרטים.");
     }
     setCbSubmitting(false);
-  }
-
-  function handleSendEmail(e: React.FormEvent) {
-    e.preventDefault();
-    if (!emailInput.trim()) {
-      toast.error("נא להזין כתובת דוא״ל");
-      return;
-    }
-    const subject = encodeURIComponent(`סיכום בדיקת צוואה | משרד עו"ד אלון אלישע`);
-    const body = encodeURIComponent(
-      `שלום,\n\nלהלן סיכום הבדיקה שבוצעה באתר משרד עו"ד אלון אלישע:\n\nסוג הבדיקה: ${result.willType}\nרמת סיכון: ${result.riskLevel}\n\n${result.headline}\n\n${result.explanation || ""}\n\nנושאים מרכזיים שעלו:\n${result.riskItems.map(item => `• ${item}`).join("\n")}\n\nהמשמעות המעשית:\nצוואה שאינה מותאמת למצב המשפחתי, לנכסים ולסיכונים הקיימים — עלולה ליצור מחלוקות בין יורשים, לעכב את חלוקת העיזבון או להביא לתוצאה שאינה תואמת את רצון המצווה.\n\nלתיאום פגישת ייעוץ: 054-9260698\n\n---\nמידע זה הינו כללי בלבד ואינו מהווה ייעוץ משפטי.\nמשרד עו"ד אלון אלישע | elisha-law.com`
-    );
-    window.open(`mailto:${emailInput}?subject=${subject}&body=${body}`, "_blank");
-    setEmailSent(true);
-    toast.success("נפתח חלון שליחת דוא״ל");
   }
 
   return (
     <div className="min-h-screen py-10 md:py-14 bg-background">
       <div className="container max-w-2xl space-y-6 md:space-y-8 px-4 md:px-6">
-        {/* Main result */}
+        {/* Header card */}
         <div className="bg-card rounded-xl border border-border shadow-md p-6 md:p-8 animate-slide-up">
-          <div className="flex items-start gap-4 mb-6">
-            <div className={`p-2.5 rounded-lg ${config.bg} ${config.border} border shrink-0`}>
-              <RiskIcon className={`w-6 h-6 ${config.color}`} />
-            </div>
-            <div>
-              <p className="text-xs text-muted-foreground mb-0.5">סוג הבדיקה</p>
-              <p className="font-semibold text-foreground">{result.willType}</p>
-            </div>
-          </div>
-
-          <h1 className="text-xl md:text-2xl font-bold leading-relaxed mb-4 text-foreground" style={{ lineHeight: 1.5 }}>
-            {result.headline}
+          <div className="gold-line mx-auto mb-6" />
+          <h1 className="text-xl md:text-2xl font-bold text-center mb-4 text-foreground" style={{ lineHeight: 1.5 }}>
+            {mode === "draft" ? "טיוטת צוואה ראשונית" : reviewHeadline}
           </h1>
 
-          <div className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${config.bg} ${config.color} border ${config.border}`}>
-            רמת סיכון: {result.riskLevel}
+          <div className="bg-secondary/50 rounded-lg p-4 mb-4">
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-muted-foreground">סוג צוואה:</span>
+              <span className="font-bold text-foreground">{willType}</span>
+            </div>
+            {reviewRiskLevel && (
+              <div className="flex justify-between items-center mt-2">
+                <span className="text-sm text-muted-foreground">רמת סיכון:</span>
+                <span className="font-bold text-foreground">{reviewRiskLevel}</span>
+              </div>
+            )}
           </div>
 
-          {result.explanation && (
-            <p className="mt-6 text-muted-foreground leading-relaxed text-sm">
-              {result.explanation}
+          {mode === "draft" && (
+            <p className="text-sm text-muted-foreground leading-relaxed text-center">
+              על בסיס התשובות שמסרת, נוצרה טיוטת צוואה ראשונית. לפני חתימה יש לבצע
+              בדיקה והתאמה משפטית מול עורך דין.
             </p>
           )}
         </div>
 
-        {/* Risk items */}
-        {result.riskItems.length > 0 && (
+        {/* Draft content */}
+        {mode === "draft" && fullDraft && (
+          <div
+            className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
+            style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+          >
+            <pre
+              className="whitespace-pre-wrap text-sm leading-relaxed text-foreground font-heebo"
+              dir="rtl"
+              style={{ fontFamily: "inherit" }}
+            >
+              {fullDraft}
+            </pre>
+          </div>
+        )}
+
+        {/* Review issues */}
+        {mode === "review" && reviewIssues && reviewIssues.length > 0 && (
           <div
             className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
             style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
           >
             <h2 className="text-base md:text-lg font-bold mb-5 text-foreground">
-              הנושאים העיקריים שזוהו בבדיקה
+              הנושאים שזוהו בבדיקה
             </h2>
             <ul className="space-y-3">
-              {result.riskItems.map((item, i) => (
+              {reviewIssues.map((item, i) => (
                 <li
                   key={i}
-                  className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground animate-slide-right"
-                  style={{
-                    animationDelay: `${200 + i * 60}ms`,
-                    animationFillMode: "backwards",
-                  }}
+                  className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
                 >
                   <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 bg-primary" />
                   {item}
@@ -129,10 +139,26 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
           </div>
         )}
 
+        {/* Download button (draft mode only) */}
+        {mode === "draft" && fullDraft && (
+          <div
+            className="animate-slide-up"
+            style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
+          >
+            <button
+              onClick={handleDownload}
+              className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] flex items-center justify-center gap-2"
+            >
+              <Download className="w-4 h-4" />
+              הורד טיוטת צוואה
+            </button>
+          </div>
+        )}
+
         {/* Practical meaning */}
         <div
           className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
-          style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
+          style={{ animationDelay: "250ms", animationFillMode: "backwards" }}
         >
           <h2 className="text-base md:text-lg font-bold mb-3 text-foreground">המשמעות המעשית</h2>
           <p className="text-muted-foreground leading-relaxed text-sm">
@@ -141,40 +167,6 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
             תואמת את רצון המצווה. בחינה מקצועית יכולה לזהות פערים אלה ולהתאים את
             ההסדר לנסיבות בפועל.
           </p>
-        </div>
-
-        {/* Email results */}
-        <div
-          className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
-          style={{ animationDelay: "250ms", animationFillMode: "backwards" }}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <Mail className="w-4 h-4 text-primary" />
-            <h2 className="text-base font-bold text-foreground">שליחת הסיכום לדוא״ל</h2>
-          </div>
-          {emailSent ? (
-            <p className="text-sm text-muted-foreground">
-              ✓ חלון שליחת הדוא״ל נפתח בהצלחה.
-            </p>
-          ) : (
-            <form onSubmit={handleSendEmail} className="flex gap-3">
-              <input
-                type="email"
-                value={emailInput}
-                onChange={(e) => setEmailInput(e.target.value)}
-                placeholder="כתובת דוא״ל"
-                dir="ltr"
-                className="flex-1 rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
-                maxLength={255}
-              />
-              <button
-                type="submit"
-                className="rounded-lg bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-all duration-200 hover:brightness-110 active:scale-[0.97] shrink-0"
-              >
-                שליחה
-              </button>
-            </form>
-          )}
         </div>
 
         {/* CTA callback */}
@@ -187,8 +179,7 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
             מעוניינים בבחינה משפטית מקצועית?
           </h2>
           <p className="text-sm text-accent-foreground/60 mb-6 leading-relaxed max-w-md mx-auto">
-            השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית — ללא התחייבות — לבחינת
-            התאמת הצוואה למצבכם.
+            השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית — ללא התחייבות.
           </p>
 
           {cbSubmitted ? (
@@ -206,29 +197,23 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
             </button>
           ) : (
             <form onSubmit={handleCallbackSubmit} className="max-w-sm mx-auto space-y-4 text-right">
-              <div>
-                <label className="block text-sm font-medium mb-1.5 text-accent-foreground">שם מלא</label>
-                <input
-                  type="text"
-                  value={cbName}
-                  onChange={(e) => setCbName(e.target.value)}
-                  className="w-full rounded-lg border border-accent-foreground/20 bg-accent-foreground/5 px-4 py-3 text-sm text-accent-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-accent-foreground/30"
-                  placeholder="שם פרטי ומשפחה"
-                  maxLength={100}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1.5 text-accent-foreground">טלפון</label>
-                <input
-                  type="tel"
-                  value={cbPhone}
-                  onChange={(e) => setCbPhone(e.target.value)}
-                  className="w-full rounded-lg border border-accent-foreground/20 bg-accent-foreground/5 px-4 py-3 text-sm text-accent-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-accent-foreground/30"
-                  placeholder="050-0000000"
-                  dir="ltr"
-                  maxLength={15}
-                />
-              </div>
+              <input
+                type="text"
+                value={cbName}
+                onChange={(e) => setCbName(e.target.value)}
+                className="w-full rounded-lg border border-accent-foreground/20 bg-accent-foreground/5 px-4 py-3 text-sm text-accent-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all placeholder:text-accent-foreground/30"
+                placeholder="שם מלא"
+                maxLength={100}
+              />
+              <input
+                type="tel"
+                value={cbPhone}
+                onChange={(e) => setCbPhone(e.target.value)}
+                className="w-full rounded-lg border border-accent-foreground/20 bg-accent-foreground/5 px-4 py-3 text-sm text-accent-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all placeholder:text-accent-foreground/30"
+                placeholder="050-0000000"
+                dir="ltr"
+                maxLength={15}
+              />
               <button
                 type="submit"
                 disabled={cbSubmitting}
