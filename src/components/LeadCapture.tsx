@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { saveLead } from "@/lib/store";
+import { calculateResults } from "@/lib/resultsEngine";
 
 interface Props {
   answers: Record<string, string>;
@@ -27,27 +28,31 @@ export function LeadCapture({ answers, onSubmit }: Props) {
     return Object.keys(errs).length === 0;
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!validate()) return;
 
     setSubmitting(true);
-    saveLead({
-      fullName: fullName.trim(),
-      phone: phone.trim(),
-      email: email.trim() || undefined,
-      answers,
-      timestamp: new Date().toISOString(),
-    });
 
-    setTimeout(() => {
-      setSubmitting(false);
-      onSubmit({
-        name: fullName.trim(),
+    const result = calculateResults(answers);
+
+    await saveLead(
+      {
+        fullName: fullName.trim(),
         phone: phone.trim(),
         email: email.trim() || undefined,
-      });
-    }, 400);
+        answers,
+        timestamp: new Date().toISOString(),
+      },
+      result
+    );
+
+    setSubmitting(false);
+    onSubmit({
+      name: fullName.trim(),
+      phone: phone.trim(),
+      email: email.trim() || undefined,
+    });
   }
 
   return (

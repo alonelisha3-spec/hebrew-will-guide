@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ResultData } from "@/lib/resultsEngine";
 import { AlertTriangle, CheckCircle, Info, XCircle, Mail, Phone } from "lucide-react";
-import { saveLead } from "@/lib/store";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 interface Props {
@@ -26,24 +26,35 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
   const [cbName, setCbName] = useState(leadName || "");
   const [cbPhone, setCbPhone] = useState(leadPhone || "");
   const [cbSubmitted, setCbSubmitted] = useState(false);
+  const [cbSubmitting, setCbSubmitting] = useState(false);
 
   const [emailInput, setEmailInput] = useState(leadEmail || "");
   const [emailSent, setEmailSent] = useState(false);
 
-  function handleCallbackSubmit(e: React.FormEvent) {
+  async function handleCallbackSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!cbName.trim() || !cbPhone.trim()) {
       toast.error("נא למלא שם מלא וטלפון");
       return;
     }
-    saveLead({
-      fullName: cbName.trim(),
-      phone: cbPhone.trim(),
-      answers: {},
-      timestamp: new Date().toISOString(),
-    });
-    setCbSubmitted(true);
-    toast.success("הפרטים התקבלו — ניצור קשר בהקדם.");
+    setCbSubmitting(true);
+    try {
+      await supabase.functions.invoke("notify-lead", {
+        body: {
+          fullName: cbName.trim(),
+          phone: cbPhone.trim(),
+          answers: {},
+          willType: result.willType,
+          riskLevel: result.riskLevel,
+          riskItems: result.riskItems,
+        },
+      });
+      setCbSubmitted(true);
+      toast.success("הפרטים התקבלו — ניצור קשר בהקדם.");
+    } catch {
+      toast.error("שגיאה בשליחת הפרטים. נסו שוב.");
+    }
+    setCbSubmitting(false);
   }
 
   function handleSendEmail(e: React.FormEvent) {
@@ -138,7 +149,7 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
           style={{ animationDelay: "250ms", animationFillMode: "backwards" }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <Mail className="w-4.5 h-4.5 text-primary" />
+            <Mail className="w-4 h-4 text-primary" />
             <h2 className="text-base font-bold">שליחת הסיכום לדוא״ל</h2>
           </div>
           {emailSent ? (
@@ -190,7 +201,7 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
               onClick={() => setShowCallbackForm(true)}
               className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.97]"
             >
-              <Phone className="w-4.5 h-4.5" />
+              <Phone className="w-4 h-4" />
               בקשת שיחה מהמשרד
             </button>
           ) : (
@@ -220,9 +231,10 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
               </div>
               <button
                 type="submit"
-                className="w-full rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all duration-200 hover:brightness-110 active:scale-[0.97]"
+                disabled={cbSubmitting}
+                className="w-full rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all duration-200 hover:brightness-110 active:scale-[0.97] disabled:opacity-60"
               >
-                שליחת פרטים
+                {cbSubmitting ? "שולח..." : "שליחת פרטים"}
               </button>
             </form>
           )}
