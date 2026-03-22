@@ -33,9 +33,9 @@ export function Questionnaire({ onComplete }: Props) {
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-background">
       {/* Progress */}
-      <div className="sticky top-0 bg-background/95 backdrop-blur-sm border-b border-border/50 z-10">
+      <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-border z-10">
         <div className="container py-4 px-4 md:px-6">
           <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
             <span>שאלה {step + 1} מתוך {totalSteps}</span>
@@ -54,7 +54,7 @@ export function Questionnaire({ onComplete }: Props) {
       <div className="flex-1 flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-xl" key={step}>
           <h2
-            className="text-xl md:text-2xl font-bold text-center mb-10 animate-slide-up"
+            className="text-xl md:text-2xl font-bold text-center mb-10 text-foreground animate-slide-up"
             style={{ lineHeight: 1.5 }}
           >
             {question.text}
@@ -68,7 +68,7 @@ export function Questionnaire({ onComplete }: Props) {
                 className={`w-full text-right rounded-lg border px-5 py-4 text-sm md:text-base font-medium transition-all duration-200 active:scale-[0.98] animate-slide-up ${
                   currentAnswer === option
                     ? "border-primary bg-primary/10 shadow-sm text-foreground"
-                    : "border-border/60 bg-card hover:border-primary/40 hover:bg-card/80"
+                    : "border-border bg-card hover:border-primary/40 hover:shadow-sm text-foreground"
                 }`}
                 style={{
                   animationDelay: `${80 + i * 60}ms`,
@@ -83,7 +83,7 @@ export function Questionnaire({ onComplete }: Props) {
       </div>
 
       {/* Navigation */}
-      <div className="border-t border-border/50 bg-background">
+      <div className="border-t border-border bg-white">
         <div className="container py-4 px-4 md:px-6 flex justify-between items-center">
           <button
             onClick={goBack}

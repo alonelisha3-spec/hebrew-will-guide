@@ -4,51 +4,51 @@
 
 @layer base {
   :root {
-    /* Premium law firm palette inspired by elisha-law.com */
-    --background: 216 25% 13%;
-    --foreground: 40 20% 92%;
+    /* Light premium law firm — inspired by EA branding: deep navy + gold */
+    --background: 0 0% 98%;
+    --foreground: 216 30% 18%;
 
-    --card: 216 22% 16%;
-    --card-foreground: 40 20% 92%;
+    --card: 0 0% 100%;
+    --card-foreground: 216 30% 18%;
 
-    --popover: 216 22% 16%;
-    --popover-foreground: 40 20% 92%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 216 30% 18%;
 
-    --primary: 38 42% 60%;
-    --primary-foreground: 216 25% 10%;
+    --primary: 38 50% 58%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 216 18% 20%;
-    --secondary-foreground: 40 20% 88%;
+    --secondary: 216 20% 95%;
+    --secondary-foreground: 216 30% 18%;
 
-    --muted: 216 15% 22%;
-    --muted-foreground: 216 10% 58%;
+    --muted: 216 15% 93%;
+    --muted-foreground: 216 10% 46%;
 
-    --accent: 38 42% 60%;
-    --accent-foreground: 216 25% 10%;
+    --accent: 216 35% 22%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 62% 50%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 216 15% 24%;
-    --input: 216 15% 24%;
-    --ring: 38 42% 60%;
+    --border: 216 15% 88%;
+    --input: 216 15% 88%;
+    --ring: 38 50% 58%;
 
     --radius: 0.5rem;
 
     /* Risk levels */
-    --risk-low: 155 50% 45%;
-    --risk-medium: 38 55% 55%;
-    --risk-high: 20 70% 52%;
-    --risk-critical: 0 65% 50%;
+    --risk-low: 155 50% 40%;
+    --risk-medium: 38 60% 48%;
+    --risk-high: 20 70% 48%;
+    --risk-critical: 0 65% 48%;
 
-    --sidebar-background: 216 25% 11%;
-    --sidebar-foreground: 40 20% 88%;
-    --sidebar-primary: 38 42% 60%;
-    --sidebar-primary-foreground: 216 25% 10%;
-    --sidebar-accent: 216 18% 20%;
+    --sidebar-background: 216 30% 16%;
+    --sidebar-foreground: 40 20% 92%;
+    --sidebar-primary: 38 50% 58%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 216 18% 22%;
     --sidebar-accent-foreground: 40 20% 88%;
     --sidebar-border: 216 15% 24%;
-    --sidebar-ring: 38 42% 60%;
+    --sidebar-ring: 38 50% 58%;
   }
 }
 
@@ -90,7 +90,8 @@
   }
 
   .gold-line {
-    @apply w-16 h-0.5 bg-primary;
+    @apply w-16 h-0.5;
+    background: hsl(var(--primary));
   }
 }
 

@@ -12,10 +12,10 @@ interface Props {
 }
 
 const riskConfig = {
-  "נמוכה": { color: "text-risk-low", bg: "bg-risk-low/15", icon: CheckCircle },
-  "בינונית": { color: "text-risk-medium", bg: "bg-risk-medium/15", icon: Info },
-  "גבוהה": { color: "text-risk-high", bg: "bg-risk-high/15", icon: AlertTriangle },
-  "גבוהה מאוד": { color: "text-risk-critical", bg: "bg-risk-critical/15", icon: XCircle },
+  "נמוכה": { color: "text-risk-low", bg: "bg-risk-low/10", border: "border-risk-low/30", icon: CheckCircle },
+  "בינונית": { color: "text-risk-medium", bg: "bg-risk-medium/10", border: "border-risk-medium/30", icon: Info },
+  "גבוהה": { color: "text-risk-high", bg: "bg-risk-high/10", border: "border-risk-high/30", icon: AlertTriangle },
+  "גבוהה מאוד": { color: "text-risk-critical", bg: "bg-risk-critical/10", border: "border-risk-critical/30", icon: XCircle },
 };
 
 export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
@@ -73,25 +73,25 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
   }
 
   return (
-    <div className="min-h-screen py-10 md:py-14">
+    <div className="min-h-screen py-10 md:py-14 bg-background">
       <div className="container max-w-2xl space-y-6 md:space-y-8 px-4 md:px-6">
         {/* Main result */}
-        <div className="bg-card rounded-xl border border-border/50 shadow-lg p-6 md:p-8 animate-slide-up">
+        <div className="bg-card rounded-xl border border-border shadow-md p-6 md:p-8 animate-slide-up">
           <div className="flex items-start gap-4 mb-6">
-            <div className={`p-2.5 rounded-lg ${config.bg} shrink-0`}>
+            <div className={`p-2.5 rounded-lg ${config.bg} ${config.border} border shrink-0`}>
               <RiskIcon className={`w-6 h-6 ${config.color}`} />
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-0.5">סוג הבדיקה</p>
-              <p className="font-semibold">{result.willType}</p>
+              <p className="font-semibold text-foreground">{result.willType}</p>
             </div>
           </div>
 
-          <h1 className="text-xl md:text-2xl font-bold leading-relaxed mb-4" style={{ lineHeight: 1.5 }}>
+          <h1 className="text-xl md:text-2xl font-bold leading-relaxed mb-4 text-foreground" style={{ lineHeight: 1.5 }}>
             {result.headline}
           </h1>
 
-          <div className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${config.bg} ${config.color}`}>
+          <div className={`inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm font-medium ${config.bg} ${config.color} border ${config.border}`}>
             רמת סיכון: {result.riskLevel}
           </div>
 
@@ -105,10 +105,10 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
         {/* Risk items */}
         {result.riskItems.length > 0 && (
           <div
-            className="bg-card rounded-xl border border-border/50 shadow-sm p-6 md:p-8 animate-slide-up"
+            className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
             style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
           >
-            <h2 className="text-base md:text-lg font-bold mb-5">
+            <h2 className="text-base md:text-lg font-bold mb-5 text-foreground">
               הנושאים העיקריים שזוהו בבדיקה
             </h2>
             <ul className="space-y-3">
@@ -131,10 +131,10 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
 
         {/* Practical meaning */}
         <div
-          className="bg-card rounded-xl border border-border/50 shadow-sm p-6 md:p-8 animate-slide-up"
+          className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
           style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
         >
-          <h2 className="text-base md:text-lg font-bold mb-3">המשמעות המעשית</h2>
+          <h2 className="text-base md:text-lg font-bold mb-3 text-foreground">המשמעות המעשית</h2>
           <p className="text-muted-foreground leading-relaxed text-sm">
             צוואה שאינה מותאמת למצב המשפחתי, לנכסים ולסיכונים הקיימים — עלולה
             ליצור מחלוקות בין יורשים, לעכב את חלוקת העיזבון או להביא לתוצאה שאינה
@@ -145,12 +145,12 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
 
         {/* Email results */}
         <div
-          className="bg-card rounded-xl border border-border/50 shadow-sm p-6 md:p-8 animate-slide-up"
+          className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
           style={{ animationDelay: "250ms", animationFillMode: "backwards" }}
         >
           <div className="flex items-center gap-3 mb-4">
             <Mail className="w-4 h-4 text-primary" />
-            <h2 className="text-base font-bold">שליחת הסיכום לדוא״ל</h2>
+            <h2 className="text-base font-bold text-foreground">שליחת הסיכום לדוא״ל</h2>
           </div>
           {emailSent ? (
             <p className="text-sm text-muted-foreground">
@@ -164,7 +164,7 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
                 onChange={(e) => setEmailInput(e.target.value)}
                 placeholder="כתובת דוא״ל"
                 dir="ltr"
-                className="flex-1 rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                className="flex-1 rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
                 maxLength={255}
               />
               <button
@@ -179,14 +179,14 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
 
         {/* CTA callback */}
         <div
-          className="bg-secondary/40 rounded-xl border border-primary/20 p-6 md:p-8 text-center animate-slide-up"
+          className="bg-accent rounded-xl border border-accent p-6 md:p-8 text-center animate-slide-up"
           style={{ animationDelay: "300ms", animationFillMode: "backwards" }}
         >
           <div className="gold-line mx-auto mb-5" />
-          <h2 className="text-lg md:text-xl font-bold mb-3">
+          <h2 className="text-lg md:text-xl font-bold mb-3 text-accent-foreground">
             מעוניינים בבחינה משפטית מקצועית?
           </h2>
-          <p className="text-sm text-muted-foreground mb-6 leading-relaxed max-w-md mx-auto">
+          <p className="text-sm text-accent-foreground/60 mb-6 leading-relaxed max-w-md mx-auto">
             השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית — ללא התחייבות — לבחינת
             התאמת הצוואה למצבכם.
           </p>
@@ -199,7 +199,7 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
           ) : !showCallbackForm ? (
             <button
               onClick={() => setShowCallbackForm(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.97]"
+              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.97]"
             >
               <Phone className="w-4 h-4" />
               בקשת שיחה מהמשרד
@@ -207,23 +207,23 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
           ) : (
             <form onSubmit={handleCallbackSubmit} className="max-w-sm mx-auto space-y-4 text-right">
               <div>
-                <label className="block text-sm font-medium mb-1.5">שם מלא</label>
+                <label className="block text-sm font-medium mb-1.5 text-accent-foreground">שם מלא</label>
                 <input
                   type="text"
                   value={cbName}
                   onChange={(e) => setCbName(e.target.value)}
-                  className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                  className="w-full rounded-lg border border-accent-foreground/20 bg-accent-foreground/5 px-4 py-3 text-sm text-accent-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-accent-foreground/30"
                   placeholder="שם פרטי ומשפחה"
                   maxLength={100}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1.5">טלפון</label>
+                <label className="block text-sm font-medium mb-1.5 text-accent-foreground">טלפון</label>
                 <input
                   type="tel"
                   value={cbPhone}
                   onChange={(e) => setCbPhone(e.target.value)}
-                  className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                  className="w-full rounded-lg border border-accent-foreground/20 bg-accent-foreground/5 px-4 py-3 text-sm text-accent-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-accent-foreground/30"
                   placeholder="050-0000000"
                   dir="ltr"
                   maxLength={15}
@@ -232,7 +232,7 @@ export function ResultPage({ result, leadEmail, leadName, leadPhone }: Props) {
               <button
                 type="submit"
                 disabled={cbSubmitting}
-                className="w-full rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all duration-200 hover:brightness-110 active:scale-[0.97] disabled:opacity-60"
+                className="w-full rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] disabled:opacity-60"
               >
                 {cbSubmitting ? "שולח..." : "שליחת פרטים"}
               </button>
