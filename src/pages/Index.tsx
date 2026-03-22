@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { LandingPage } from "@/components/LandingPage";
 import { Questionnaire } from "@/components/Questionnaire";
 import { LeadCapture } from "@/components/LeadCapture";
@@ -28,35 +30,43 @@ export default function Index() {
     const res = calculateResults(answers);
     setResult(res);
     setStep("results");
-    toast.success("הפרטים נקלטו בהצלחה. ניתן לעיין בתוצאה כעת.");
+    toast.success("הפרטים נקלטו בהצלחה.");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  if (step === "questionnaire") {
-    return <Questionnaire onComplete={handleQuestionnaireComplete} />;
-  }
-
-  if (step === "lead") {
-    return <LeadCapture answers={answers} onSubmit={handleLeadSubmit} />;
-  }
-
-  if (step === "results" && result) {
-    return (
-      <ResultPage
-        result={result}
-        leadEmail={leadInfo.email}
-        leadName={leadInfo.name}
-        leadPhone={leadInfo.phone}
-      />
-    );
-  }
+  const showHeaderFooter = step === "landing" || step === "results";
 
   return (
-    <LandingPage
-      onStart={() => {
-        setStep("questionnaire");
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }}
-    />
+    <>
+      {showHeaderFooter && <Header />}
+
+      {step === "questionnaire" && (
+        <Questionnaire onComplete={handleQuestionnaireComplete} />
+      )}
+
+      {step === "lead" && (
+        <LeadCapture answers={answers} onSubmit={handleLeadSubmit} />
+      )}
+
+      {step === "results" && result && (
+        <ResultPage
+          result={result}
+          leadEmail={leadInfo.email}
+          leadName={leadInfo.name}
+          leadPhone={leadInfo.phone}
+        />
+      )}
+
+      {step === "landing" && (
+        <LandingPage
+          onStart={() => {
+            setStep("questionnaire");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
+      )}
+
+      {showHeaderFooter && <Footer />}
+    </>
   );
 }

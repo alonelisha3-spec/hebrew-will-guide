@@ -21,8 +21,8 @@ export function LeadCapture({ answers, onSubmit }: Props) {
     if (!phone.trim()) errs.phone = "שדה חובה";
     else if (!/^0\d{8,9}$/.test(phone.replace(/[-\s]/g, "")))
       errs.phone = "מספר טלפון לא תקין";
-    if (!consentCallback) errs.consent = "יש לאשר כדי להמשיך";
-    if (!consentDisclaimer) errs.disclaimer = "יש לאשר כדי להמשיך";
+    if (!consentCallback) errs.consent = "נדרש אישור כדי להמשיך";
+    if (!consentDisclaimer) errs.disclaimer = "נדרש אישור כדי להמשיך";
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -51,13 +51,16 @@ export function LeadCapture({ answers, onSubmit }: Props) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12">
-      <div className="container max-w-md">
-        <div className="bg-card rounded-xl border shadow-lg p-8 animate-slide-up">
-          <h2 className="text-2xl font-bold text-center mb-2">כמעט סיימנו</h2>
+    <div className="min-h-screen flex items-center justify-center py-12 px-4">
+      <div className="w-full max-w-md">
+        <div className="bg-card rounded-xl border border-border/50 shadow-lg p-6 md:p-8 animate-slide-up">
+          <div className="gold-line mx-auto mb-6" />
+          <h2 className="text-xl md:text-2xl font-bold text-center mb-2">
+            שלב אחרון לפני התוצאות
+          </h2>
           <p className="text-sm text-muted-foreground text-center mb-8 leading-relaxed">
-            כדי להציג את תוצאות הבדיקה המלאות ולקבוע האם יש צורך בצוואה רגילה,
-            צוואה הדדית או עדכון צוואה קיימת, יש להשאיר פרטים.
+            לצורך הצגת סיכום הבדיקה ובחינת ההתאמה לצוואה רגילה, הדדית או עדכון
+            צוואה קיימת — נבקש פרטים קצרים.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -69,8 +72,8 @@ export function LeadCapture({ answers, onSubmit }: Props) {
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full rounded-lg border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
-                placeholder="הזינו שם מלא"
+                className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                placeholder="שם פרטי ומשפחה"
                 maxLength={100}
               />
               {errors.fullName && (
@@ -86,8 +89,8 @@ export function LeadCapture({ answers, onSubmit }: Props) {
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full rounded-lg border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
-                placeholder="050-1234567"
+                className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                placeholder="050-0000000"
                 dir="ltr"
                 maxLength={15}
               />
@@ -98,13 +101,14 @@ export function LeadCapture({ answers, onSubmit }: Props) {
 
             <div>
               <label className="block text-sm font-medium mb-1.5">
-                אימייל <span className="text-xs text-muted-foreground">(אופציונלי)</span>
+                דוא״ל{" "}
+                <span className="text-xs text-muted-foreground">(רשות)</span>
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border bg-background px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent transition-all"
+                className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
                 placeholder="email@example.com"
                 dir="ltr"
                 maxLength={255}
@@ -117,10 +121,10 @@ export function LeadCapture({ answers, onSubmit }: Props) {
                   type="checkbox"
                   checked={consentCallback}
                   onChange={(e) => setConsentCallback(e.target.checked)}
-                  className="mt-1 rounded border-border"
+                  className="mt-1 rounded border-border accent-primary"
                 />
-                <span className="text-sm leading-relaxed">
-                  אני מאשר/ת שיחזרו אליי בקשר לבדיקה
+                <span className="text-sm leading-relaxed text-muted-foreground">
+                  אני מאשר/ת יצירת קשר מטעם המשרד בנוגע לתוצאות הבדיקה
                 </span>
               </label>
               {errors.consent && (
@@ -132,10 +136,11 @@ export function LeadCapture({ answers, onSubmit }: Props) {
                   type="checkbox"
                   checked={consentDisclaimer}
                   onChange={(e) => setConsentDisclaimer(e.target.checked)}
-                  className="mt-1 rounded border-border"
+                  className="mt-1 rounded border-border accent-primary"
                 />
-                <span className="text-sm leading-relaxed">
-                  קראתי והבנתי שהבדיקה אינה ייעוץ משפטי
+                <span className="text-sm leading-relaxed text-muted-foreground">
+                  ידוע לי כי הבדיקה אינה מהווה ייעוץ משפטי ואינה יוצרת יחסי
+                  עורך דין–לקוח
                 </span>
               </label>
               {errors.disclaimer && (
@@ -146,9 +151,9 @@ export function LeadCapture({ answers, onSubmit }: Props) {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/10 transition-all duration-200 hover:shadow-xl hover:shadow-primary/15 active:scale-[0.97] disabled:opacity-60"
+              className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.97] disabled:opacity-60"
             >
-              {submitting ? "שולח..." : "הצג תוצאה"}
+              {submitting ? "שולח..." : "הצגת תוצאות הבדיקה"}
             </button>
           </form>
         </div>
