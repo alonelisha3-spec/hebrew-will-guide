@@ -6,8 +6,6 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const NOTIFY_EMAIL = "alonelisha3@gmail.com";
-
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -29,7 +27,9 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey);
 
     // Save to DB
+    const leadId = crypto.randomUUID();
     const { error: dbError } = await supabase.from("leads").insert({
+      id: leadId,
       full_name: fullName,
       phone,
       email: email || null,
@@ -47,57 +47,35 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Build notification email content
-    const answersFormatted = answers
-      ? Object.entries(answers as Record<string, string>)
-          .map(([k, v]) => `  ${k}: ${v}`)
-          .join("\n")
-      : "לא מולא";
-
-    const riskItemsList = riskItems?.length
-      ? (riskItems as string[]).map((item: string) => `  • ${item}`).join("\n")
-      : "";
-
-    const emailSubject = `פנייה חדשה | ${fullName} | בדיקת צוואה`;
-    const emailText = [
-      `פנייה חדשה מבדיקת צוואה חכמה`,
-      ``,
-      `שם: ${fullName}`,
-      `טלפון: ${phone}`,
-      email ? `דוא"ל: ${email}` : null,
-      ``,
-      willType ? `סוג בדיקה: ${willType}` : null,
-      riskLevel ? `רמת סיכון: ${riskLevel}` : null,
-      riskItemsList ? `\nנושאים שזוהו:\n${riskItemsList}` : null,
-      ``,
-      `תשובות:\n${answersFormatted}`,
-      ``,
-      `תאריך: ${new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    // Send notification email to the lawyer using Supabase Auth admin
-    // (using the internal SMTP configured in Supabase)
+    // Send notification email to the lawyer via transactional email system
+    const timestamp = new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" });
     try {
-      const { error: emailError } = await supabase.auth.admin.inviteUserByEmail(
-        NOTIFY_EMAIL,
-        { data: {} }
-      );
-      // This is a workaround — log the notification instead if invite fails
-      if (emailError) {
-        console.log("Email notification (invite method not suitable, logging instead):");
-      }
-    } catch {
-      // Expected — we don't actually want to invite, just notify
-    }
+      const { error: emailError } = await supabase.functions.invoke("send-transactional-email", {
+        body: {
+          templateName: "lead-notification",
+          recipientEmail: "alonelisha3@gmail.com",
+          idempotencyKey: `lead-notify-${leadId}`,
+          templateData: {
+            fullName,
+            phone,
+            email: email || "",
+            willType: willType || "",
+            riskLevel: riskLevel || "",
+            riskItems: riskItems || [],
+            answers: answers || {},
+            timestamp,
+          },
+        },
+      });
 
-    // Log the full notification for review in edge function logs
-    console.log("=== NEW LEAD NOTIFICATION ===");
-    console.log(`To: ${NOTIFY_EMAIL}`);
-    console.log(`Subject: ${emailSubject}`);
-    console.log(emailText);
-    console.log("=== END NOTIFICATION ===");
+      if (emailError) {
+        console.error("Email send error:", emailError);
+      } else {
+        console.log("Lead notification email enqueued for", fullName);
+      }
+    } catch (emailErr) {
+      console.error("Email invoke error:", emailErr);
+    }
 
     return new Response(
       JSON.stringify({ success: true, message: "הפרטים נשמרו בהצלחה" }),
