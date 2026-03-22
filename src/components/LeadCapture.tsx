@@ -56,11 +56,11 @@ export function LeadCapture({ answers, onSubmit }: Props) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4">
+    <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-background">
       <div className="w-full max-w-md">
-        <div className="bg-card rounded-xl border border-border/50 shadow-lg p-6 md:p-8 animate-slide-up">
+        <div className="bg-card rounded-xl border border-border shadow-md p-6 md:p-8 animate-slide-up">
           <div className="gold-line mx-auto mb-6" />
-          <h2 className="text-xl md:text-2xl font-bold text-center mb-2">
+          <h2 className="text-xl md:text-2xl font-bold text-center mb-2 text-foreground">
             שלב אחרון לפני התוצאות
           </h2>
           <p className="text-sm text-muted-foreground text-center mb-8 leading-relaxed">
@@ -70,14 +70,14 @@ export function LeadCapture({ answers, onSubmit }: Props) {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium mb-1.5">
+              <label className="block text-sm font-medium mb-1.5 text-foreground">
                 שם מלא <span className="text-destructive">*</span>
               </label>
               <input
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
                 placeholder="שם פרטי ומשפחה"
                 maxLength={100}
               />
@@ -87,14 +87,14 @@ export function LeadCapture({ answers, onSubmit }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5">
+              <label className="block text-sm font-medium mb-1.5 text-foreground">
                 טלפון <span className="text-destructive">*</span>
               </label>
               <input
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
                 placeholder="050-0000000"
                 dir="ltr"
                 maxLength={15}
@@ -105,7 +105,7 @@ export function LeadCapture({ answers, onSubmit }: Props) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium mb-1.5">
+              <label className="block text-sm font-medium mb-1.5 text-foreground">
                 דוא״ל{" "}
                 <span className="text-xs text-muted-foreground">(רשות)</span>
               </label>
@@ -113,7 +113,7 @@ export function LeadCapture({ answers, onSubmit }: Props) {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-border/60 bg-secondary/30 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/40"
+                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
                 placeholder="email@example.com"
                 dir="ltr"
                 maxLength={255}
@@ -156,7 +156,7 @@ export function LeadCapture({ answers, onSubmit }: Props) {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg shadow-primary/15 transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.97] disabled:opacity-60"
+              className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.97] disabled:opacity-60"
             >
               {submitting ? "שולח..." : "הצגת תוצאות הבדיקה"}
             </button>
