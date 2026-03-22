@@ -3,7 +3,7 @@ import { saveLead } from "@/lib/store";
 
 interface Props {
   answers: Record<string, string>;
-  onSubmit: () => void;
+  onSubmit: (info: { name: string; phone: string; email?: string }) => void;
 }
 
 export function LeadCapture({ answers, onSubmit }: Props) {
@@ -42,7 +42,11 @@ export function LeadCapture({ answers, onSubmit }: Props) {
 
     setTimeout(() => {
       setSubmitting(false);
-      onSubmit();
+      onSubmit({
+        name: fullName.trim(),
+        phone: phone.trim(),
+        email: email.trim() || undefined,
+      });
     }, 400);
   }
 

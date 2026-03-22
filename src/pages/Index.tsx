@@ -12,6 +12,10 @@ export default function Index() {
   const [step, setStep] = useState<AppStep>("landing");
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [result, setResult] = useState<ResultData | null>(null);
+  const [leadInfo, setLeadInfo] = useState<{ name: string; phone: string; email?: string }>({
+    name: "",
+    phone: "",
+  });
 
   function handleQuestionnaireComplete(ans: Record<string, string>) {
     setAnswers(ans);
@@ -19,17 +23,13 @@ export default function Index() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function handleLeadSubmit() {
+  function handleLeadSubmit(info: { name: string; phone: string; email?: string }) {
+    setLeadInfo(info);
     const res = calculateResults(answers);
     setResult(res);
     setStep("results");
     toast.success("הפרטים נקלטו בהצלחה. ניתן לעיין בתוצאה כעת.");
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function handleContactRequest() {
-    // Scroll back to lead capture or show confirmation
-    toast.success("תודה! ניצור קשר בהקדם.");
   }
 
   if (step === "questionnaire") {
@@ -41,7 +41,14 @@ export default function Index() {
   }
 
   if (step === "results" && result) {
-    return <ResultPage result={result} onContactRequest={handleContactRequest} />;
+    return (
+      <ResultPage
+        result={result}
+        leadEmail={leadInfo.email}
+        leadName={leadInfo.name}
+        leadPhone={leadInfo.phone}
+      />
+    );
   }
 
   return (
