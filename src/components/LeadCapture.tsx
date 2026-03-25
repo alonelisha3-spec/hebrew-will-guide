@@ -206,8 +206,8 @@ ${buildSummary()}
                   onChange={(e) => setConsentData(e.target.checked)}
                   className="mt-1 rounded border-border accent-primary"
                 />
-                <span className="text-sm leading-relaxed text-muted-foreground">
-                  אני מאשר/ת שימוש בפרטים שמסרתי לצורך יצירת קשר בקשר לבקשתי <span className="text-destructive">*</span>
+                <span className="text-xs leading-relaxed text-muted-foreground">
+                  אני מאשר/ת כי ידוע לי שהמידע, התוצאה והטיוטה המוצגים במערכת הם כלליים וראשוניים בלבד, אינם מהווים ייעוץ משפטי, אינם מחליפים פגישה עם עורך דין, ואינם מהווים צוואה סופית או תקפה לחתימה. אני מאשר/ת שימוש בפרטים שמסרתי לצורך יצירת קשר, טיפול בפנייה ושיפור השירות, בהתאם ל<Link to="/terms" target="_blank" className="text-primary hover:underline">תנאי השימוש</Link> ול<Link to="/privacy" target="_blank" className="text-primary hover:underline">מדיניות הפרטיות</Link>. <span className="text-destructive">*</span>
                 </span>
               </label>
               {errors.consentData && (
