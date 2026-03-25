@@ -95,8 +95,7 @@ export function ResultPage({
 
           {mode === "draft" && (
             <p className="text-sm text-muted-foreground leading-relaxed text-center">
-              על בסיס התשובות שמסרת, נוצרה טיוטת צוואה ראשונית. לפני חתימה יש לבצע
-              בדיקה והתאמה משפטית מול עורך דין.
+              {legalWarning}
             </p>
           )}
         </div>
