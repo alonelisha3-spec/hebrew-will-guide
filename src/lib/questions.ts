@@ -7,25 +7,13 @@ export interface Question {
   condition?: (answers: Record<string, string>) => boolean;
 }
 
-// Questions for "no will" path — will draft generation
+// מסלול: אין לי צוואה
 export const noWillQuestions: Question[] = [
   {
     id: "fullName",
     text: "מהו שמך המלא?",
     type: "text",
     placeholder: "שם פרטי ושם משפחה",
-  },
-  {
-    id: "idNumber",
-    text: "מהו מספר תעודת הזהות שלך?",
-    type: "text",
-    placeholder: "מספר תעודת זהות",
-  },
-  {
-    id: "address",
-    text: "מהי כתובת מגוריך?",
-    type: "text",
-    placeholder: "רחוב, מספר, עיר",
   },
   {
     id: "familyStatus",
@@ -40,10 +28,10 @@ export const noWillQuestions: Question[] = [
     options: ["כן", "לא"],
   },
   {
-    id: "spouseName",
-    text: "מהו שם בן/בת הזוג?",
-    type: "text",
-    placeholder: "שם מלא של בן/בת הזוג",
+    id: "spouseProtection",
+    text: "האם חשוב לך להגן קודם כל על בן/בת הזוג?",
+    type: "select",
+    options: ["כן", "לא", "לא בטוח/ה"],
     condition: (a) => a.hasSpouse === "כן",
   },
   {
@@ -60,15 +48,8 @@ export const noWillQuestions: Question[] = [
     condition: (a) => a.hasChildren === "כן",
   },
   {
-    id: "childrenNames",
-    text: "נא לציין את שמות הילדים (מופרדים בפסיק)",
-    type: "text",
-    placeholder: "לדוגמה: יעל, דני, נעמה",
-    condition: (a) => a.hasChildren === "כן",
-  },
-  {
     id: "minorChildren",
-    text: "האם יש ילדים קטינים (מתחת לגיל 18)?",
+    text: "האם יש ילדים קטינים?",
     type: "select",
     options: ["כן", "לא"],
     condition: (a) => a.hasChildren === "כן",
@@ -77,7 +58,12 @@ export const noWillQuestions: Question[] = [
     id: "mainBeneficiary",
     text: "למי מיועד עיקר הרכוש?",
     type: "select",
-    options: ["לבן/בת הזוג", "לילדים בחלקים שווים", "לבן/בת הזוג ולאחר מכן לילדים", "אחר"],
+    options: [
+      "לבן/בת הזוג",
+      "לילדים בחלקים שווים",
+      "לבן/בת הזוג ולאחר מכן לילדים",
+      "אחר",
+    ],
   },
   {
     id: "equalDistribution",
@@ -86,20 +72,26 @@ export const noWillQuestions: Question[] = [
     options: ["כן, חלוקה שווה", "לא, חלוקה שונה"],
   },
   {
+    id: "conflictRisk",
+    text: "האם יש חשש למחלוקת בין היורשים?",
+    type: "select",
+    options: ["כן", "לא", "לא בטוח/ה"],
+  },
+  {
     id: "realEstate",
-    text: "האם יש לך נכסי מקרקעין (דירה, בית, קרקע)?",
+    text: "האם יש לך נכסי מקרקעין?",
     type: "select",
     options: ["כן", "לא"],
   },
   {
     id: "financialAssets",
-    text: "האם יש לך חשבונות בנק, חסכונות, קופות גמל או זכויות כספיות?",
+    text: "האם יש לך חסכונות, קופות, קרנות או זכויות כספיות?",
     type: "select",
     options: ["כן", "לא"],
   },
   {
     id: "digitalAssets",
-    text: "האם יש לך נכסים דיגיטליים (חשבונות, מטבעות דיגיטליים, חנויות מקוונות)?",
+    text: "האם יש לך נכסים דיגיטליים?",
     type: "select",
     options: ["כן", "לא", "לא בטוח/ה"],
   },
@@ -110,34 +102,75 @@ export const noWillQuestions: Question[] = [
     options: ["כן", "לא", "לא בטוח/ה"],
   },
   {
-    id: "estateManagerName",
-    text: "מהו שם מנהל העיזבון המבוקש?",
-    type: "text",
-    placeholder: "שם מלא",
-    condition: (a) => a.estateManager === "כן",
-  },
-  {
     id: "grandchildrenClause",
-    text: "האם ברצונך לכלול מנגנון של 'נכדים במקום ילד' (אם ילד נפטר לפני המצווה)?",
+    text: "האם לכלול מנגנון של 'נכדים במקום ילד'?",
     type: "select",
     options: ["כן", "לא"],
   },
   {
     id: "specialCircumstances",
-    text: "האם יש נסיבות משפחתיות מיוחדות שיש להתחשב בהן?",
+    text: "האם יש נסיבות משפחתיות מיוחדות?",
     type: "select",
     options: ["כן", "לא"],
   },
   {
     id: "specialDetails",
-    text: "נא לפרט בקצרה את הנסיבות המיוחדות",
+    text: "נא לפרט בקצרה",
     type: "text",
     placeholder: "תיאור קצר",
     condition: (a) => a.specialCircumstances === "כן",
   },
+  // רשות בלבד
+  {
+    id: "provideIdNow",
+    text: "האם תרצה/י להזין עכשיו מספר תעודת זהות? (לא חובה)",
+    type: "select",
+    options: ["כן", "לא, אשלים בהמשך"],
+  },
+  {
+    id: "idNumber",
+    text: "מהו מספר תעודת הזהות שלך?",
+    type: "text",
+    placeholder: "מספר תעודת זהות",
+    condition: (a) => a.provideIdNow === "כן",
+  },
+  {
+    id: "provideAddressNow",
+    text: "האם תרצה/י להזין עכשיו כתובת מגורים? (לא חובה)",
+    type: "select",
+    options: ["כן", "לא, אשלים בהמשך"],
+  },
+  {
+    id: "address",
+    text: "מהי כתובת מגוריך?",
+    type: "text",
+    placeholder: "רחוב, מספר, עיר",
+    condition: (a) => a.provideAddressNow === "כן",
+  },
+  {
+    id: "provideNamesNow",
+    text: "האם תרצה/י להזין עכשיו שמות בני משפחה? (לא חובה)",
+    type: "select",
+    options: ["כן", "לא, אשלים בהמשך"],
+    condition: (a) => a.hasChildren === "כן" || a.hasSpouse === "כן",
+  },
+  {
+    id: "spouseName",
+    text: "מהו שם בן/בת הזוג?",
+    type: "text",
+    placeholder: "שם מלא",
+    condition: (a) => a.hasSpouse === "כן" && a.provideNamesNow === "כן",
+  },
+  {
+    id: "childrenNames",
+    text: "נא לציין את שמות הילדים (מופרדים בפסיק)",
+    type: "text",
+    placeholder: "לדוגמה: יעל, דני, נעמה",
+    condition: (a) => a.hasChildren === "כן" && a.provideNamesNow === "כן",
+  },
 ];
 
-// Questions for "existing will review" path
+// מסלול: יש לי צוואה
 export const existingWillQuestions: Question[] = [
   {
     id: "willType",
@@ -159,7 +192,7 @@ export const existingWillQuestions: Question[] = [
   },
   {
     id: "digitalAssets",
-    text: "האם יש לך נכסים דיגיטליים שאינם מוזכרים בצוואה?",
+    text: "האם יש נכסים דיגיטליים שאינם מוזכרים בצוואה?",
     type: "select",
     options: ["כן", "לא", "לא בטוח/ה"],
   },
