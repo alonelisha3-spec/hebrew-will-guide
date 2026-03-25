@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Download, Phone, Mail, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { legalWarning } from "@/lib/constants";
 
 interface Props {
   mode: "draft" | "review";
@@ -94,8 +95,7 @@ export function ResultPage({
 
           {mode === "draft" && (
             <p className="text-sm text-muted-foreground leading-relaxed text-center">
-              על בסיס התשובות שמסרת, נוצרה טיוטת צוואה ראשונית. לפני חתימה יש לבצע
-              בדיקה והתאמה משפטית מול עורך דין.
+              {legalWarning}
             </p>
           )}
         </div>
@@ -227,9 +227,7 @@ export function ResultPage({
 
         {/* Disclaimer */}
         <p className="text-[11px] text-muted-foreground/60 text-center max-w-xl mx-auto leading-relaxed pb-6">
-          המידע המוצג הינו כללי וראשוני בלבד. אין בו משום ייעוץ משפטי, אין הוא
-          מהווה תחליף לפגישה עם עורך דין, ואין בו כדי ליצור יחסי עורך דין–לקוח
-          או צוואה תקפה על פי דין.
+          {legalWarning}
         </p>
       </div>
     </div>
