@@ -1,3 +1,5 @@
+import { footerLegalText } from "@/lib/constants";
+
 export function Footer() {
   return (
     <footer className="border-t border-border bg-accent text-accent-foreground py-10">
