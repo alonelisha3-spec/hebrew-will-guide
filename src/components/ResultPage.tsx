@@ -227,9 +227,7 @@ export function ResultPage({
 
         {/* Disclaimer */}
         <p className="text-[11px] text-muted-foreground/60 text-center max-w-xl mx-auto leading-relaxed pb-6">
-          המידע המוצג הינו כללי וראשוני בלבד. אין בו משום ייעוץ משפטי, אין הוא
-          מהווה תחליף לפגישה עם עורך דין, ואין בו כדי ליצור יחסי עורך דין–לקוח
-          או צוואה תקפה על פי דין.
+          {legalWarning}
         </p>
       </div>
     </div>

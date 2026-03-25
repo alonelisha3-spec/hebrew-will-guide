@@ -18,9 +18,7 @@ export function Footer() {
         </div>
         <div className="border-t border-accent-foreground/10 pt-6">
           <p className="text-[11px] text-accent-foreground/50 text-center max-w-2xl mx-auto leading-relaxed">
-            המידע המוצג באתר זה הינו כללי וראשוני בלבד. אין בו משום ייעוץ משפטי, אין הוא מהווה
-            תחליף לפגישת ייעוץ אישית עם עורך דין, ואין בו כדי ליצור יחסי עורך דין–לקוח או צוואה
-            תקפה על פי דין.
+            {footerLegalText}
           </p>
         </div>
       </div>
