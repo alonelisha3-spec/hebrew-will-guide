@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { footerLegalText } from "@/lib/constants";
 
 export function Footer() {
@@ -16,6 +17,13 @@ export function Footer() {
             <a href="mailto:alonelisha3@gmail.com" className="hover:text-primary transition-colors">alonelisha3@gmail.com</a>
           </div>
         </div>
+
+        <div className="flex items-center justify-center gap-4 text-xs text-accent-foreground/60">
+          <Link to="/terms" className="hover:text-primary transition-colors">תנאי שימוש</Link>
+          <span>·</span>
+          <Link to="/privacy" className="hover:text-primary transition-colors">מדיניות פרטיות</Link>
+        </div>
+
         <div className="border-t border-accent-foreground/10 pt-6">
           <p className="text-[11px] text-accent-foreground/50 text-center max-w-2xl mx-auto leading-relaxed">
             {footerLegalText}
