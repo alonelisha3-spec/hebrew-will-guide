@@ -78,6 +78,12 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
               ניתן להשלים בהמשך פרטים חסרים
             </span>
           </div>
+
+          <div className="mt-10 max-w-2xl mx-auto rounded-lg border border-white/15 bg-white/5 px-5 py-4 text-xs text-accent-foreground/60 leading-relaxed text-center">
+            <p>
+              השימוש במערכת אינו מהווה ייעוץ משפטי, אינו יוצר יחסי עורך דין–לקוח, ואינו מפיק צוואה תקפה לחתימה. המערכת מספקת נוסח ראשוני וכללי בלבד, המבוסס על תשובות המשתמש, ללא בדיקה או אימות נסיבות אישיות. כל הסתמכות על התוצאה נעשית באחריות המשתמש בלבד. המשרד לא יישא באחריות לכל נזק הנובע מהשימוש במערכת או מהסתמכות על תוצריה.
+            </p>
+          </div>
         </div>
       </section>
 
