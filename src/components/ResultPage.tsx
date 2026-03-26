@@ -98,7 +98,7 @@ export function ResultPage({
           {mode === "draft" && (
             <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 mb-6 space-y-2">
               <p>{legalWarning}</p>
-              <p>הסתמכות על התוצאה או על נוסח הצוואה ללא בדיקה משפטית פרטנית עלולה להוביל לתוצאה שאינה תואמת את רצון המשתמש.</p>
+              <p>המשתמש מצהיר כי ידוע לו שעל מנת להקנות תוקף משפטי לצוואה, נדרש ניסוח מותאם אישית, בדיקה משפטית פרטנית ועמידה בדרישות הדין, לרבות דרישות צורניות וראייתיות.</p>
             </div>
           )}
         </div>
