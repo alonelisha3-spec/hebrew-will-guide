@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Download, Phone, Mail, CheckCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { legalWarning } from "@/lib/constants";
+import { legalWarningText as legalWarning } from "@/lib/legalTexts";
 
 interface Props {
   mode: "draft" | "review";

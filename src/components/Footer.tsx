@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { footerLegalText } from "@/lib/constants";
+import { footerLegalText } from "@/lib/legalTexts";
 
 export function Footer() {
   return (
