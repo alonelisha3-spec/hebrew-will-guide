@@ -163,8 +163,8 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
             <ArrowRight className="w-4 h-4" />
             חזרה
           </button>
-          <span className="text-xs text-muted-foreground/60">
-            המידע ישמש לבניית נוסח ראשוני בלבד
+          <span className="text-xs text-muted-foreground/60 max-w-sm text-center leading-relaxed">
+            המערכת נותנת כיוון ברור ונוסח ראשוני, אך צוואה היא מסמך משפטי אישי שמומלץ להשלים עם עורך דין.
           </span>
         </div>
       </div>
