@@ -61,7 +61,7 @@ export const noWillQuestions: Question[] = [
       "בנכסים מסוימים לכל אחד",
       "טרם החלטתי",
     ],
-    explanation: "חלוקה באחוזים, בחלקים או לפי נכס מסוים מייצרת טיוטה שונה.",
+    explanation: "חלוקה באחוזים, בחלקים או לפי נכס מסוים מייצרת נוסח שונה.",
     condition: (a) => a.multipleHeirs === "כן",
   },
   {
