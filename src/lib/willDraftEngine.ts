@@ -185,11 +185,11 @@ function buildDraftText(a: Record<string, string>, willType: WillDraftData["will
   lines.push("");
 
   if (willType === "צוואה הדדית") {
-    lines.push("(טיוטה ראשונית – במבנה צוואה הדדית / בן זוג תחילה ולאחר מכן יורשים נוספים)");
+    lines.push("(נוסח ראשוני – במבנה צוואה הדדית / בן זוג תחילה ולאחר מכן יורשים נוספים)");
   } else if (willType === "צוואה רגילה") {
-    lines.push("(טיוטה ראשונית – צוואה בכתב)");
+    lines.push("(נוסח ראשוני – צוואה בכתב)");
   } else {
-    lines.push("(טיוטה ראשונית – נדרש בירור להשלמת מבנה הצוואה)");
+    lines.push("(נוסח ראשוני – נדרש בירור להשלמת מבנה הצוואה)");
   }
   lines.push("");
 
