@@ -164,7 +164,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
             חזרה
           </button>
           <span className="text-xs text-muted-foreground/60 max-w-sm text-center leading-relaxed">
-            המערכת נותנת כיוון ברור ונוסח ראשוני, אך צוואה היא מסמך משפטי אישי שמומלץ להשלים עם עורך דין.
+            התהליך לוקח פחות מ-2 דקות
           </span>
         </div>
       </div>
