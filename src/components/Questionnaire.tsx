@@ -82,7 +82,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
       <div className="flex-1 flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-xl" key={question.id}>
           <p className="text-xs text-muted-foreground text-center mb-4 animate-slide-up">
-            המערכת בונה עבורך נוסח צוואה מותאם אישית לפי הנתונים שתמסור/י
+            ענה/י בפשטות — אין צורך בידע משפטי
           </p>
 
           <h2
@@ -164,7 +164,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
             חזרה
           </button>
           <span className="text-xs text-muted-foreground/60 max-w-sm text-center leading-relaxed">
-            המערכת נותנת כיוון ברור ונוסח ראשוני, אך צוואה היא מסמך משפטי אישי שמומלץ להשלים עם עורך דין.
+            התהליך לוקח פחות מ-2 דקות
           </span>
         </div>
       </div>
