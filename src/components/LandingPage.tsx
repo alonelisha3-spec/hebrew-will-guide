@@ -1,5 +1,6 @@
 import { Shield, FileText, Scale, CheckCircle2 } from "lucide-react";
 import { FAQSection } from "./FAQSection";
+import portraitImg from "@/assets/alon-elisha-portrait.png";
 
 interface Props {
   onNoWill: () => void;
@@ -83,19 +84,26 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
       <FAQSection />
 
       <section className="py-20 md:py-28 bg-background">
-        <div className="container max-w-2xl text-center px-4 md:px-6">
-          <h2 className="text-xl md:text-2xl font-bold text-foreground">
-            לפני שחותמים, עדיף להבין מה חסר
-          </h2>
-          <p className="mt-4 text-muted-foreground leading-relaxed text-sm md:text-base">
-            התחילו עכשיו, קבלו טיוטה ראשונית ותמונה ברורה יותר של מה נכון להסדיר.
-          </p>
-          <button
-            onClick={onNoWill}
-            className="mt-8 inline-flex items-center justify-center rounded-md bg-accent px-10 py-4 text-base font-semibold text-accent-foreground shadow-lg hover:brightness-110"
-          >
-            אני רוצה להתחיל
-          </button>
+        <div className="container max-w-3xl px-4 md:px-6 flex flex-col md:flex-row items-center gap-8 md:gap-12">
+          <img
+            src={portraitImg}
+            alt="עו״ד אלון אלישע"
+            className="w-36 h-36 md:w-44 md:h-44 rounded-full object-cover object-top shadow-lg border-4 border-accent/20 flex-shrink-0"
+          />
+          <div className="text-center md:text-right">
+            <h2 className="text-xl md:text-2xl font-bold text-foreground">
+              לפני שחותמים, עדיף להבין מה חסר
+            </h2>
+            <p className="mt-4 text-muted-foreground leading-relaxed text-sm md:text-base">
+              התחילו עכשיו, קבלו טיוטה ראשונית ותמונה ברורה יותר של מה נכון להסדיר.
+            </p>
+            <button
+              onClick={onNoWill}
+              className="mt-8 inline-flex items-center justify-center rounded-md bg-accent px-10 py-4 text-base font-semibold text-accent-foreground shadow-lg hover:brightness-110"
+            >
+              אני רוצה להתחיל
+            </button>
+          </div>
         </div>
       </section>
     </div>
