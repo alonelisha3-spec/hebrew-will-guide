@@ -82,7 +82,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
       <div className="flex-1 flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-xl" key={question.id}>
           <p className="text-xs text-muted-foreground text-center mb-4 animate-slide-up">
-            המערכת בונה עבורך נוסח צוואה מותאם אישית לפי הנתונים שתמסור/י
+            ענה/י בפשטות — אין צורך בידע משפטי
           </p>
 
           <h2
