@@ -190,7 +190,7 @@ export const noWillQuestions: Question[] = [
     text: "נא לפרט את הנכס ואת בעל זכות הקדימה",
     type: "text",
     placeholder: "לדוגמה: הדירה ב..., זכות קדימה ל...",
-    explanation: "ישמש ליצירת סעיף ייעודי בטיוטה.",
+    explanation: "ישמש ליצירת סעיף ייעודי בנוסח הצוואה.",
     condition: (a) => a.rightOfFirstRefusal === "כן",
   },
   {
