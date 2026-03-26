@@ -19,9 +19,9 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
             className="text-3xl md:text-5xl font-bold leading-tight text-white"
             style={{ lineHeight: 1.25 }}
           >
-            צוואה בהתאמה אישית
+            רוצים להסדיר צוואה?
             <br />
-            אל תשאיר את המשפחה שלך לנחש
+            התחילו עכשיו וקבלו נוסח צוואה מוכן בהתאמה אישית
           </h1>
           <p className="mt-6 text-base md:text-lg text-accent-foreground/85 leading-relaxed max-w-2xl mx-auto">
             ענו על מספר שאלות פשוטות וקבלו נוסח צוואה מלא, ברור ומותאם למצב
