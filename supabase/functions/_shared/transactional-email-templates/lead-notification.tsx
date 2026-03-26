@@ -90,7 +90,7 @@ export const template = {
     riskLevel: 'בינונית',
     riskItems: ['נדרשת התייחסות לילדים קטינים'],
     answers: { familyStatus: 'נשוי/אה' },
-    fullDraft: 'צ ו ו א ה\n\n(טיוטה ראשונית)',
+    fullDraft: 'צ ו ו א ה\n\n(נוסח ראשוני)',
     timestamp: '22/03/2026, 12:00',
   },
 } satisfies TemplateEntry
