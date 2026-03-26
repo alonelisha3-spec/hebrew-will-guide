@@ -460,7 +460,7 @@ function buildDraftText(a: Record<string, string>, willType: WillDraftData["will
   // General supplementary clause
   lines.push(`${section}. הוראה כללית משלימה`);
   lines.push(
-    `בכל מקום שבו לא הושלם פרט מסוים בטיוטה זו, יש להשלים את זהות היורשים, הנכסים, החלקים וההוראות הספציפיות במסגרת ניסוח סופי ומותאם אישית.`
+    `בכל מקום שבו לא הושלם פרט מסוים בנוסח זה, יש להשלים את זהות היורשים, הנכסים, החלקים וההוראות הספציפיות במסגרת ניסוח סופי ומותאם אישית.`
   );
   lines.push("");
   section++;
