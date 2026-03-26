@@ -82,11 +82,17 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
       <div className="flex-1 flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-xl" key={question.id}>
           <h2
-            className="text-xl md:text-2xl font-bold text-center mb-10 text-foreground animate-slide-up"
+            className="text-xl md:text-2xl font-bold text-center mb-3 text-foreground animate-slide-up"
             style={{ lineHeight: 1.5 }}
           >
             {question.text}
           </h2>
+          {question.explanation && (
+            <p className="text-sm text-muted-foreground text-center mb-10 animate-slide-up" style={{ animationDelay: "40ms", animationFillMode: "backwards" }}>
+              {question.explanation}
+            </p>
+          )}
+          {!question.explanation && <div className="mb-10" />}
 
           {question.type === "select" && question.options ? (
             <div className="space-y-3">
