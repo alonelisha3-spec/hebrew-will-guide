@@ -76,7 +76,7 @@ export const noWillQuestions: Question[] = [
     text: "נא לתאר בקצרה את הנכס ואת ההוראה המבוקשת",
     type: "text",
     placeholder: "לדוגמה: דירה ברחוב..., תימכר / תועבר / תינתן זכות קדימה",
-    explanation: "מידע זה ישמש לבניית סעיף ייעודי בטיוטה.",
+    explanation: "מידע זה ישמש לבניית סעיף ייעודי בנוסח הצוואה.",
     condition: (a) => a.specialAssetInstruction === "כן",
   },
   {
