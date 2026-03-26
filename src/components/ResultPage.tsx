@@ -94,9 +94,9 @@ export function ResultPage({
           </div>
 
           {mode === "draft" && (
-            <p className="text-sm text-muted-foreground leading-relaxed text-center">
+            <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 mb-6">
               {legalWarning}
-            </p>
+            </div>
           )}
         </div>
 
