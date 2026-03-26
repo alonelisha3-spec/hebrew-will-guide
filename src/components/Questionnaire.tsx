@@ -11,7 +11,6 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Filter questions based on conditions
   const activeQuestions = questionList.filter(
     (q) => !q.condition || q.condition(answers)
   );
@@ -20,7 +19,6 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
   const totalSteps = activeQuestions.length;
   const progress = totalSteps > 0 ? ((currentIndex + 1) / totalSteps) * 100 : 0;
 
-  // Clamp index if conditions change
   useEffect(() => {
     if (currentIndex >= activeQuestions.length && activeQuestions.length > 0) {
       setCurrentIndex(activeQuestions.length - 1);
@@ -32,10 +30,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
   const currentAnswer = answers[question.id] || "";
 
   function selectOption(option: string) {
-    const updated = { ...answers, [question.id]: option };
-    setAnswers(updated);
-
-    setTimeout(() => advance(updated), 300);
+    setAnswers({ ...answers, [question.id]: option });
   }
 
   function handleTextSubmit(e: React.FormEvent) {
@@ -60,13 +55,18 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
     if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
   }
 
+  function goNext() {
+    if (!currentAnswer.trim()) return;
+    advance(answers);
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Progress */}
       <div className="sticky top-0 bg-white/95 backdrop-blur-sm border-b border-border z-10">
         <div className="container py-4 px-4 md:px-6">
           <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
-            <span>שאלה {currentIndex + 1} מתוך {totalSteps}</span>
+            <span>שלב {currentIndex + 1} מתוך {totalSteps}</span>
             <span>{Math.round(progress)}%</span>
           </div>
           <div className="w-full h-1 bg-muted rounded-full overflow-hidden">
@@ -81,12 +81,17 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
       {/* Question */}
       <div className="flex-1 flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-xl" key={question.id}>
+          <p className="text-xs text-muted-foreground text-center mb-4 animate-slide-up">
+            אבחון ראשוני לצורך בניית טיוטת צוואה
+          </p>
+
           <h2
             className="text-xl md:text-2xl font-bold text-center mb-3 text-foreground animate-slide-up"
             style={{ lineHeight: 1.5 }}
           >
             {question.text}
           </h2>
+
           {question.explanation && (
             <p className="text-sm text-muted-foreground text-center mb-10 animate-slide-up" style={{ animationDelay: "40ms", animationFillMode: "backwards" }}>
               {question.explanation}
@@ -113,6 +118,14 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
                   {option}
                 </button>
               ))}
+
+              <button
+                onClick={goNext}
+                disabled={!currentAnswer.trim()}
+                className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] disabled:opacity-40 mt-4"
+              >
+                המשך
+              </button>
             </div>
           ) : (
             <form onSubmit={handleTextSubmit} className="space-y-4 animate-slide-up" style={{ animationDelay: "80ms", animationFillMode: "backwards" }}>
@@ -125,7 +138,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
                 placeholder={question.placeholder || ""}
                 className="w-full rounded-lg border border-border bg-card px-5 py-4 text-sm md:text-base text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
                 autoFocus
-                maxLength={200}
+                maxLength={300}
               />
               <button
                 type="submit"
@@ -151,7 +164,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
             חזרה
           </button>
           <span className="text-xs text-muted-foreground/60">
-            {question.type === "select" ? "בחרו תשובה כדי להמשיך" : "הקלידו ולחצו המשך"}
+            המידע ישמש לבניית תוצאה ראשונית בלבד
           </span>
         </div>
       </div>
