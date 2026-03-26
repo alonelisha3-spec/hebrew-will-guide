@@ -1,5 +1,6 @@
 import { Shield, FileText, Scale, CheckCircle2 } from "lucide-react";
 import { FAQSection } from "./FAQSection";
+import portraitImg from "@/assets/alon-elisha-portrait.png";
 
 interface Props {
   onNoWill: () => void;
