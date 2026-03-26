@@ -14,7 +14,7 @@ export const noWillQuestions: Question[] = [
     text: "מהו שמך המלא?",
     type: "text",
     placeholder: "שם פרטי ושם משפחה",
-    explanation: "השם ישמש בטיוטה הראשונית בלבד.",
+    explanation: "השם ישמש בנוסח הצוואה הראשוני בלבד.",
   },
   {
     id: "familyStructure",
