@@ -213,7 +213,7 @@ export const noWillQuestions: Question[] = [
     text: "האם יש לך נכסים דיגיטליים, חשבונות מקוונים או מידע דיגיטלי שחשוב להסדיר?",
     type: "select",
     options: ["כן", "לא", "לא בטוח/ה"],
-    explanation: "המערכת תוכל להוסיף התייחסות ראשונית לכך בטיוטה.",
+    explanation: "המערכת תוכל להוסיף התייחסות ראשונית לכך בנוסח הצוואה.",
   },
   {
     id: "burialAndMemorial",
