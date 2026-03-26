@@ -12,7 +12,8 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
-  const [consentData, setConsentData] = useState(false);
+  const [consentMain, setConsentMain] = useState(false);
+  const [consentMarketing, setConsentMarketing] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
 
@@ -20,6 +21,7 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     const errs: Record<string, string> = {};
 
     if (!fullName.trim()) errs.fullName = "יש למלא שם מלא";
+
     if (!phone.trim()) {
       errs.phone = "יש למלא טלפון";
     } else if (!/^0\d{8,9}$/.test(phone.replace(/[-\s]/g, ""))) {
@@ -30,8 +32,8 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
       errs.email = "יש למלא כתובת דוא״ל";
     }
 
-    if (!consentData) {
-      errs.consentData = "יש לאשר שימוש בפרטים לצורך יצירת קשר";
+    if (!consentMain) {
+      errs.consentMain = "יש לאשר כדי להמשיך";
     }
 
     setErrors(errs);
@@ -39,17 +41,16 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
   }
 
   function buildSummary() {
-    const importantAnswers = Object.entries(answers)
-      .filter(([, value]) => value && String(value).trim() !== "")
-      .map(([key, value]) => `${key}: ${value}`)
-      .join("\n");
-
-    return importantAnswers || "לא נרשמו תשובות";
+    return (
+      Object.entries(answers)
+        .filter(([, value]) => value && String(value).trim() !== "")
+        .map(([key, value]) => `${key}: ${value}`)
+        .join("\n") || "לא נרשמו תשובות"
+    );
   }
 
   async function sendLeadToEmail() {
     const payload = new FormData();
-
     payload.append("_subject", "ליד חדש - מערכת צוואות");
     payload.append("_captcha", "false");
     payload.append("_template", "table");
@@ -61,30 +62,12 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     payload.append("סוג צוואה", willDraftData?.willType || "לא ידוע");
     payload.append("תשובות", buildSummary());
     payload.append("טיוטה", willDraftData?.fullDraft || "לא נוצרה טיוטה");
+    payload.append("אישור שיווק", consentMarketing ? "כן" : "לא");
 
     await fetch("https://formsubmit.co/alonelisha3@gmail.com", {
       method: "POST",
       body: payload,
     });
-  }
-
-  function sendLeadToWhatsApp() {
-    const msg = `ליד חדש ממערכת הצוואות
-
-שם: ${fullName.trim()}
-טלפון: ${phone.trim()}
-אימייל: ${email.trim() || "לא נמסר"}
-סוג פנייה: ${intent}
-סוג צוואה: ${willDraftData?.willType || "לא ידוע"}
-
-תשובות:
-${buildSummary()}
-`;
-
-    window.open(
-      `https://wa.me/972549260698?text=${encodeURIComponent(msg)}`,
-      "_blank"
-    );
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -95,7 +78,6 @@ ${buildSummary()}
 
     try {
       await sendLeadToEmail();
-      sendLeadToWhatsApp();
 
       onSubmit({
         name: fullName.trim(),
@@ -112,18 +94,20 @@ ${buildSummary()}
 
   const title =
     intent === "callback"
-      ? "נמצאו נקודות שמומלץ לבדוק"
-      : "כדי לקבל את התוצאה המלאה";
+      ? "השאירו פרטים להתייחסות אישית"
+      : "השאירו פרטים לצפייה בטיוטה המלאה";
 
   const subtitle =
     intent === "callback"
-      ? "השאירו פרטים ואחזור אליכם לגבי הטיוטה או החוסרים שעלו"
-      : "השאירו פרטים קצרים כדי לקבל את הטיוטה או התוצאה המלאה";
+      ? "נחזור אליכם בקשר לחוסרים שעלו או להשלמת הצוואה"
+      : "לאחר השליחה תוצג הטיוטה המלאה או תישלח אליכם בדוא״ל, לפי בחירתכם";
 
   const buttonLabel =
     intent === "callback"
-      ? "אני רוצה שיחזרו אליי"
-      : "המשך לתוצאה המלאה";
+      ? "המשך וקבל התייחסות אישית"
+      : intent === "email"
+      ? "שלח לי את הטיוטה למייל"
+      : "הצג את הטיוטה המלאה";
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-background">
@@ -135,8 +119,13 @@ ${buildSummary()}
             {title}
           </h2>
 
-          <p className="text-sm text-muted-foreground text-center mb-8 leading-relaxed">
+          <p className="text-sm text-muted-foreground text-center mb-4 leading-relaxed">
             {subtitle}
+          </p>
+
+          <p className="text-xs text-muted-foreground/70 text-center mb-8 leading-relaxed">
+            אין חובה להשלים בשלב זה תעודת זהות, כתובת או שמות מלאים של בני משפחה
+            כדי לצפות בטיוטה הראשונית או לבקש התייחסות.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -202,17 +191,29 @@ ${buildSummary()}
               <label className="flex items-start gap-3 cursor-pointer">
                 <input
                   type="checkbox"
-                  checked={consentData}
-                  onChange={(e) => setConsentData(e.target.checked)}
+                  checked={consentMain}
+                  onChange={(e) => setConsentMain(e.target.checked)}
                   className="mt-1 rounded border-border accent-primary"
                 />
                 <span className="text-xs leading-relaxed text-muted-foreground">
-                  אני מאשר/ת כי ידוע לי שהמידע, התוצאה והטיוטה המוצגים במערכת הם כלליים וראשוניים בלבד, אינם מהווים ייעוץ משפטי, אינם מחליפים פגישה עם עורך דין, ואינם מהווים צוואה סופית או תקפה לחתימה. אני מאשר/ת שימוש בפרטים שמסרתי לצורך יצירת קשר, טיפול בפנייה ושיפור השירות, בהתאם ל<Link to="/terms" target="_blank" className="text-primary hover:underline">תנאי השימוש</Link> ול<Link to="/privacy" target="_blank" className="text-primary hover:underline">מדיניות הפרטיות</Link>. <span className="text-destructive">*</span>
+                  אני מאשר/ת כי ידוע לי שהמידע, התוצאה, הבדיקה והטיוטה המוצגים במערכת הם כלליים וראשוניים בלבד, מבוססים על תשובות שהוזנו על־ידי, אינם מהווים ייעוץ משפטי, אינם מחליפים בדיקה פרטנית או פגישה עם עורך דין, ואינם מהווים צוואה סופית, מלאה או תקפה לחתימה. ידוע לי כי הסתמכות על התוצאה או על הטיוטה ללא התאמה משפטית פרטנית עלולה להביא לתוצאה שאינה תואמת את רצוני. אני מאשר/ת שימוש בפרטים שמסרתי לצורך יצירת קשר, טיפול בפנייה, שמירת מידע תפעולית, תיעוד ושיפור השירות, בהתאם ל<Link to="/terms" target="_blank" className="text-primary hover:underline">תנאי השימוש</Link> ול<Link to="/privacy" target="_blank" className="text-primary hover:underline">מדיניות הפרטיות</Link>. <span className="text-destructive">*</span>
                 </span>
               </label>
-              {errors.consentData && (
-                <p className="text-destructive text-xs mr-7">{errors.consentData}</p>
+              {errors.consentMain && (
+                <p className="text-destructive text-xs mr-7">{errors.consentMain}</p>
               )}
+
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consentMarketing}
+                  onChange={(e) => setConsentMarketing(e.target.checked)}
+                  className="mt-1 rounded border-border accent-primary"
+                />
+                <span className="text-xs leading-relaxed text-muted-foreground">
+                  אני מסכים/ה לקבל בעתיד עדכונים, תוכן מקצועי והצעות שירות מהמשרד. (רשות)
+                </span>
+              </label>
             </div>
 
             <button
@@ -224,9 +225,15 @@ ${buildSummary()}
             </button>
           </form>
 
-          <p className="text-[10px] text-muted-foreground/50 text-center mt-6 leading-relaxed">
-            לאחר השליחה, הפרטים יישלחו למשרד לצורך יצירת קשר והמשך טיפול.
-          </p>
+          <div className="mt-6 space-y-2">
+            <p className="text-[10px] text-muted-foreground/50 text-center leading-relaxed">
+              לאחר השליחה, הפרטים יישלחו למשרד לצורך יצירת קשר והמשך טיפול.
+            </p>
+            <p className="text-[10px] text-muted-foreground/50 text-center leading-relaxed">
+              אם בחרת בשליחה בדוא״ל, ודא שהכתובת שהוזנה נכונה. ניתן לבקש עיון,
+              תיקון או מחיקה של מידע בהתאם לדין.
+            </p>
+          </div>
         </div>
       </div>
     </div>
