@@ -14,7 +14,7 @@ export const noWillQuestions: Question[] = [
     text: "מהו שמך המלא?",
     type: "text",
     placeholder: "שם פרטי ושם משפחה",
-    explanation: "השם ישמש בטיוטה הראשונית בלבד.",
+    explanation: "השם ישמש בנוסח הצוואה הראשוני בלבד.",
   },
   {
     id: "familyStructure",
@@ -61,7 +61,7 @@ export const noWillQuestions: Question[] = [
       "בנכסים מסוימים לכל אחד",
       "טרם החלטתי",
     ],
-    explanation: "חלוקה באחוזים, בחלקים או לפי נכס מסוים מייצרת טיוטה שונה.",
+    explanation: "חלוקה באחוזים, בחלקים או לפי נכס מסוים מייצרת נוסח שונה.",
     condition: (a) => a.multipleHeirs === "כן",
   },
   {
@@ -76,7 +76,7 @@ export const noWillQuestions: Question[] = [
     text: "נא לתאר בקצרה את הנכס ואת ההוראה המבוקשת",
     type: "text",
     placeholder: "לדוגמה: דירה ברחוב..., תימכר / תועבר / תינתן זכות קדימה",
-    explanation: "מידע זה ישמש לבניית סעיף ייעודי בטיוטה.",
+    explanation: "מידע זה ישמש לבניית סעיף ייעודי בנוסח הצוואה.",
     condition: (a) => a.specialAssetInstruction === "כן",
   },
   {
@@ -190,7 +190,7 @@ export const noWillQuestions: Question[] = [
     text: "נא לפרט את הנכס ואת בעל זכות הקדימה",
     type: "text",
     placeholder: "לדוגמה: הדירה ב..., זכות קדימה ל...",
-    explanation: "ישמש ליצירת סעיף ייעודי בטיוטה.",
+    explanation: "ישמש ליצירת סעיף ייעודי בנוסח הצוואה.",
     condition: (a) => a.rightOfFirstRefusal === "כן",
   },
   {
@@ -213,7 +213,7 @@ export const noWillQuestions: Question[] = [
     text: "האם יש לך נכסים דיגיטליים, חשבונות מקוונים או מידע דיגיטלי שחשוב להסדיר?",
     type: "select",
     options: ["כן", "לא", "לא בטוח/ה"],
-    explanation: "המערכת תוכל להוסיף התייחסות ראשונית לכך בטיוטה.",
+    explanation: "המערכת תוכל להוסיף התייחסות ראשונית לכך בנוסח הצוואה.",
   },
   {
     id: "burialAndMemorial",

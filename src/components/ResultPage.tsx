@@ -39,7 +39,7 @@ export function ResultPage({
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
+    a.download = `נוסח_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   }
@@ -63,7 +63,7 @@ export function ResultPage({
         },
       });
       setCbSubmitted(true);
-      toast.success("הפרטים התקבלו — ניצור קשר בהקדם.");
+      toast.success("הפרטים נקלטו בהצלחה — ניצור קשר בהקדם.");
     } catch {
       toast.error("שגיאה בשליחת הפרטים.");
     }
@@ -77,7 +77,9 @@ export function ResultPage({
         <div className="bg-card rounded-xl border border-border shadow-md p-6 md:p-8 animate-slide-up">
           <div className="gold-line mx-auto mb-6" />
           <h1 className="text-xl md:text-2xl font-bold text-center mb-4 text-foreground" style={{ lineHeight: 1.5 }}>
-            {mode === "draft" ? "טיוטת צוואה ראשונית" : reviewHeadline}
+            {mode === "draft"
+              ? "נוסח הצוואה שלך מוכן"
+              : reviewHeadline || "נמצאו נושאים שמומלץ לבדוק בצוואה הקיימת"}
           </h1>
 
           <div className="bg-secondary/50 rounded-lg p-4 mb-4">
@@ -94,8 +96,9 @@ export function ResultPage({
           </div>
 
           {mode === "draft" && (
-            <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 mb-6">
-              {legalWarning}
+            <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 mb-6 space-y-2">
+              <p>{legalWarning}</p>
+              <p>הסתמכות על התוצאה או על נוסח הצוואה ללא בדיקה משפטית פרטנית עלולה להוביל לתוצאה שאינה תואמת את רצון המשתמש.</p>
             </div>
           )}
         </div>
@@ -150,7 +153,7 @@ export function ResultPage({
               className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] flex items-center justify-center gap-2"
             >
               <Download className="w-4 h-4" />
-              הורד טיוטת צוואה
+              הורד את נוסח הצוואה
             </button>
           </div>
         )}
@@ -176,7 +179,7 @@ export function ResultPage({
         >
           <div className="gold-line mx-auto mb-5" />
           <h2 className="text-lg md:text-xl font-bold mb-3 text-accent-foreground">
-            מעוניינים בבחינה משפטית מקצועית?
+            אני רוצה בדיקה משפטית והשלמה סופית
           </h2>
           <p className="text-sm text-accent-foreground/60 mb-6 leading-relaxed max-w-md mx-auto">
             השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית — ללא התחייבות.
@@ -185,7 +188,7 @@ export function ResultPage({
           {cbSubmitted ? (
             <div className="flex items-center justify-center gap-2 text-risk-low font-medium">
               <CheckCircle className="w-5 h-5" />
-              <span>הפרטים התקבלו. ניצור קשר בהקדם.</span>
+              <span>הפרטים נקלטו בהצלחה. ניצור קשר בהקדם.</span>
             </div>
           ) : !showCallbackForm ? (
             <button

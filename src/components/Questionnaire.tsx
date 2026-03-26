@@ -82,7 +82,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
       <div className="flex-1 flex items-center justify-center py-12 px-4">
         <div className="w-full max-w-xl" key={question.id}>
           <p className="text-xs text-muted-foreground text-center mb-4 animate-slide-up">
-            אבחון ראשוני לצורך בניית טיוטת צוואה
+            המערכת בונה עבורך נוסח צוואה מותאם אישית לפי הנתונים שתמסור/י
           </p>
 
           <h2
@@ -164,7 +164,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
             חזרה
           </button>
           <span className="text-xs text-muted-foreground/60">
-            המידע ישמש לבניית תוצאה ראשונית בלבד
+            המידע ישמש לבניית נוסח ראשוני בלבד
           </span>
         </div>
       </div>

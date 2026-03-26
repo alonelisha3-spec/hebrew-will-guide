@@ -1,4 +1,4 @@
-import { Shield, FileText, Scale, CheckCircle2 } from "lucide-react";
+import { Shield, FileText, Scale, CheckCircle2, Briefcase } from "lucide-react";
 import { FAQSection } from "./FAQSection";
 import portraitImg from "@/assets/portrait-alon.png";
 
@@ -21,28 +21,28 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
           >
             רוצים להסדיר צוואה?
             <br />
-            התחילו עכשיו וקבלו טיוטת צוואה ראשונית
+            התחילו עכשיו וקבלו נוסח צוואה מוכן בהתאמה אישית
           </h1>
           <p className="mt-6 text-base md:text-lg text-accent-foreground/85 leading-relaxed max-w-2xl mx-auto">
-            ענו על מספר שאלות וקבלו תוצאה ראשונית ברורה, כולל טיוטת צוואה,
-            זיהוי חוסרים ונקודות שמומלץ להסדיר לפני חתימה.
+            ענו על מספר שאלות פשוטות וקבלו נוסח צוואה מלא, ברור ומותאם למצב
+            האישי שלכם — כולל זיהוי חוסרים ונושאים שחשוב להסדיר.
           </p>
 
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm max-w-3xl mx-auto">
             <div className="rounded-lg bg-white/10 border border-white/10 px-4 py-3">
-              <p className="font-semibold text-white">טיוטת צוואה ראשונית</p>
-              <p className="text-accent-foreground/70 mt-1">תוך דקות ספורות</p>
+              <p className="font-semibold text-white">נוסח צוואה מוכן תוך דקות</p>
+              <p className="text-accent-foreground/70 mt-1">מבוסס על הנתונים שלך</p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-4 py-3">
-              <p className="font-semibold text-white">איתור חוסרים</p>
+              <p className="font-semibold text-white">התאמה למצב משפחתי ונכסים</p>
               <p className="text-accent-foreground/70 mt-1">
-                בנושאים שעלולים ליצור בעיה בעתיד
+                זיהוי נושאים שמצריכים הסדרה
               </p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-4 py-3">
-              <p className="font-semibold text-white">המשך טיפול אישי</p>
+              <p className="font-semibold text-white">אפשרות להמשך טיפול אישי במשרד</p>
               <p className="text-accent-foreground/70 mt-1">
-                אם תרצו להפוך את הטיוטה למסמך מסודר
+                בדיקה משפטית והשלמה סופית
               </p>
             </div>
           </div>
@@ -53,7 +53,7 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
               className="inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:brightness-110 w-full sm:w-auto"
             >
               <FileText className="w-4 h-4 ml-2" />
-              אני רוצה לקבל טיוטת צוואה
+              אני רוצה להכין צוואה
             </button>
             <button
               onClick={onExistingWill}
@@ -92,16 +92,17 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
           />
           <div className="text-center md:text-right">
             <h2 className="text-xl md:text-2xl font-bold text-foreground">
-              לפני שחותמים, עדיף להבין מה חסר
+              אל תשאירו את הדברים החשובים לאי-ודאות
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-sm md:text-base">
-              התחילו עכשיו, קבלו טיוטה ראשונית ותמונה ברורה יותר של מה נכון להסדיר.
+              התחילו עכשיו, ענו על מספר שאלות, וקבלו נוסח צוואה ראשוני ומסודר
+              בהתאם לנתונים שלכם.
             </p>
             <button
               onClick={onNoWill}
               className="mt-8 inline-flex items-center justify-center rounded-md bg-accent px-10 py-4 text-base font-semibold text-accent-foreground shadow-lg hover:brightness-110"
             >
-              אני רוצה להתחיל
+              התחל עכשיו
             </button>
           </div>
         </div>

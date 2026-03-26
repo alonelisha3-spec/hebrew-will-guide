@@ -234,11 +234,11 @@ function buildCommercialPreview(
     }
 
     if (lead.temperature === "hot") {
-      points.push("לפי התשובות, מומלץ לבקש חזרה אישית ולא להסתפק בטיוטה כללית.");
+      points.push("לפי התשובות, מומלץ לבקש חזרה אישית ולא להסתפק בנוסח כללי.");
     } else if (lead.temperature === "warm") {
       points.push("נמצאו נושאים שמצריכים ניסוח מדויק לפני חתימה.");
     } else {
-      points.push("ניתן להפיק טיוטה ראשונית, אך מומלץ לבדוק התאמה משפטית.");
+      points.push("ניתן להפיק נוסח ראשוני, אך מומלץ לבדוק התאמה משפטית.");
     }
 
     return {
@@ -301,10 +301,10 @@ function buildCommercialDraft(
       "הערה מקדימה: לפי הנתונים שנמסרו, קיימים מאפיינים שמצריכים התאמה משפטית פרטנית לפני חתימה, ובפרט בשל מורכבות משפחתית/נכסית.\n\n";
   } else if (lead.temperature === "warm") {
     intro =
-      "הערה מקדימה: מדובר בטיוטה ראשונית בלבד, ומומלץ לבצע בדיקה לפני חתימה כדי לוודא התאמה מלאה למצב המשפחתי והנכסי.\n\n";
+      "הערה מקדימה: מדובר בנוסח ראשוני בלבד, ומומלץ לבצע בדיקה לפני חתימה כדי לוודא התאמה מלאה למצב המשפחתי והנכסי.\n\n";
   } else {
     intro =
-      "הערה מקדימה: מדובר בטיוטה ראשונית בלבד, שאינה מחליפה בדיקה משפטית פרטנית.\n\n";
+      "הערה מקדימה: מדובר בנוסח ראשוני בלבד, שאינו מחליף בדיקה משפטית פרטנית.\n\n";
   }
 
   return {
@@ -395,9 +395,9 @@ export default function Index() {
     setStep("results");
 
     if (intent === "callback") {
-      toast.success("הבקשה נקלטה. מומלץ לחזור לליד בהקדם.");
+      toast.success("הפרטים נקלטו בהצלחה.");
     } else if (analysis.temperature === "hot") {
-      toast.success("זוהה ליד חם. מומלץ ליצור קשר טלפוני בהקדם.");
+      toast.success("הפרטים נקלטו בהצלחה. נוסח הצוואה מוכן לצפייה.");
     } else {
       toast.success("הפרטים נקלטו בהצלחה.");
     }
@@ -440,7 +440,7 @@ export default function Index() {
         <PreviewPage
           willType={previewType}
           keyPoints={previewPoints}
-          onShowFull={() => handlePreviewAction("callback")}
+          onShowFull={() => handlePreviewAction("full")}
           onSendEmail={() => handlePreviewAction("email")}
           onCallback={() => handlePreviewAction("callback")}
         />

@@ -61,7 +61,7 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     payload.append("סוג פנייה", intent);
     payload.append("סוג צוואה", willDraftData?.willType || "לא ידוע");
     payload.append("תשובות", buildSummary());
-    payload.append("טיוטה", willDraftData?.fullDraft || "לא נוצרה טיוטה");
+    payload.append("נוסח צוואה", willDraftData?.fullDraft || "לא הופק נוסח");
     payload.append("אישור שיווק", consentMarketing ? "כן" : "לא");
 
     await fetch("https://formsubmit.co/alonelisha3@gmail.com", {
@@ -93,21 +93,25 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
   }
 
   const title =
-    intent === "callback"
-      ? "השאירו פרטים להתייחסות אישית"
-      : "השאירו פרטים לצפייה בטיוטה המלאה";
+    intent === "full"
+      ? "כדי לצפות בנוסח הצוואה המלא"
+      : intent === "email"
+      ? "כדי לשלוח אליך את נוסח הצוואה"
+      : "כדי לקבל התייחסות אישית";
 
   const subtitle =
-    intent === "callback"
-      ? "נחזור אליכם בקשר לחוסרים שעלו או להשלמת הצוואה"
-      : "לאחר השליחה תוצג הטיוטה המלאה או תישלח אליכם בדוא״ל, לפי בחירתכם";
+    intent === "full"
+      ? "השאירו פרטים קצרים כדי לצפות בנוסח הצוואה המלא"
+      : intent === "email"
+      ? "השאירו פרטים קצרים כדי לקבל את נוסח הצוואה בדוא״ל"
+      : "השאירו פרטים ואחזור אליכם לגבי הצוואה והנושאים שעלו";
 
   const buttonLabel =
-    intent === "callback"
-      ? "המשך וקבל התייחסות אישית"
+    intent === "full"
+      ? "הצג את נוסח הצוואה המלא"
       : intent === "email"
-      ? "שלח לי את הטיוטה למייל"
-      : "הצג את הטיוטה המלאה";
+      ? "שלח לי את נוסח הצוואה"
+      : "אני רוצה שיחזרו אליי";
 
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-background">
@@ -124,8 +128,8 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
           </p>
 
           <p className="text-xs text-muted-foreground/70 text-center mb-8 leading-relaxed">
-            אין חובה להשלים בשלב זה תעודת זהות, כתובת או שמות מלאים של בני משפחה
-            כדי לצפות בטיוטה הראשונית או לבקש התייחסות.
+            בשלב זה אין חובה להשלים תעודת זהות, כתובת או שמות מלאים של בני
+            משפחה כדי לצפות בנוסח הראשוני או לבקש התייחסות.
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -196,7 +200,7 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
                   className="mt-1 rounded border-border accent-primary"
                 />
                 <span className="text-xs leading-relaxed text-muted-foreground">
-                  אני מאשר/ת כי ידוע לי שהמידע, התוצאה, הבדיקה והטיוטה המוצגים במערכת הם כלליים וראשוניים בלבד, מבוססים על תשובות שהוזנו על־ידי, אינם מהווים ייעוץ משפטי, אינם מחליפים בדיקה פרטנית או פגישה עם עורך דין, ואינם מהווים צוואה סופית, מלאה או תקפה לחתימה. ידוע לי כי הסתמכות על התוצאה או על הטיוטה ללא התאמה משפטית פרטנית עלולה להביא לתוצאה שאינה תואמת את רצוני. אני מאשר/ת שימוש בפרטים שמסרתי לצורך יצירת קשר, טיפול בפנייה, שמירת מידע תפעולית, תיעוד ושיפור השירות, בהתאם ל<Link to="/terms" target="_blank" className="text-primary hover:underline">תנאי השימוש</Link> ול<Link to="/privacy" target="_blank" className="text-primary hover:underline">מדיניות הפרטיות</Link>. <span className="text-destructive">*</span>
+                  אני מאשר/ת כי ידוע לי שהמידע, התוצאה ונוסח הצוואה המופקים במערכת זו הם כלליים וראשוניים בלבד, מבוססים על הנתונים שהוזנו על ידי המשתמש, אינם מהווים ייעוץ משפטי, אינם מחליפים פגישה עם עורך דין, ואינם מהווים צוואה סופית או תקפה לחתימה ללא התאמה משפטית פרטנית ובחינת נסיבות המקרה. הסתמכות על התוצאה או על נוסח הצוואה ללא בדיקה משפטית פרטנית עלולה להוביל לתוצאה שאינה תואמת את רצון המשתמש. אני מאשר/ת שימוש בפרטים שמסרתי לצורך יצירת קשר, טיפול בפנייה, שמירת מידע תפעולית, תיעוד ושיפור השירות, בהתאם ל<Link to="/terms" target="_blank" className="text-primary hover:underline">תנאי השימוש</Link> ול<Link to="/privacy" target="_blank" className="text-primary hover:underline">מדיניות הפרטיות</Link>. <span className="text-destructive">*</span>
                 </span>
               </label>
               {errors.consentMain && (
