@@ -168,8 +168,11 @@ function buildMutualWillText(a: Record<string, string>): string {
   const name = clean(a.fullName);
   const idNum = clean(a.idNumber);
   const address = clean(a.address);
+  const spouseName = clean(a.spouseName);
+  const spouseId = clean(a.spouseId);
   const today = currentDateHe();
   const childrenNames = splitNames(a.childrenNames);
+  const otherHeirNames = splitNames(a.otherHeirNames);
   const executorName = clean(a.executorName);
   const specialAssetDetails = clean(a.specialAssetDetails, "[יש להשלים פרטי נכס והוראה]");
   const specificChargeDetails = clean(a.specificChargeDetails, "[יש להשלים את החיוב המבוקש]");
@@ -186,7 +189,7 @@ function buildMutualWillText(a: Record<string, string>): string {
   lines.push("");
 
   // --- Joint declaration ---
-  lines.push(`אנו הח\"מ, ${name}, ת\"ז ${idNum}, מרחוב ${address}, ובן/בת זוגו/ה ___________,  ת\"ז ___________, מצהירים בזאת כי אנו כשירים לצוות, פועלים בדעה צלולה ומתוך רצון חופשי, ללא כל כפייה, איום, לחץ או השפעה בלתי הוגנת מסוג שהוא.`);
+  lines.push(`אנו הח\"מ, ${name}, ת\"ז ${idNum}, מרחוב ${address}, ובן/בת זוגו/ה ${spouseName}, ת\"ז ${spouseId}, מצהירים בזאת כי אנו כשירים לצוות, פועלים בדעה צלולה ומתוך רצון חופשי, ללא כל כפייה, איום, לחץ או השפעה בלתי הוגנת מסוג שהוא.`);
   lines.push("");
   lines.push(`צוואה זו נערכה כצוואה הדדית בהתאם לסעיף 8א לחוק הירושה, תשכ\"ה–1965 (להלן: "החוק"), ומתבססת על רצוננו המשותף ועל ההסתמכות ההדדית כי הוראותיה יישמרו גם לאחר פטירת אחד מאיתנו. צוואה זו מהווה את צוואתנו האחרונה והיא מבטלת כל צוואה קודמת, ככל שנעשתה.`);
   lines.push("");
@@ -237,10 +240,10 @@ function buildMutualWillText(a: Record<string, string>): string {
 
   // --- 5. First spouse death ---
   lines.push(`${section}. הוראות לעת פטירת הראשון מבני הזוג`);
-  lines.push(`${section}.1 במקרה של פטירת אחד מאיתנו, אנו מצווים כי כל רכושנו, מכל מין וסוג, כפי שהוגדר בסעיף 1 לעיל, יעבור במלואו, ללא כל יוצא מן הכלל, לבן או לבת הזוג הנותר/ת בחיים (להלן: "בן הזוג הנותר").`);
-  lines.push(`${section}.2 בן הזוג הנותר יהיה הזוכה הבלעדי בעיזבון, לרבות דירת המגורים, חשבונות הבנק, הזכויות הסוציאליות, קרנות ההשתלמות, קופות הגמל, הפנסיה, המיטלטלין, הכספים, הזכויות החוזיות וכל נכס מכל סוג שהוא.`);
-  lines.push(`${section}.3 מטרת הוראה זו היא להבטיח כי בן הזוג הנותר יוכל להמשיך ולנהל את חייו באופן תקין, ללא פגיעה כלכלית וללא תלות בצדדים אחרים.`);
-  lines.push(`${section}.4 רק בן הזוג הנותר בחיים יהיה זכאי לכל העיזבון במלואו בעת הפטירה הראשונה.`);
+  lines.push(`${section}.1 במקרה של פטירת אחד מאיתנו, אנו מצווים כי כל רכושנו, מכל מין וסוג, כפי שהוגדר בסעיף 1 לעיל, יעבור במלואו, ללא כל יוצא מן הכלל, לבן או לבת הזוג הנותר/ת בחיים.`);
+  lines.push(`${section}.2 לצורך הבהרה: אם ${name} ילך/תלך לעולמו/ה ראשון/ה – כל העיזבון יעבור ל${spouseName}. אם ${spouseName} ילך/תלך לעולמו/ה ראשון/ה – כל העיזבון יעבור ל${name}.`);
+  lines.push(`${section}.3 בן הזוג הנותר יהיה הזוכה הבלעדי בעיזבון, לרבות דירת המגורים, חשבונות הבנק, הזכויות הסוציאליות, קרנות ההשתלמות, קופות הגמל, הפנסיה, המיטלטלין, הכספים, הזכויות החוזיות וכל נכס מכל סוג שהוא.`);
+  lines.push(`${section}.4 מטרת הוראה זו היא להבטיח כי בן הזוג הנותר יוכל להמשיך ולנהל את חייו באופן תקין, ללא פגיעה כלכלית וללא תלות בצדדים אחרים.`);
   lines.push("");
   section++;
 
@@ -277,14 +280,14 @@ function buildMutualWillText(a: Record<string, string>): string {
   if (yes(a.conflictRisk) || unsure(a.conflictRisk)) {
     lines.push(`${section}. מנגנוני צמצום מחלוקות`);
     if (
-      a.conflictProtection === "כן, לרבות שמאות / הערכת שווי" ||
-      a.conflictProtection === "כן, שניהם"
+      (a.conflictProtection || "").includes("הערכת שווי") ||
+      (a.conflictProtection || "").includes("שניהם")
     ) {
       lines.push(`שווי נכסים שיידרש להעריכם לצורך חלוקת העיזבון ייקבע באמצעות חוות דעת של איש מקצוע מתאים, ובמקרה הצורך ייקבע בצוואה הסופית מנגנון בחירה של שמאי או מומחה ניטרלי.`);
     }
     if (
-      a.conflictProtection === "כן, לרבות מנגנון נגד התנגדות לצוואה" ||
-      a.conflictProtection === "כן, שניהם"
+      (a.conflictProtection || "").includes("התנגדות") ||
+      (a.conflictProtection || "").includes("שניהם")
     ) {
       lines.push(`בצוואה הסופית ניתן לשקול סעיף הקובע השלכות ביחס ליורש שינקוט הליך משפטי שמטרתו לסכל את קיום הצוואה, בכפוף לדין.`);
     }
@@ -341,8 +344,8 @@ function buildMutualWillText(a: Record<string, string>): string {
   lines.push(`ת.ז.: ${idNum}`);
   lines.push(`חתימה: _______________`);
   lines.push("");
-  lines.push(`מצווה 2: _______________`);
-  lines.push(`ת.ז.: _______________`);
+  lines.push(`מצווה 2: ${spouseName}`);
+  lines.push(`ת.ז.: ${spouseId}`);
   lines.push(`חתימה: _______________`);
   lines.push("");
   lines.push(`אנו הח"מ מצהירים בזאת כי שני המצווים חתמו על צוואה זו בפנינו שניהם, לאחר שהצהירו בפנינו כי זוהי צוואתם, וכי הם פועלים בדעה צלולה, מרצון חופשי וללא כל השפעה בלתי הוגנת. אנו מצהירים כי איננו יורשים על פי צוואה זו, איננו נהנים ממנה, ואיננו בני משפחה מדרגה ראשונה של מי מבני הזוג המצווים.`);
@@ -365,12 +368,14 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   const name = clean(a.fullName);
   const idNum = clean(a.idNumber);
   const address = clean(a.address);
+  const spouseName = clean(a.spouseName);
   const today = currentDateHe();
 
   const inheritanceModel = a.inheritanceModel || "";
   const distributionMethod = a.distributionMethod || "";
   const specialAssetDetails = clean(a.specialAssetDetails, "[יש להשלים פרטי נכס והוראה]");
   const substituteHeirMode = a.substituteHeirMode || "";
+  const substituteHeirName = clean(a.substituteHeirName, "[יש להשלים שם יורש חלופי]");
   const successiveHeirDetails = clean(a.successiveHeirDetails, "[יש להשלים יורש ראשון ויורש שני]");
   const minorChildrenDetails = a.minorChildrenDetails || "";
   const executorName = clean(a.executorName);
@@ -384,7 +389,8 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   );
   const specialDetails = clean(a.specialDetails, "[יש להשלים נסיבות מיוחדות]");
   const childrenNames = splitNames(a.childrenNames);
-
+  const otherHeirNames = splitNames(a.otherHeirNames);
+  const allHeirs = [...childrenNames, ...otherHeirNames];
   const lines: string[] = [];
   let section = 1;
 
@@ -426,20 +432,39 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   lines.push(`${section}. מבנה כללי של ההורשה`);
   if (inheritanceModel.includes("הכל לבן/בת הזוג") || inheritanceModel.includes("כל העיזבון לבן/בת הזוג")) {
     lines.push(
-      `אני מצווה את מלוא עיזבוני לבן/בת זוגי. ככל שיידרש, יש להשלים את פרטי בן/בת הזוג בצוואה הסופית.`
+      `אני מצווה את מלוא עיזבוני ל${spouseName}.`
     );
   } else if (inheritanceModel.includes("קודם לבן/בת הזוג") || inheritanceModel.includes("בן/בת הזוג קודם")) {
     lines.push(
-      `אני מצווה כי תחילה יעבור עיזבוני לבן/בת הזוג, ולאחר מכן ליורשים הבאים אחריו בהתאם להוראות צוואה זו.`
+      `אני מצווה כי תחילה יעבור מלוא עיזבוני ל${spouseName}, ולאחר פטירתו/ה יעבור העיזבון ליורשים הבאים:`
     );
+    if (childrenNames.length > 0) {
+      const share = (100 / childrenNames.length).toFixed(0);
+      childrenNames.forEach((child, i) => {
+        lines.push(`   ${i + 1}. ${child} – ${share}% מן העיזבון.`);
+      });
+    } else {
+      lines.push(`   [יש להשלים שמות היורשים ואחוזי חלוקה]`);
+    }
   } else if (inheritanceModel.includes("לחלק בין") || inheritanceModel.includes("חלוקה ישירה")) {
-    lines.push(
-      `אני מצווה את עיזבוני לחלוקה ישירה בין כמה יורשים, בהתאם למנגנון החלוקה המפורט בצוואה זו.`
-    );
+    lines.push(`אני מצווה את עיזבוני לחלוקה בין היורשים הבאים:`);
+    if (allHeirs.length > 0) {
+      const share = (100 / allHeirs.length).toFixed(0);
+      allHeirs.forEach((heir, i) => {
+        lines.push(`   ${i + 1}. ${heir} – ${share}% מן העיזבון.`);
+      });
+    } else {
+      lines.push(`   [יש להשלים שמות היורשים ואחוזי חלוקה]`);
+    }
   } else if (inheritanceModel.includes("חלוקה מיוחדת") || inheritanceModel.includes("חלוקה לא שוויונית")) {
-    lines.push(
-      `אני מצווה את עיזבוני בהתאם לחלוקה מותאמת אישית, שאינה בהכרח שוויונית, כמפורט בצוואה זו.`
-    );
+    lines.push(`אני מצווה את עיזבוני בהתאם לחלוקה מותאמת אישית ליורשים הבאים:`);
+    if (allHeirs.length > 0) {
+      allHeirs.forEach((heir, i) => {
+        lines.push(`   ${i + 1}. ${heir} – [יש להשלים אחוז או נכס].`);
+      });
+    } else {
+      lines.push(`   [יש להשלים שמות היורשים ואופן החלוקה]`);
+    }
   } else {
     lines.push(
       `נדרש בירור נוסף לצורך קביעת מבנה ההורשה המדויק.`
@@ -451,12 +476,14 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   // Distribution methods
   if (distributionMethod.includes("שווה בשווה") || distributionMethod === "בחלקים שווים") {
     lines.push(`${section}. אופן החלוקה בין היורשים`);
-    if (childrenNames.length > 0) {
-      lines.push(
-        `החלוקה בין היורשים תהיה בחלקים שווים. בהתאם לנתונים שנמסרו, מדובר ביורשים הבאים: ${childrenNames.join(", ")}.`
-      );
+    if (allHeirs.length > 0) {
+      const share = (100 / allHeirs.length).toFixed(0);
+      lines.push(`החלוקה בין היורשים תהיה בחלקים שווים:`);
+      allHeirs.forEach((heir, i) => {
+        lines.push(`   ${i + 1}. ${heir} – ${share}% מן העיזבון.`);
+      });
     } else {
-      lines.push(`החלוקה בין היורשים תהיה בחלקים שווים.`);
+      lines.push(`החלוקה בין היורשים תהיה בחלקים שווים. [יש להשלים שמות היורשים]`);
     }
     lines.push("");
     section++;
@@ -502,17 +529,17 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   // Substitute heir
   if (yes(a.substituteHeir)) {
     lines.push(`${section}. יורש במקום יורש`);
-    if (substituteHeirMode === "חלקו יעבור לצאצאיו") {
+    if (substituteHeirMode.includes("ילדים שלו") || substituteHeirMode.includes("לצאצאיו")) {
       lines.push(
         `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יבואו צאצאיו במקומו ויירשו את חלקו בחלקים שווים ביניהם.`
       );
-    } else if (substituteHeirMode === "חלקו יחזור לשאר היורשים היחסיים") {
+    } else if (substituteHeirMode.includes("שאר היורשים") || substituteHeirMode.includes("יתחלק")) {
       lines.push(
         `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יתווסף חלקו ליתר היורשים לפי יחס חלקיהם בעיזבון.`
       );
-    } else if (substituteHeirMode === "אדם אחר ייכנס במקומו") {
+    } else if (substituteHeirMode.includes("אדם אחר") || substituteHeirMode.includes("אבחר")) {
       lines.push(
-        `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יבוא במקומו אדם אחר שיוגדר במפורש בצוואה הסופית.`
+        `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יבוא במקומו: ${substituteHeirName}.`
       );
     } else {
       lines.push(
@@ -539,15 +566,15 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   // Minor children
   if (yes(a.minorChildren)) {
     lines.push(`${section}. הוראות לגבי קטינים או יורשים שזכאותם נדחית`);
-    if (minorChildrenDetails === "ניהול עד גיל מסוים") {
+    if (minorChildrenDetails.includes("ינהל") && minorChildrenDetails.includes("גיל")) {
       lines.push(
         `ככל שחלק בעיזבון מיועד לקטין או למי שזכאותו נדחית, ינוהל חלקו עד הגיעו לגיל שייקבע בצוואה הסופית.`
       );
-    } else if (minorChildrenDetails === "מסירת הכספים בשלבים") {
+    } else if (minorChildrenDetails.includes("בשלבים")) {
       lines.push(
         `ככל שחלק בעיזבון מיועד לקטין או למי שזכאותו נדחית, ניתן לקבוע כי הכספים יימסרו לו בשלבים שייקבעו בצוואה הסופית.`
       );
-    } else if (minorChildrenDetails === "מינוי אדם שינהל עד להתקיים תנאי") {
+    } else if (minorChildrenDetails.includes("תנאי") || minorChildrenDetails.includes("ינהל")) {
       lines.push(
         `ככל שחלק בעיזבון מיועד לקטין או למי שזכאותו נדחית, ינוהל חלקו בידי אדם שימונה לכך עד להתקיים התנאי שנקבע.`
       );
@@ -579,16 +606,16 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   if (yes(a.conflictRisk) || unsure(a.conflictRisk)) {
     lines.push(`${section}. מנגנוני צמצום מחלוקות`);
     if (
-      a.conflictProtection === "כן, לרבות שמאות / הערכת שווי" ||
-      a.conflictProtection === "כן, שניהם"
+      (a.conflictProtection || "").includes("הערכת שווי") ||
+      (a.conflictProtection || "").includes("שניהם")
     ) {
       lines.push(
         `שווי נכסים שיידרש להעריכם לצורך חלוקת העיזבון ייקבע באמצעות חוות דעת של איש מקצוע מתאים, ובמקרה הצורך ייקבע בצוואה הסופית מנגנון בחירה של שמאי או מומחה ניטרלי.`
       );
     }
     if (
-      a.conflictProtection === "כן, לרבות מנגנון נגד התנגדות לצוואה" ||
-      a.conflictProtection === "כן, שניהם"
+      (a.conflictProtection || "").includes("התנגדות") ||
+      (a.conflictProtection || "").includes("שניהם")
     ) {
       lines.push(
         `בצוואה הסופית ניתן לשקול סעיף הקובע השלכות ביחס ליורש שינקוט הליך משפטי שמטרתו לסכל את קיום הצוואה, בכפוף לדין.`

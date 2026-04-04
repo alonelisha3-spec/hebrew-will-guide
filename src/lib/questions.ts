@@ -31,6 +31,21 @@ export const noWillQuestions: Question[] = [
     explanation: "זה עוזר לנו להתאים את המבנה הבסיסי של הצוואה.",
   },
   {
+    id: "spouseName",
+    text: "מה שם בן/בת הזוג שלך?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    explanation: "השם ישמש בצוואה לציון היורש/ת.",
+    condition: (a) => !!a.familyStructure?.includes("בן/בת זוג"),
+  },
+  {
+    id: "spouseId",
+    text: "מספר תעודת הזהות של בן/בת הזוג (לא חובה)",
+    type: "text",
+    placeholder: "מספר תעודת זהות",
+    condition: (a) => !!a.familyStructure?.includes("בן/בת זוג") && !!a.spouseName?.trim(),
+  },
+  {
     id: "inheritanceModel",
     text: "למי תרצה/י להוריש?",
     type: "select",
@@ -42,6 +57,26 @@ export const noWillQuestions: Question[] = [
       "עדיין לא בטוח/ה",
     ],
     explanation: "אפשר לשנות את זה בהמשך — רק כדי להבין את הכיוון.",
+  },
+  {
+    id: "childrenNames",
+    text: "מה שמות הילדים שלך?",
+    type: "text",
+    placeholder: "לדוגמה: דני כהן, מיכל כהן, יוסי כהן",
+    explanation: "הפרד/י בין השמות בפסיק. השמות ישמשו בצוואה.",
+    condition: (a) =>
+      a.familyStructure?.includes("ילדים") ||
+      a.inheritanceModel?.includes("לחלק"),
+  },
+  {
+    id: "otherHeirNames",
+    text: "למי עוד תרצה/י להוריש? (מלבד בן/בת זוג וילדים)",
+    type: "text",
+    placeholder: "לדוגמה: אחי דוד לוי, חברתי שרה כהן",
+    explanation: "הפרד/י בין השמות בפסיק. אם אין — דלג/י.",
+    condition: (a) =>
+      a.inheritanceModel?.includes("לחלק") ||
+      a.inheritanceModel?.includes("חלוקה מיוחדת"),
   },
   {
     id: "multipleHeirs",
@@ -93,6 +128,13 @@ export const noWillQuestions: Question[] = [
       "עדיין לא החלטתי",
     ],
     condition: (a) => a.substituteHeir === "כן",
+  },
+  {
+    id: "substituteHeirName",
+    text: "מי האדם שיקבל במקומו?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => a.substituteHeirMode === "יעבור לאדם אחר שאבחר",
   },
   {
     id: "successiveHeir",
