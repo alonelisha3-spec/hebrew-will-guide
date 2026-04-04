@@ -368,12 +368,14 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   const name = clean(a.fullName);
   const idNum = clean(a.idNumber);
   const address = clean(a.address);
+  const spouseName = clean(a.spouseName);
   const today = currentDateHe();
 
   const inheritanceModel = a.inheritanceModel || "";
   const distributionMethod = a.distributionMethod || "";
   const specialAssetDetails = clean(a.specialAssetDetails, "[יש להשלים פרטי נכס והוראה]");
   const substituteHeirMode = a.substituteHeirMode || "";
+  const substituteHeirName = clean(a.substituteHeirName, "[יש להשלים שם יורש חלופי]");
   const successiveHeirDetails = clean(a.successiveHeirDetails, "[יש להשלים יורש ראשון ויורש שני]");
   const minorChildrenDetails = a.minorChildrenDetails || "";
   const executorName = clean(a.executorName);
@@ -387,7 +389,8 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   );
   const specialDetails = clean(a.specialDetails, "[יש להשלים נסיבות מיוחדות]");
   const childrenNames = splitNames(a.childrenNames);
-
+  const otherHeirNames = splitNames(a.otherHeirNames);
+  const allHeirs = [...childrenNames, ...otherHeirNames];
   const lines: string[] = [];
   let section = 1;
 
