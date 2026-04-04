@@ -15,7 +15,14 @@ interface LeadNotificationProps {
   riskItems?: string[]
   answers?: Record<string, string>
   fullDraft?: string
+  ctaTag?: string
   timestamp?: string
+}
+
+const CTA_LABELS: Record<string, string> = {
+  purchase: '🔥 רוצה לרכוש צוואה שלמה ב-500 ₪ (ליד חם)',
+  callback: '📞 מעוניין — מבקש חזרה טלפונית (ליד חם)',
+  draft_only: '📄 נשאר עם הטיוטה בלבד (ליד קר)',
 }
 
 const LeadNotificationEmail = ({
