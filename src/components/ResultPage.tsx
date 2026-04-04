@@ -108,7 +108,11 @@ export function ResultPage({
               קיבלתי את הפרטים שלך
             </h1>
             <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6">
-              אעבור על הצוואה ואחזור אליך היום עם השלמה מלאה והערות מדויקות
+              {selectedCta === "purchase"
+                ? "נציג יחזור אליך בהקדם להסדרת התשלום והשלמת הצוואה"
+                : selectedCta === "callback"
+                ? "נחזור אליך בהקדם"
+                : "הטיוטה שלך מוכנה — ניתן להוריד אותה כעת"}
             </p>
             {selectedCta === "cold" && fullDraft && (
               <button
