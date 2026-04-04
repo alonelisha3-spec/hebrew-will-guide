@@ -45,6 +45,20 @@ function splitNames(v?: string): string[] {
     .filter(Boolean);
 }
 
+function collectChildrenNames(a: Record<string, string>): string[] {
+  // Support new individual fields (child1Name..child7Name)
+  const names: string[] = [];
+  for (let i = 1; i <= 7; i++) {
+    const name = a[`child${i}Name`];
+    if (hasValue(name)) names.push(name!.trim());
+  }
+  // Fallback to legacy comma-separated field
+  if (names.length === 0 && hasValue(a.childrenNames)) {
+    return splitNames(a.childrenNames);
+  }
+  return names;
+}
+
 function getWillType(answers: Record<string, string>): WillDraftData["willType"] {
   const familyStructure = answers.familyStructure || "";
   const inheritanceModel = answers.inheritanceModel || "";
