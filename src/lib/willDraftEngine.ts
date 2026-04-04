@@ -280,14 +280,14 @@ function buildMutualWillText(a: Record<string, string>): string {
   if (yes(a.conflictRisk) || unsure(a.conflictRisk)) {
     lines.push(`${section}. מנגנוני צמצום מחלוקות`);
     if (
-      a.conflictProtection === "כן, לרבות שמאות / הערכת שווי" ||
-      a.conflictProtection === "כן, שניהם"
+      (a.conflictProtection || "").includes("הערכת שווי") ||
+      (a.conflictProtection || "").includes("שניהם")
     ) {
       lines.push(`שווי נכסים שיידרש להעריכם לצורך חלוקת העיזבון ייקבע באמצעות חוות דעת של איש מקצוע מתאים, ובמקרה הצורך ייקבע בצוואה הסופית מנגנון בחירה של שמאי או מומחה ניטרלי.`);
     }
     if (
-      a.conflictProtection === "כן, לרבות מנגנון נגד התנגדות לצוואה" ||
-      a.conflictProtection === "כן, שניהם"
+      (a.conflictProtection || "").includes("התנגדות") ||
+      (a.conflictProtection || "").includes("שניהם")
     ) {
       lines.push(`בצוואה הסופית ניתן לשקול סעיף הקובע השלכות ביחס ליורש שינקוט הליך משפטי שמטרתו לסכל את קיום הצוואה, בכפוף לדין.`);
     }
