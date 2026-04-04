@@ -132,7 +132,6 @@ export function generateWillPreview(answers: Record<string, string>): {
     distributionMethod.includes("לא שווים") ||
     distributionMethod.includes("אחוזים") ||
     distributionMethod.includes("נכס מסוים")
-    distributionMethod === "בנכסים מסוימים לכל אחד"
   ) {
     points.push("החלוקה אינה סטנדרטית ודורשת ניסוח קפדני.");
   }
