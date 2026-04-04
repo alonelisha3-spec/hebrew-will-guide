@@ -55,8 +55,10 @@ function getWillType(answers: Record<string, string>): WillDraftData["willType"]
     familyStructure.includes("משותפים");
 
   const spouseFirst =
-    inheritanceModel === "כל העיזבון לבן/בת הזוג" ||
-    inheritanceModel === "בן/בת הזוג קודם ואחריו יורשים נוספים";
+    inheritanceModel.includes("הכל לבן/בת הזוג") ||
+    inheritanceModel.includes("כל העיזבון לבן/בת הזוג") ||
+    inheritanceModel.includes("קודם לבן/בת הזוג") ||
+    inheritanceModel.includes("בן/בת הזוג קודם");
 
   if (spouseRelevant && spouseFirst) {
     return "צוואה הדדית";
