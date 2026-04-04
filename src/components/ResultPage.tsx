@@ -236,9 +236,9 @@ export function ResultPage({
             /* Lead form after CTA selection */
             <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4 text-right animate-slide-up">
               <p className="text-xs text-accent-foreground/60 text-center mb-2">
-                {selectedCta === "hot_no_call"
-                  ? "השאר פרטים וקבל צוואה מלאה — ללא שיחה"
-                  : selectedCta === "hot_call"
+                {selectedCta === "purchase"
+                  ? "נציג יחזור אליך להסדרת התשלום"
+                  : selectedCta === "callback"
                   ? "השאר פרטים ונחזור אליך בהקדם"
                   : "השאר פרטים ונשלח לך את הטיוטה"}
               </p>
