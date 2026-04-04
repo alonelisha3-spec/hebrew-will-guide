@@ -471,7 +471,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     section++;
   }
 
-  if (distributionMethod === "באחוזים") {
+  if (distributionMethod.includes("אחוזים") || distributionMethod === "באחוזים") {
     lines.push(`${section}. חלוקה באחוזים`);
     lines.push(
       `העיזבון יחולק באחוזים בין היורשים. בצוואה הסופית יש להשלים את שמות היורשים ואת שיעור חלקו של כל אחד מהם באחוזים.`
