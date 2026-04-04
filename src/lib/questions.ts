@@ -130,6 +130,13 @@ export const noWillQuestions: Question[] = [
     condition: (a) => a.substituteHeir === "כן",
   },
   {
+    id: "substituteHeirName",
+    text: "מי האדם שיקבל במקומו?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => a.substituteHeirMode === "יעבור לאדם אחר שאבחר",
+  },
+  {
     id: "successiveHeir",
     text: "תרצה/י שהרכוש יעבור קודם לאדם אחד ורק אחר כך לאדם אחר?",
     type: "select",
