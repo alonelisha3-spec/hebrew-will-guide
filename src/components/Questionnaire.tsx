@@ -35,7 +35,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
 
   function handleTextSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!currentAnswer.trim()) return;
+    if (!currentAnswer.trim() && !question.optional) return;
     advance(answers);
   }
 
