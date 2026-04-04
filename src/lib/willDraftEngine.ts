@@ -45,6 +45,20 @@ function splitNames(v?: string): string[] {
     .filter(Boolean);
 }
 
+function collectChildrenNames(a: Record<string, string>): string[] {
+  // Support new individual fields (child1Name..child7Name)
+  const names: string[] = [];
+  for (let i = 1; i <= 7; i++) {
+    const name = a[`child${i}Name`];
+    if (hasValue(name)) names.push(name!.trim());
+  }
+  // Fallback to legacy comma-separated field
+  if (names.length === 0 && hasValue(a.childrenNames)) {
+    return splitNames(a.childrenNames);
+  }
+  return names;
+}
+
 function getWillType(answers: Record<string, string>): WillDraftData["willType"] {
   const familyStructure = answers.familyStructure || "";
   const inheritanceModel = answers.inheritanceModel || "";
@@ -171,7 +185,7 @@ function buildMutualWillText(a: Record<string, string>): string {
   const spouseName = clean(a.spouseName);
   const spouseId = clean(a.spouseId);
   const today = currentDateHe();
-  const childrenNames = splitNames(a.childrenNames);
+  const childrenNames = collectChildrenNames(a);
   const otherHeirNames = splitNames(a.otherHeirNames);
   const executorName = clean(a.executorName);
   const specialAssetDetails = clean(a.specialAssetDetails, "[יש להשלים פרטי נכס והוראה]");
@@ -388,7 +402,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     "[יש להשלים את החיוב המבוקש]"
   );
   const specialDetails = clean(a.specialDetails, "[יש להשלים נסיבות מיוחדות]");
-  const childrenNames = splitNames(a.childrenNames);
+  const childrenNames = collectChildrenNames(a);
   const otherHeirNames = splitNames(a.otherHeirNames);
   const allHeirs = [...childrenNames, ...otherHeirNames];
   const lines: string[] = [];

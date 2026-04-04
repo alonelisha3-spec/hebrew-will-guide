@@ -5,6 +5,7 @@ export interface Question {
   type: "select" | "text";
   placeholder?: string;
   explanation?: string;
+  optional?: boolean;
   condition?: (answers: Record<string, string>) => boolean;
 }
 
@@ -43,6 +44,7 @@ export const noWillQuestions: Question[] = [
     text: "מספר תעודת הזהות של בן/בת הזוג (לא חובה)",
     type: "text",
     placeholder: "מספר תעודת זהות",
+    optional: true,
     condition: (a) => !!a.familyStructure?.includes("בן/בת זוג") && !!a.spouseName?.trim(),
   },
   {
@@ -51,7 +53,7 @@ export const noWillQuestions: Question[] = [
     type: "select",
     options: [
       "הכל לבן/בת הזוג",
-      "קודם לבן/בת הזוג, ואחר כך ליורשים נוספים",
+      "קודם לבן/בת הזוג, ואחר כך ליורשים נוספים (לילדים)",
       "לחלק בין כמה אנשים",
       "חלוקה מיוחדת שאני רוצה להגדיר",
       "עדיין לא בטוח/ה",
@@ -59,30 +61,94 @@ export const noWillQuestions: Question[] = [
     explanation: "אפשר לשנות את זה בהמשך — רק כדי להבין את הכיוון.",
   },
   {
-    id: "childrenNames",
-    text: "מה שמות הילדים שלך?",
+    id: "customDistribution",
+    text: "תאר/י בקצרה את החלוקה שאת/ה רוצה",
     type: "text",
-    placeholder: "לדוגמה: דני כהן, מיכל כהן, יוסי כהן",
-    explanation: "הפרד/י בין השמות בפסיק. השמות ישמשו בצוואה.",
+    placeholder: "לדוגמה: 50% לבן/בת הזוג, 25% לכל ילד",
+    explanation: "נתרגם את זה לניסוח משפטי בצוואה.",
+    condition: (a) => a.inheritanceModel === "חלוקה מיוחדת שאני רוצה להגדיר",
+  },
+  {
+    id: "childrenCount",
+    text: "כמה ילדים יש לך?",
+    type: "select",
+    options: ["1", "2", "3", "4", "5", "6", "7"],
     condition: (a) =>
       a.familyStructure?.includes("ילדים") ||
       a.inheritanceModel?.includes("לחלק"),
   },
   {
-    id: "otherHeirNames",
-    text: "למי עוד תרצה/י להוריש? (מלבד בן/בת זוג וילדים)",
+    id: "child1Name",
+    text: "מה שם הילד/ה הראשון/ה?",
     type: "text",
-    placeholder: "לדוגמה: אחי דוד לוי, חברתי שרה כהן",
-    explanation: "הפרד/י בין השמות בפסיק. אם אין — דלג/י.",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => Number(a.childrenCount) >= 1,
+  },
+  {
+    id: "child2Name",
+    text: "מה שם הילד/ה השני/ה?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => Number(a.childrenCount) >= 2,
+  },
+  {
+    id: "child3Name",
+    text: "מה שם הילד/ה השלישי/ת?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => Number(a.childrenCount) >= 3,
+  },
+  {
+    id: "child4Name",
+    text: "מה שם הילד/ה הרביעי/ת?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => Number(a.childrenCount) >= 4,
+  },
+  {
+    id: "child5Name",
+    text: "מה שם הילד/ה החמישי/ת?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => Number(a.childrenCount) >= 5,
+  },
+  {
+    id: "child6Name",
+    text: "מה שם הילד/ה השישי/ת?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => Number(a.childrenCount) >= 6,
+  },
+  {
+    id: "child7Name",
+    text: "מה שם הילד/ה השביעי/ת?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    condition: (a) => Number(a.childrenCount) >= 7,
+  },
+  {
+    id: "hasOtherHeirs",
+    text: "יש עוד מישהו שתרצה/י להוריש לו? (מלבד בן/בת זוג וילדים)",
+    type: "select",
+    options: ["כן", "לא"],
     condition: (a) =>
       a.inheritanceModel?.includes("לחלק") ||
       a.inheritanceModel?.includes("חלוקה מיוחדת"),
   },
   {
+    id: "otherHeirNames",
+    text: "למי עוד תרצה/י להוריש?",
+    type: "text",
+    placeholder: "לדוגמה: אחי דוד לוי, חברתי שרה כהן",
+    explanation: "הפרד/י בין השמות בפסיק.",
+    condition: (a) => a.hasOtherHeirs === "כן",
+  },
+  {
     id: "multipleHeirs",
-    text: "יש יותר מאדם אחד שתרצה/י להוריש לו?",
+    text: "האם יש יותר מיורש אחד שאת/ה רוצה לכלול בצוואה? (כולל ילדים ואנשים נוספים)",
     type: "select",
     options: ["כן", "לא"],
+    explanation: "אם כבר ציינת ילדים או יורשים נוספים — בחר/י כן.",
   },
   {
     id: "distributionMethod",
