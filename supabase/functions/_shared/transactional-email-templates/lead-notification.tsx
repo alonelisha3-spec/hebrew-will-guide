@@ -34,6 +34,7 @@ const LeadNotificationEmail = ({
   riskItems = [],
   answers = {},
   fullDraft = '',
+  ctaTag = '',
   timestamp = '',
 }: LeadNotificationProps) => (
   <Html lang="he" dir="rtl">
