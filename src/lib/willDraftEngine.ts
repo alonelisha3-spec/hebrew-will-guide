@@ -449,7 +449,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   section++;
 
   // Distribution methods
-  if (distributionMethod === "בחלקים שווים") {
+  if (distributionMethod.includes("שווה בשווה") || distributionMethod === "בחלקים שווים") {
     lines.push(`${section}. אופן החלוקה בין היורשים`);
     if (childrenNames.length > 0) {
       lines.push(
