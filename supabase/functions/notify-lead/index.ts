@@ -65,6 +65,7 @@ Deno.serve(async (req) => {
             riskItems: riskItems || [],
             answers: answers || {},
             fullDraft: fullDraft || "",
+            ctaTag: ctaTag || "",
             timestamp,
           },
         },

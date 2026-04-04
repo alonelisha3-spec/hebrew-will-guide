@@ -259,7 +259,7 @@ export function ResultPage({
                 dir="ltr"
                 maxLength={15}
               />
-              {(selectedCta === "hot_no_call" || selectedCta === "cold") && (
+              {(selectedCta === "purchase" || selectedCta === "draft_only") && (
                 <input
                   type="email"
                   value={cbEmail}
