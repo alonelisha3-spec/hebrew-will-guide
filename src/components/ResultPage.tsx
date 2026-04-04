@@ -56,41 +56,8 @@ export function ResultPage({
     URL.revokeObjectURL(url);
   }
 
-  function handleDownloadPdf() {
-    if (!fullDraft) return;
-    const doc = new jsPDF({ putOnlyUsedFonts: true });
-    
-    // Add Hebrew font
-    doc.addFileToVFS("Rubik.ttf", rubikFontBase64);
-    doc.addFont("Rubik.ttf", "Rubik", "normal");
-    doc.setFont("Rubik");
-    doc.setFontSize(12);
 
-    const lines = fullDraft.split("\n");
-    const pageWidth = doc.internal.pageSize.getWidth();
-    let y = 20;
-    const lineHeight = 8;
-    const margin = 15;
-    const maxWidth = pageWidth - margin * 2;
 
-    for (const line of lines) {
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
-      const splitLines = doc.splitTextToSize(line || " ", maxWidth);
-      for (const sl of splitLines) {
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
-        }
-        doc.text(sl, pageWidth - margin, y, { align: "right" });
-        y += lineHeight;
-      }
-    }
-
-    doc.save(`טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.pdf`);
-  }
 
   return (
     <div className="min-h-screen py-10 md:py-14 bg-background">
