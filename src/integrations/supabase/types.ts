@@ -105,6 +105,7 @@ export type Database = {
         Row: {
           answers: Json | null
           created_at: string
+          cta_tag: string | null
           email: string | null
           full_name: string
           id: string
@@ -116,6 +117,7 @@ export type Database = {
         Insert: {
           answers?: Json | null
           created_at?: string
+          cta_tag?: string | null
           email?: string | null
           full_name: string
           id?: string
@@ -127,6 +129,7 @@ export type Database = {
         Update: {
           answers?: Json | null
           created_at?: string
+          cta_tag?: string | null
           email?: string | null
           full_name?: string
           id?: string

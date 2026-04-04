@@ -15,7 +15,14 @@ interface LeadNotificationProps {
   riskItems?: string[]
   answers?: Record<string, string>
   fullDraft?: string
+  ctaTag?: string
   timestamp?: string
+}
+
+const CTA_LABELS: Record<string, string> = {
+  purchase: '🔥 רוצה לרכוש צוואה שלמה ב-500 ₪ (ליד חם)',
+  callback: '📞 מעוניין — מבקש חזרה טלפונית (ליד חם)',
+  draft_only: '📄 נשאר עם הטיוטה בלבד (ליד קר)',
 }
 
 const LeadNotificationEmail = ({
@@ -27,6 +34,7 @@ const LeadNotificationEmail = ({
   riskItems = [],
   answers = {},
   fullDraft = '',
+  ctaTag = '',
   timestamp = '',
 }: LeadNotificationProps) => (
   <Html lang="he" dir="rtl">
@@ -35,6 +43,8 @@ const LeadNotificationEmail = ({
     <Body style={main}>
       <Container style={container}>
         <Heading style={h1}>ליד חדש מהמערכת</Heading>
+        {ctaTag ? <Text style={ctaStyle}>{CTA_LABELS[ctaTag] || ctaTag}</Text> : null}
+        <Hr style={hr} />
         <Text style={text}><strong>שם:</strong> {fullName}</Text>
         <Text style={text}><strong>טלפון:</strong> {phone}</Text>
         {email ? <Text style={text}><strong>דוא״ל:</strong> {email}</Text> : null}
@@ -100,6 +110,7 @@ const container = { padding: '20px 25px', direction: 'rtl' as const }
 const h1 = { fontSize: '22px', fontWeight: 'bold' as const, color: '#1a2332', margin: '0 0 20px' }
 const h2 = { fontSize: '16px', fontWeight: 'bold' as const, color: '#1a2332', margin: '15px 0 10px' }
 const text = { fontSize: '14px', color: '#55575d', lineHeight: '1.6', margin: '0 0 8px' }
+const ctaStyle = { fontSize: '16px', fontWeight: 'bold' as const, color: '#1a2332', margin: '0 0 10px', padding: '12px 16px', backgroundColor: '#f0f4ff', borderRadius: '8px' }
 const draftStyle = { fontSize: '12px', color: '#333', lineHeight: '1.8', margin: '0 0 8px', whiteSpace: 'pre-wrap' as const, fontFamily: 'monospace, Arial, sans-serif' }
 const hr = { borderColor: '#e5e5e5', margin: '20px 0' }
 const footer = { fontSize: '12px', color: '#999', margin: '20px 0 0' }

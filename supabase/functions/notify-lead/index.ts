@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { fullName, phone, email, answers, willType, riskLevel, riskItems, fullDraft } = body;
+    const { fullName, phone, email, answers, willType, riskLevel, riskItems, fullDraft, ctaTag } = body;
 
     if (!fullName || !phone) {
       return new Response(
@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
       will_type: willType || null,
       risk_level: riskLevel || null,
       risk_items: riskItems || [],
+      cta_tag: ctaTag || null,
     });
 
     if (dbError) {
@@ -64,6 +65,7 @@ Deno.serve(async (req) => {
             riskItems: riskItems || [],
             answers: answers || {},
             fullDraft: fullDraft || "",
+            ctaTag: ctaTag || "",
             timestamp,
           },
         },

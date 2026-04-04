@@ -18,7 +18,7 @@ interface Props {
   leadEmail?: string;
 }
 
-type CtaTag = "hot_no_call" | "hot_call" | "cold";
+type CtaTag = "purchase" | "callback" | "draft_only";
 
 const ALWAYS_SHOW_GAPS = [
   {
@@ -76,7 +76,7 @@ export function ResultPage({
           riskLevel: reviewRiskLevel || "",
           riskItems: reviewIssues || [],
           ctaTag: selectedCta,
-          fullDraft: selectedCta === "cold" ? fullDraft : undefined,
+          fullDraft: fullDraft || undefined,
         },
       });
       setSubmitted(true);
@@ -108,9 +108,13 @@ export function ResultPage({
               קיבלתי את הפרטים שלך
             </h1>
             <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6">
-              אעבור על הצוואה ואחזור אליך היום עם השלמה מלאה והערות מדויקות
+              {selectedCta === "purchase"
+                ? "נציג יחזור אליך בהקדם להסדרת התשלום והשלמת הצוואה"
+                : selectedCta === "callback"
+                ? "נחזור אליך בהקדם"
+                : "הטיוטה שלך מוכנה — ניתן להוריד אותה כעת"}
             </p>
-            {selectedCta === "cold" && fullDraft && (
+            {selectedCta === "draft_only" && fullDraft && (
               <button
                 onClick={handleDownloadDraft}
                 className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary/80 transition-all"
@@ -209,32 +213,32 @@ export function ResultPage({
           {!selectedCta ? (
             <div className="space-y-3">
               <button
-                onClick={() => setSelectedCta("hot_no_call")}
+                onClick={() => setSelectedCta("purchase")}
                 className="w-full rounded-xl bg-primary px-6 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.98]"
               >
-                אני רוצה השלמה מלאה עכשיו — ללא צורך ביצירת קשר
+                אני מעוניין בצוואה שלמה וחוקית — רכישה ב־500 ₪
               </button>
               <button
-                onClick={() => setSelectedCta("hot_call")}
+                onClick={() => setSelectedCta("callback")}
                 className="w-full rounded-xl border-2 border-primary bg-transparent px-6 py-4 text-base font-semibold text-accent-foreground transition-all duration-200 hover:bg-primary/10 active:scale-[0.98] flex items-center justify-center gap-2"
               >
                 <Phone className="w-4 h-4" />
-                אני רוצה השלמה ב־500 ₪ — חזור אליי
+                אני מעוניין — אנא חזרו אליי
               </button>
               <button
-                onClick={() => setSelectedCta("cold")}
+                onClick={() => setSelectedCta("draft_only")}
                 className="w-full rounded-xl border border-accent-foreground/20 bg-transparent px-6 py-3 text-sm text-accent-foreground/60 transition-all duration-200 hover:bg-accent-foreground/5 active:scale-[0.98]"
               >
-                שלח לי את הטיוטה בלבד
+                אשאר עם הטיוטה בלבד
               </button>
             </div>
           ) : (
             /* Lead form after CTA selection */
             <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4 text-right animate-slide-up">
               <p className="text-xs text-accent-foreground/60 text-center mb-2">
-                {selectedCta === "hot_no_call"
-                  ? "השאר פרטים וקבל צוואה מלאה — ללא שיחה"
-                  : selectedCta === "hot_call"
+                {selectedCta === "purchase"
+                  ? "נציג יחזור אליך להסדרת התשלום"
+                  : selectedCta === "callback"
                   ? "השאר פרטים ונחזור אליך בהקדם"
                   : "השאר פרטים ונשלח לך את הטיוטה"}
               </p>
@@ -255,7 +259,7 @@ export function ResultPage({
                 dir="ltr"
                 maxLength={15}
               />
-              {(selectedCta === "hot_no_call" || selectedCta === "cold") && (
+              {(selectedCta === "purchase" || selectedCta === "draft_only") && (
                 <input
                   type="email"
                   value={cbEmail}
