@@ -2,6 +2,7 @@ import { AlertTriangle, FileText, Download, Users, Shield } from "lucide-react";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
 import type { WillGap } from "@/lib/willGapsEngine";
 import jsPDF from "jspdf";
+import { rubikFontBase64 } from "@/lib/rubik-font";
 
 interface Props {
   mode: "draft" | "review";
@@ -60,30 +61,31 @@ export function ResultPage({
   function handleDownloadPdf() {
     if (!fullDraft) return;
     const doc = new jsPDF({ putOnlyUsedFonts: true });
-    // jsPDF doesn't natively support Hebrew RTL well, so we split lines manually
+    
+    // Add Hebrew font
+    doc.addFileToVFS("Rubik.ttf", rubikFontBase64);
+    doc.addFont("Rubik.ttf", "Rubik", "normal");
+    doc.setFont("Rubik");
+    doc.setFontSize(12);
+
     const lines = fullDraft.split("\n");
     const pageWidth = doc.internal.pageSize.getWidth();
     let y = 20;
-    const lineHeight = 7;
+    const lineHeight = 8;
     const margin = 15;
     const maxWidth = pageWidth - margin * 2;
-
-    doc.setFont("Helvetica");
-    doc.setFontSize(11);
 
     for (const line of lines) {
       if (y > 270) {
         doc.addPage();
         y = 20;
       }
-      // Split long lines
       const splitLines = doc.splitTextToSize(line || " ", maxWidth);
       for (const sl of splitLines) {
         if (y > 270) {
           doc.addPage();
           y = 20;
         }
-        // Right-align for Hebrew
         doc.text(sl, pageWidth - margin, y, { align: "right" });
         y += lineHeight;
       }
