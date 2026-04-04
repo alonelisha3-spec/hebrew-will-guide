@@ -114,7 +114,7 @@ export function ResultPage({
                 ? "נחזור אליך בהקדם"
                 : "הטיוטה שלך מוכנה — ניתן להוריד אותה כעת"}
             </p>
-            {selectedCta === "cold" && fullDraft && (
+            {selectedCta === "draft_only" && fullDraft && (
               <button
                 onClick={handleDownloadDraft}
                 className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary/80 transition-all"
