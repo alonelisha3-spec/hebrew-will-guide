@@ -73,9 +73,11 @@ export const noWillQuestions: Question[] = [
     text: "כמה ילדים יש לך?",
     type: "select",
     options: ["1", "2", "3", "4", "5", "6", "7"],
-    condition: (a) =>
-      a.familyStructure?.includes("ילדים") ||
-      a.inheritanceModel?.includes("לחלק"),
+    condition: (a) => {
+      const fs = a.familyStructure || "";
+      const hasChildren = fs.includes("ילדים") && fs !== "אין לי בן/בת זוג ואין ילדים" && fs !== "יש לי בן/בת זוג, אין ילדים";
+      return hasChildren || !!a.inheritanceModel?.includes("לחלק");
+    },
   },
   {
     id: "child1Name",
