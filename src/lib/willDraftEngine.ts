@@ -529,17 +529,17 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   // Substitute heir
   if (yes(a.substituteHeir)) {
     lines.push(`${section}. יורש במקום יורש`);
-    if (substituteHeirMode === "חלקו יעבור לצאצאיו") {
+    if (substituteHeirMode.includes("ילדים שלו") || substituteHeirMode.includes("לצאצאיו")) {
       lines.push(
         `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יבואו צאצאיו במקומו ויירשו את חלקו בחלקים שווים ביניהם.`
       );
-    } else if (substituteHeirMode === "חלקו יחזור לשאר היורשים היחסיים") {
+    } else if (substituteHeirMode.includes("שאר היורשים") || substituteHeirMode.includes("יתחלק")) {
       lines.push(
         `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יתווסף חלקו ליתר היורשים לפי יחס חלקיהם בעיזבון.`
       );
-    } else if (substituteHeirMode === "אדם אחר ייכנס במקומו") {
+    } else if (substituteHeirMode.includes("אדם אחר") || substituteHeirMode.includes("אבחר")) {
       lines.push(
-        `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יבוא במקומו אדם אחר שיוגדר במפורש בצוואה הסופית.`
+        `אם אחד היורשים ילך לעולמו לפניי או לפני קבלת חלקו בעיזבון, יבוא במקומו: ${substituteHeirName}.`
       );
     } else {
       lines.push(
