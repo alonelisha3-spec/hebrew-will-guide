@@ -480,7 +480,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     section++;
   }
 
-  if (distributionMethod === "בנכסים מסוימים לכל אחד") {
+  if (distributionMethod.includes("נכס מסוים") || distributionMethod === "בנכסים מסוימים לכל אחד") {
     lines.push(`${section}. חלוקה לפי נכסים מסוימים`);
     lines.push(
       `ההורשה תתבצע לפי שיוך נכסים מסוימים ליורשים שונים. בצוואה הסופית יש להשלים את זהות הנכסים, את שמות היורשים ואת היחס בין שווי הנכסים לבין שאר רכיבי העיזבון.`
