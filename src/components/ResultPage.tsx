@@ -115,22 +115,15 @@ export function ResultPage({
               הורד את הטיוטה שלך
             </h2>
             <p className="text-sm text-muted-foreground mb-6 leading-relaxed max-w-md mx-auto">
-              ניתן להוריד את הטיוטה בפורמט טקסט או PDF
+              ניתן להוריד את הטיוטה כקובץ טקסט
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex items-center justify-center">
               <button
                 onClick={handleDownloadTxt}
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary/80 transition-all active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-lg hover:brightness-110 transition-all active:scale-[0.98]"
               >
                 <FileText className="w-4 h-4" />
                 הורד כקובץ טקסט
-              </button>
-              <button
-                onClick={handleDownloadPdf}
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-lg hover:brightness-110 transition-all active:scale-[0.98]"
-              >
-                <Download className="w-4 h-4" />
-                הורד כ-PDF
               </button>
             </div>
           </div>
