@@ -402,7 +402,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     "[יש להשלים את החיוב המבוקש]"
   );
   const specialDetails = clean(a.specialDetails, "[יש להשלים נסיבות מיוחדות]");
-  const childrenNames = splitNames(a.childrenNames);
+  const childrenNames = collectChildrenNames(a);
   const otherHeirNames = splitNames(a.otherHeirNames);
   const allHeirs = [...childrenNames, ...otherHeirNames];
   const lines: string[] = [];
