@@ -213,23 +213,23 @@ export function ResultPage({
           {!selectedCta ? (
             <div className="space-y-3">
               <button
-                onClick={() => setSelectedCta("hot_no_call")}
+                onClick={() => setSelectedCta("purchase")}
                 className="w-full rounded-xl bg-primary px-6 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.98]"
               >
-                אני רוצה השלמה מלאה עכשיו — ללא צורך ביצירת קשר
+                אני מעוניין בצוואה שלמה וחוקית — רכישה ב־500 ₪
               </button>
               <button
-                onClick={() => setSelectedCta("hot_call")}
+                onClick={() => setSelectedCta("callback")}
                 className="w-full rounded-xl border-2 border-primary bg-transparent px-6 py-4 text-base font-semibold text-accent-foreground transition-all duration-200 hover:bg-primary/10 active:scale-[0.98] flex items-center justify-center gap-2"
               >
                 <Phone className="w-4 h-4" />
-                אני רוצה השלמה ב־500 ₪ — חזור אליי
+                אני מעוניין — אנא חזרו אליי
               </button>
               <button
-                onClick={() => setSelectedCta("cold")}
+                onClick={() => setSelectedCta("draft_only")}
                 className="w-full rounded-xl border border-accent-foreground/20 bg-transparent px-6 py-3 text-sm text-accent-foreground/60 transition-all duration-200 hover:bg-accent-foreground/5 active:scale-[0.98]"
               >
-                שלח לי את הטיוטה בלבד
+                אשאר עם הטיוטה בלבד
               </button>
             </div>
           ) : (
