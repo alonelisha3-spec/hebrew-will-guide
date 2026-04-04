@@ -13,7 +13,7 @@ Deno.serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { fullName, phone, email, answers, willType, riskLevel, riskItems, fullDraft } = body;
+    const { fullName, phone, email, answers, willType, riskLevel, riskItems, fullDraft, ctaTag } = body;
 
     if (!fullName || !phone) {
       return new Response(
