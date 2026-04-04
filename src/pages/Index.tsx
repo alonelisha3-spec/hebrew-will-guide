@@ -12,6 +12,7 @@ import {
   generateFullWillDraft,
   generateExistingWillReview,
 } from "@/lib/willDraftEngine";
+import { analyzeWillGaps } from "@/lib/willGapsEngine";
 import { toast } from "sonner";
 
 type AppStep = "landing" | "questionnaire" | "preview" | "lead" | "results";
@@ -460,6 +461,7 @@ export default function Index() {
           mode="draft"
           willType={draftData.willType}
           fullDraft={draftData.fullDraft}
+          gaps={analyzeWillGaps(answers, draftData.willType)}
           leadName={leadInfo.name}
           leadPhone={leadInfo.phone}
           leadEmail={leadInfo.email}
@@ -473,6 +475,7 @@ export default function Index() {
           reviewHeadline={reviewData.headline}
           reviewIssues={reviewData.issues}
           reviewRiskLevel={reviewData.riskLevel}
+          gaps={analyzeWillGaps(answers, reviewData.willType)}
           leadName={leadInfo.name}
           leadPhone={leadInfo.phone}
           leadEmail={leadInfo.email}
