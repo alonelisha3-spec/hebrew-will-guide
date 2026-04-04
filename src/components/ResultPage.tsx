@@ -1,8 +1,6 @@
-import { AlertTriangle, FileText, Download, Users, Shield } from "lucide-react";
+import { AlertTriangle, FileText, Users, Shield } from "lucide-react";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
 import type { WillGap } from "@/lib/willGapsEngine";
-import jsPDF from "jspdf";
-import { rubikFontBase64 } from "@/lib/rubik-font";
 
 interface Props {
   mode: "draft" | "review";
@@ -58,41 +56,8 @@ export function ResultPage({
     URL.revokeObjectURL(url);
   }
 
-  function handleDownloadPdf() {
-    if (!fullDraft) return;
-    const doc = new jsPDF({ putOnlyUsedFonts: true });
-    
-    // Add Hebrew font
-    doc.addFileToVFS("Rubik.ttf", rubikFontBase64);
-    doc.addFont("Rubik.ttf", "Rubik", "normal");
-    doc.setFont("Rubik");
-    doc.setFontSize(12);
 
-    const lines = fullDraft.split("\n");
-    const pageWidth = doc.internal.pageSize.getWidth();
-    let y = 20;
-    const lineHeight = 8;
-    const margin = 15;
-    const maxWidth = pageWidth - margin * 2;
 
-    for (const line of lines) {
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
-      const splitLines = doc.splitTextToSize(line || " ", maxWidth);
-      for (const sl of splitLines) {
-        if (y > 270) {
-          doc.addPage();
-          y = 20;
-        }
-        doc.text(sl, pageWidth - margin, y, { align: "right" });
-        y += lineHeight;
-      }
-    }
-
-    doc.save(`טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.pdf`);
-  }
 
   return (
     <div className="min-h-screen py-10 md:py-14 bg-background">
@@ -150,22 +115,15 @@ export function ResultPage({
               הורד את הטיוטה שלך
             </h2>
             <p className="text-sm text-muted-foreground mb-6 leading-relaxed max-w-md mx-auto">
-              ניתן להוריד את הטיוטה בפורמט טקסט או PDF
+              ניתן להוריד את הטיוטה כקובץ טקסט
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <div className="flex items-center justify-center">
               <button
                 onClick={handleDownloadTxt}
-                className="inline-flex items-center gap-2 rounded-xl border border-border bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary/80 transition-all active:scale-[0.98]"
+                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-lg hover:brightness-110 transition-all active:scale-[0.98]"
               >
                 <FileText className="w-4 h-4" />
                 הורד כקובץ טקסט
-              </button>
-              <button
-                onClick={handleDownloadPdf}
-                className="inline-flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow-lg hover:brightness-110 transition-all active:scale-[0.98]"
-              >
-                <Download className="w-4 h-4" />
-                הורד כ-PDF
               </button>
             </div>
           </div>
