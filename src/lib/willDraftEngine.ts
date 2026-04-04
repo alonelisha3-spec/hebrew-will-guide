@@ -127,9 +127,11 @@ export function generateWillPreview(answers: Record<string, string>): {
   }
 
   if (
-    inheritanceModel === "חלוקה לא שוויונית או מותאמת אישית" ||
-    distributionMethod === "בחלקים לא שווים" ||
-    distributionMethod === "באחוזים" ||
+    inheritanceModel.includes("חלוקה מיוחדת") ||
+    inheritanceModel.includes("חלוקה לא שוויונית") ||
+    distributionMethod.includes("לא שווים") ||
+    distributionMethod.includes("אחוזים") ||
+    distributionMethod.includes("נכס מסוים")
     distributionMethod === "בנכסים מסוימים לכל אחד"
   ) {
     points.push("החלוקה אינה סטנדרטית ודורשת ניסוח קפדני.");
