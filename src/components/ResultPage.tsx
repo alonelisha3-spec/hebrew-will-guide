@@ -18,7 +18,7 @@ interface Props {
   leadEmail?: string;
 }
 
-type CtaTag = "hot_no_call" | "hot_call" | "cold";
+type CtaTag = "purchase" | "callback" | "draft_only";
 
 const ALWAYS_SHOW_GAPS = [
   {
