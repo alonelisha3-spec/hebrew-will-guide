@@ -566,15 +566,15 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   // Minor children
   if (yes(a.minorChildren)) {
     lines.push(`${section}. הוראות לגבי קטינים או יורשים שזכאותם נדחית`);
-    if (minorChildrenDetails === "ניהול עד גיל מסוים") {
+    if (minorChildrenDetails.includes("ינהל") && minorChildrenDetails.includes("גיל")) {
       lines.push(
         `ככל שחלק בעיזבון מיועד לקטין או למי שזכאותו נדחית, ינוהל חלקו עד הגיעו לגיל שייקבע בצוואה הסופית.`
       );
-    } else if (minorChildrenDetails === "מסירת הכספים בשלבים") {
+    } else if (minorChildrenDetails.includes("בשלבים")) {
       lines.push(
         `ככל שחלק בעיזבון מיועד לקטין או למי שזכאותו נדחית, ניתן לקבוע כי הכספים יימסרו לו בשלבים שייקבעו בצוואה הסופית.`
       );
-    } else if (minorChildrenDetails === "מינוי אדם שינהל עד להתקיים תנאי") {
+    } else if (minorChildrenDetails.includes("תנאי") || minorChildrenDetails.includes("ינהל")) {
       lines.push(
         `ככל שחלק בעיזבון מיועד לקטין או למי שזכאותו נדחית, ינוהל חלקו בידי אדם שימונה לכך עד להתקיים התנאי שנקבע.`
       );
