@@ -5,6 +5,7 @@ export interface Question {
   type: "select" | "text";
   placeholder?: string;
   explanation?: string;
+  optional?: boolean;
   condition?: (answers: Record<string, string>) => boolean;
 }
 

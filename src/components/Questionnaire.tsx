@@ -56,7 +56,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
   }
 
   function goNext() {
-    if (!currentAnswer.trim()) return;
+    if (!currentAnswer.trim() && !question.optional) return;
     advance(answers);
   }
 
