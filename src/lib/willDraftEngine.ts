@@ -462,7 +462,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     section++;
   }
 
-  if (distributionMethod === "בחלקים לא שווים") {
+  if (distributionMethod.includes("לא שווים") || distributionMethod === "בחלקים לא שווים") {
     lines.push(`${section}. חלוקה לא שוויונית`);
     lines.push(
       `מדובר בחלוקה שאינה שוויונית. בצוואה הסופית יש לפרט את זהות היורשים ואת שיעור או אופן חלקו של כל אחד מהם בנפרד, כדי למנוע מחלוקת פרשנית.`
