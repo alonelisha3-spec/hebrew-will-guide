@@ -168,8 +168,11 @@ function buildMutualWillText(a: Record<string, string>): string {
   const name = clean(a.fullName);
   const idNum = clean(a.idNumber);
   const address = clean(a.address);
+  const spouseName = clean(a.spouseName);
+  const spouseId = clean(a.spouseId);
   const today = currentDateHe();
   const childrenNames = splitNames(a.childrenNames);
+  const otherHeirNames = splitNames(a.otherHeirNames);
   const executorName = clean(a.executorName);
   const specialAssetDetails = clean(a.specialAssetDetails, "[יש להשלים פרטי נכס והוראה]");
   const specificChargeDetails = clean(a.specificChargeDetails, "[יש להשלים את החיוב המבוקש]");
@@ -186,7 +189,7 @@ function buildMutualWillText(a: Record<string, string>): string {
   lines.push("");
 
   // --- Joint declaration ---
-  lines.push(`אנו הח\"מ, ${name}, ת\"ז ${idNum}, מרחוב ${address}, ובן/בת זוגו/ה ___________,  ת\"ז ___________, מצהירים בזאת כי אנו כשירים לצוות, פועלים בדעה צלולה ומתוך רצון חופשי, ללא כל כפייה, איום, לחץ או השפעה בלתי הוגנת מסוג שהוא.`);
+  lines.push(`אנו הח\"מ, ${name}, ת\"ז ${idNum}, מרחוב ${address}, ובן/בת זוגו/ה ${spouseName}, ת\"ז ${spouseId}, מצהירים בזאת כי אנו כשירים לצוות, פועלים בדעה צלולה ומתוך רצון חופשי, ללא כל כפייה, איום, לחץ או השפעה בלתי הוגנת מסוג שהוא.`);
   lines.push("");
   lines.push(`צוואה זו נערכה כצוואה הדדית בהתאם לסעיף 8א לחוק הירושה, תשכ\"ה–1965 (להלן: "החוק"), ומתבססת על רצוננו המשותף ועל ההסתמכות ההדדית כי הוראותיה יישמרו גם לאחר פטירת אחד מאיתנו. צוואה זו מהווה את צוואתנו האחרונה והיא מבטלת כל צוואה קודמת, ככל שנעשתה.`);
   lines.push("");
