@@ -55,8 +55,10 @@ function getWillType(answers: Record<string, string>): WillDraftData["willType"]
     familyStructure.includes("משותפים");
 
   const spouseFirst =
-    inheritanceModel === "כל העיזבון לבן/בת הזוג" ||
-    inheritanceModel === "בן/בת הזוג קודם ואחריו יורשים נוספים";
+    inheritanceModel.includes("הכל לבן/בת הזוג") ||
+    inheritanceModel.includes("כל העיזבון לבן/בת הזוג") ||
+    inheritanceModel.includes("קודם לבן/בת הזוג") ||
+    inheritanceModel.includes("בן/בת הזוג קודם");
 
   if (spouseRelevant && spouseFirst) {
     return "צוואה הדדית";
@@ -125,15 +127,16 @@ export function generateWillPreview(answers: Record<string, string>): {
   }
 
   if (
-    inheritanceModel === "חלוקה לא שוויונית או מותאמת אישית" ||
-    distributionMethod === "בחלקים לא שווים" ||
-    distributionMethod === "באחוזים" ||
-    distributionMethod === "בנכסים מסוימים לכל אחד"
+    inheritanceModel.includes("חלוקה מיוחדת") ||
+    inheritanceModel.includes("חלוקה לא שוויונית") ||
+    distributionMethod.includes("לא שווים") ||
+    distributionMethod.includes("אחוזים") ||
+    distributionMethod.includes("נכס מסוים")
   ) {
     points.push("החלוקה אינה סטנדרטית ודורשת ניסוח קפדני.");
   }
 
-  if (familyStructure === "מבנה משפחתי מורכב אחר") {
+  if (familyStructure.includes("מורכב") || familyStructure === "מצב אחר") {
     points.push("מדובר במבנה משפחתי מורכב שמצריך התאמה משפטית פרטנית.");
   }
 
@@ -421,19 +424,19 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
 
   // Inheritance structure
   lines.push(`${section}. מבנה כללי של ההורשה`);
-  if (inheritanceModel === "כל העיזבון לבן/בת הזוג") {
+  if (inheritanceModel.includes("הכל לבן/בת הזוג") || inheritanceModel.includes("כל העיזבון לבן/בת הזוג")) {
     lines.push(
       `אני מצווה את מלוא עיזבוני לבן/בת זוגי. ככל שיידרש, יש להשלים את פרטי בן/בת הזוג בצוואה הסופית.`
     );
-  } else if (inheritanceModel === "בן/בת הזוג קודם ואחריו יורשים נוספים") {
+  } else if (inheritanceModel.includes("קודם לבן/בת הזוג") || inheritanceModel.includes("בן/בת הזוג קודם")) {
     lines.push(
       `אני מצווה כי תחילה יעבור עיזבוני לבן/בת הזוג, ולאחר מכן ליורשים הבאים אחריו בהתאם להוראות צוואה זו.`
     );
-  } else if (inheritanceModel === "חלוקה ישירה בין כמה יורשים") {
+  } else if (inheritanceModel.includes("לחלק בין") || inheritanceModel.includes("חלוקה ישירה")) {
     lines.push(
       `אני מצווה את עיזבוני לחלוקה ישירה בין כמה יורשים, בהתאם למנגנון החלוקה המפורט בצוואה זו.`
     );
-  } else if (inheritanceModel === "חלוקה לא שוויונית או מותאמת אישית") {
+  } else if (inheritanceModel.includes("חלוקה מיוחדת") || inheritanceModel.includes("חלוקה לא שוויונית")) {
     lines.push(
       `אני מצווה את עיזבוני בהתאם לחלוקה מותאמת אישית, שאינה בהכרח שוויונית, כמפורט בצוואה זו.`
     );
@@ -446,7 +449,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   section++;
 
   // Distribution methods
-  if (distributionMethod === "בחלקים שווים") {
+  if (distributionMethod.includes("שווה בשווה") || distributionMethod === "בחלקים שווים") {
     lines.push(`${section}. אופן החלוקה בין היורשים`);
     if (childrenNames.length > 0) {
       lines.push(
@@ -459,7 +462,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     section++;
   }
 
-  if (distributionMethod === "בחלקים לא שווים") {
+  if (distributionMethod.includes("לא שווים") || distributionMethod === "בחלקים לא שווים") {
     lines.push(`${section}. חלוקה לא שוויונית`);
     lines.push(
       `מדובר בחלוקה שאינה שוויונית. בצוואה הסופית יש לפרט את זהות היורשים ואת שיעור או אופן חלקו של כל אחד מהם בנפרד, כדי למנוע מחלוקת פרשנית.`
@@ -468,7 +471,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     section++;
   }
 
-  if (distributionMethod === "באחוזים") {
+  if (distributionMethod.includes("אחוזים") || distributionMethod === "באחוזים") {
     lines.push(`${section}. חלוקה באחוזים`);
     lines.push(
       `העיזבון יחולק באחוזים בין היורשים. בצוואה הסופית יש להשלים את שמות היורשים ואת שיעור חלקו של כל אחד מהם באחוזים.`
@@ -477,7 +480,7 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
     section++;
   }
 
-  if (distributionMethod === "בנכסים מסוימים לכל אחד") {
+  if (distributionMethod.includes("נכס מסוים") || distributionMethod === "בנכסים מסוימים לכל אחד") {
     lines.push(`${section}. חלוקה לפי נכסים מסוימים`);
     lines.push(
       `ההורשה תתבצע לפי שיוך נכסים מסוימים ליורשים שונים. בצוואה הסופית יש להשלים את זהות הנכסים, את שמות היורשים ואת היחס בין שווי הנכסים לבין שאר רכיבי העיזבון.`
