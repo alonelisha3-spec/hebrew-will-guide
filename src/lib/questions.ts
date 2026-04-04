@@ -151,6 +151,19 @@ export const noWillQuestions: Question[] = [
     explanation: "אם כבר ציינת ילדים או יורשים נוספים — בחר/י כן.",
   },
   {
+    id: "distributionMethod",
+    text: "איך לחלק ביניהם?",
+    type: "select",
+    options: [
+      "שווה בשווה",
+      "חלקים לא שווים",
+      "לפי אחוזים",
+      "כל אחד מקבל נכס מסוים",
+      "עדיין לא החלטתי",
+    ],
+    condition: (a) => a.multipleHeirs === "כן",
+  },
+  {
     id: "specialAssetInstruction",
     text: "יש נכס מסוים שחשוב לך לציין לגביו הוראה?",
     type: "select",
