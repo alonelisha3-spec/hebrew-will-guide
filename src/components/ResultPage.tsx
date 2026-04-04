@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { Download, Phone, Mail, CheckCircle } from "lucide-react";
+import { Download, Phone, CheckCircle, AlertTriangle, Info, AlertCircle } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
+import type { WillGap } from "@/lib/willGapsEngine";
 
 interface Props {
   mode: "draft" | "review";
@@ -11,9 +12,64 @@ interface Props {
   reviewHeadline?: string;
   reviewIssues?: string[];
   reviewRiskLevel?: string;
+  gaps?: WillGap[];
   leadName: string;
   leadPhone: string;
   leadEmail?: string;
+}
+
+const severityConfig = {
+  high: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-50 border-red-200", label: "חשוב" },
+  medium: { icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50 border-amber-200", label: "מומלץ" },
+  low: { icon: Info, color: "text-blue-600", bg: "bg-blue-50 border-blue-200", label: "כדאי לדעת" },
+};
+
+function GapsSection({ gaps }: { gaps: WillGap[] }) {
+  const high = gaps.filter((g) => g.severity === "high");
+  const medium = gaps.filter((g) => g.severity === "medium");
+  const low = gaps.filter((g) => g.severity === "low");
+  const sorted = [...high, ...medium, ...low];
+
+  return (
+    <div
+      className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
+      style={{ animationDelay: "150ms", animationFillMode: "backwards" }}
+    >
+      <h2 className="text-base md:text-lg font-bold mb-2 text-foreground">
+        מה עוד חסר בנוסח הזה?
+      </h2>
+      <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
+        זיהינו {sorted.length} נושאים שכדאי להשלים עם עורך דין כדי שהצוואה תהיה תקפה ומלאה:
+      </p>
+      <div className="space-y-3">
+        {sorted.map((gap, i) => {
+          const config = severityConfig[gap.severity];
+          const Icon = config.icon;
+          return (
+            <div
+              key={i}
+              className={`rounded-lg border p-4 ${config.bg}`}
+            >
+              <div className="flex items-start gap-3">
+                <Icon className={`w-5 h-5 mt-0.5 shrink-0 ${config.color}`} />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="font-semibold text-sm text-foreground">{gap.title}</span>
+                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${config.color} bg-white/60`}>
+                      {config.label}
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-muted-foreground">
+                    {gap.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 export function ResultPage({
@@ -23,6 +79,7 @@ export function ResultPage({
   reviewHeadline,
   reviewIssues,
   reviewRiskLevel,
+  gaps,
   leadName,
   leadPhone,
   leadEmail,
@@ -157,6 +214,9 @@ export function ResultPage({
             </button>
           </div>
         )}
+
+        {/* Gaps / Insights section */}
+        {gaps && gaps.length > 0 && <GapsSection gaps={gaps} />}
 
         {/* Practical meaning */}
         <div
