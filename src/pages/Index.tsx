@@ -12,6 +12,7 @@ import {
   generateFullWillDraft,
   generateExistingWillReview,
 } from "@/lib/willDraftEngine";
+import { analyzeWillGaps } from "@/lib/willGapsEngine";
 import { toast } from "sonner";
 
 type AppStep = "landing" | "questionnaire" | "preview" | "lead" | "results";
