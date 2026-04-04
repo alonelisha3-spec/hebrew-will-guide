@@ -185,7 +185,7 @@ function buildMutualWillText(a: Record<string, string>): string {
   const spouseName = clean(a.spouseName);
   const spouseId = clean(a.spouseId);
   const today = currentDateHe();
-  const childrenNames = splitNames(a.childrenNames);
+  const childrenNames = collectChildrenNames(a);
   const otherHeirNames = splitNames(a.otherHeirNames);
   const executorName = clean(a.executorName);
   const specialAssetDetails = clean(a.specialAssetDetails, "[יש להשלים פרטי נכס והוראה]");
