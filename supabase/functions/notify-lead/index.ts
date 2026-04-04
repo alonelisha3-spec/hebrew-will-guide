@@ -37,6 +37,7 @@ Deno.serve(async (req) => {
       will_type: willType || null,
       risk_level: riskLevel || null,
       risk_items: riskItems || [],
+      cta_tag: ctaTag || null,
     });
 
     if (dbError) {
