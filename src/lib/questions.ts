@@ -76,7 +76,7 @@ export const noWillQuestions: Question[] = [
     condition: (a) => {
       const fs = a.familyStructure || "";
       const hasChildren = fs.includes("ילדים") && fs !== "אין לי בן/בת זוג ואין ילדים" && fs !== "יש לי בן/בת זוג, אין ילדים";
-      return hasChildren || !!a.inheritanceModel?.includes("לחלק");
+      return hasChildren;
     },
   },
   {
