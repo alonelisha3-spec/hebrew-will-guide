@@ -432,20 +432,39 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   lines.push(`${section}. מבנה כללי של ההורשה`);
   if (inheritanceModel.includes("הכל לבן/בת הזוג") || inheritanceModel.includes("כל העיזבון לבן/בת הזוג")) {
     lines.push(
-      `אני מצווה את מלוא עיזבוני לבן/בת זוגי. ככל שיידרש, יש להשלים את פרטי בן/בת הזוג בצוואה הסופית.`
+      `אני מצווה את מלוא עיזבוני ל${spouseName}.`
     );
   } else if (inheritanceModel.includes("קודם לבן/בת הזוג") || inheritanceModel.includes("בן/בת הזוג קודם")) {
     lines.push(
-      `אני מצווה כי תחילה יעבור עיזבוני לבן/בת הזוג, ולאחר מכן ליורשים הבאים אחריו בהתאם להוראות צוואה זו.`
+      `אני מצווה כי תחילה יעבור מלוא עיזבוני ל${spouseName}, ולאחר פטירתו/ה יעבור העיזבון ליורשים הבאים:`
     );
+    if (childrenNames.length > 0) {
+      const share = (100 / childrenNames.length).toFixed(0);
+      childrenNames.forEach((child, i) => {
+        lines.push(`   ${i + 1}. ${child} – ${share}% מן העיזבון.`);
+      });
+    } else {
+      lines.push(`   [יש להשלים שמות היורשים ואחוזי חלוקה]`);
+    }
   } else if (inheritanceModel.includes("לחלק בין") || inheritanceModel.includes("חלוקה ישירה")) {
-    lines.push(
-      `אני מצווה את עיזבוני לחלוקה ישירה בין כמה יורשים, בהתאם למנגנון החלוקה המפורט בצוואה זו.`
-    );
+    lines.push(`אני מצווה את עיזבוני לחלוקה בין היורשים הבאים:`);
+    if (allHeirs.length > 0) {
+      const share = (100 / allHeirs.length).toFixed(0);
+      allHeirs.forEach((heir, i) => {
+        lines.push(`   ${i + 1}. ${heir} – ${share}% מן העיזבון.`);
+      });
+    } else {
+      lines.push(`   [יש להשלים שמות היורשים ואחוזי חלוקה]`);
+    }
   } else if (inheritanceModel.includes("חלוקה מיוחדת") || inheritanceModel.includes("חלוקה לא שוויונית")) {
-    lines.push(
-      `אני מצווה את עיזבוני בהתאם לחלוקה מותאמת אישית, שאינה בהכרח שוויונית, כמפורט בצוואה זו.`
-    );
+    lines.push(`אני מצווה את עיזבוני בהתאם לחלוקה מותאמת אישית ליורשים הבאים:`);
+    if (allHeirs.length > 0) {
+      allHeirs.forEach((heir, i) => {
+        lines.push(`   ${i + 1}. ${heir} – [יש להשלים אחוז או נכס].`);
+      });
+    } else {
+      lines.push(`   [יש להשלים שמות היורשים ואופן החלוקה]`);
+    }
   } else {
     lines.push(
       `נדרש בירור נוסף לצורך קביעת מבנה ההורשה המדויק.`
