@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Download, Phone, CheckCircle, AlertTriangle, Info, AlertCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, Phone, FileText, Send, Shield, Pen, Users, Building } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
@@ -18,59 +18,22 @@ interface Props {
   leadEmail?: string;
 }
 
-const severityConfig = {
-  high: { icon: AlertCircle, color: "text-red-600", bg: "bg-red-50 border-red-200", label: "חשוב" },
-  medium: { icon: AlertTriangle, color: "text-amber-600", bg: "bg-amber-50 border-amber-200", label: "מומלץ" },
-  low: { icon: Info, color: "text-blue-600", bg: "bg-blue-50 border-blue-200", label: "כדאי לדעת" },
-};
+type CtaTag = "hot_no_call" | "hot_call" | "cold";
 
-function GapsSection({ gaps }: { gaps: WillGap[] }) {
-  const high = gaps.filter((g) => g.severity === "high");
-  const medium = gaps.filter((g) => g.severity === "medium");
-  const low = gaps.filter((g) => g.severity === "low");
-  const sorted = [...high, ...medium, ...low];
-
-  return (
-    <div
-      className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
-      style={{ animationDelay: "150ms", animationFillMode: "backwards" }}
-    >
-      <h2 className="text-base md:text-lg font-bold mb-2 text-foreground">
-        מה עוד חסר בנוסח הזה?
-      </h2>
-      <p className="text-sm text-muted-foreground mb-5 leading-relaxed">
-        זיהינו {sorted.length} נושאים שכדאי להשלים עם עורך דין כדי שהצוואה תהיה תקפה ומלאה:
-      </p>
-      <div className="space-y-3">
-        {sorted.map((gap, i) => {
-          const config = severityConfig[gap.severity];
-          const Icon = config.icon;
-          return (
-            <div
-              key={i}
-              className={`rounded-lg border p-4 ${config.bg}`}
-            >
-              <div className="flex items-start gap-3">
-                <Icon className={`w-5 h-5 mt-0.5 shrink-0 ${config.color}`} />
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="font-semibold text-sm text-foreground">{gap.title}</span>
-                    <span className={`text-[10px] px-1.5 py-0.5 rounded font-medium ${config.color} bg-white/60`}>
-                      {config.label}
-                    </span>
-                  </div>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {gap.description}
-                  </p>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
+const ALWAYS_SHOW_GAPS = [
+  {
+    icon: Users,
+    text: "חסר מנגנון ליורשים חלופיים — מה קורה אם אחד היורשים לא יוכל לרשת?",
+  },
+  {
+    icon: FileText,
+    text: "ניסוח משפטי בסיסי שעלול להוביל לפרשנויות שונות בבית המשפט",
+  },
+  {
+    icon: Shield,
+    text: "אין מנגנון למניעת סכסוכים בין יורשים או להגנה על בן/בת הזוג",
+  },
+];
 
 export function ResultPage({
   mode,
@@ -84,182 +47,197 @@ export function ResultPage({
   leadPhone,
   leadEmail,
 }: Props) {
-  const [showCallbackForm, setShowCallbackForm] = useState(false);
-  const [cbSubmitted, setCbSubmitted] = useState(false);
-  const [cbSubmitting, setCbSubmitting] = useState(false);
+  const [selectedCta, setSelectedCta] = useState<CtaTag | null>(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [cbName, setCbName] = useState(leadName);
   const [cbPhone, setCbPhone] = useState(leadPhone);
+  const [cbEmail, setCbEmail] = useState(leadEmail || "");
 
-  function handleDownload() {
-    if (!fullDraft) return;
-    const blob = new Blob([fullDraft], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `נוסח_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
-  }
+  // Merge engine gaps with always-shown gaps, cap at 4
+  const extraGaps = gaps?.filter((g) => g.severity === "high").slice(0, 1) || [];
+  const displayGapCount = ALWAYS_SHOW_GAPS.length + extraGaps.length;
 
-  async function handleCallbackSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!cbName.trim() || !cbPhone.trim()) {
       toast.error("נא למלא שם וטלפון");
       return;
     }
-    setCbSubmitting(true);
+    setSubmitting(true);
     try {
       await supabase.functions.invoke("notify-lead", {
         body: {
           fullName: cbName.trim(),
           phone: cbPhone.trim(),
+          email: cbEmail.trim() || undefined,
           answers: {},
           willType,
           riskLevel: reviewRiskLevel || "",
           riskItems: reviewIssues || [],
+          ctaTag: selectedCta,
+          fullDraft: selectedCta === "cold" ? fullDraft : undefined,
         },
       });
-      setCbSubmitted(true);
-      toast.success("הפרטים נקלטו בהצלחה — ניצור קשר בהקדם.");
+      setSubmitted(true);
     } catch {
-      toast.error("שגיאה בשליחת הפרטים.");
+      toast.error("שגיאה בשליחת הפרטים, נסו שוב.");
     }
-    setCbSubmitting(false);
+    setSubmitting(false);
+  }
+
+  function handleDownloadDraft() {
+    if (!fullDraft) return;
+    const blob = new Blob([fullDraft], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // After submission — confirmation screen
+  if (submitted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-background">
+        <div className="w-full max-w-lg text-center animate-slide-up">
+          <div className="bg-card rounded-2xl border border-border shadow-lg p-8 md:p-10">
+            <CheckCircle className="w-14 h-14 mx-auto mb-5 text-[hsl(var(--risk-low))]" />
+            <h1 className="text-xl md:text-2xl font-bold mb-3 text-foreground">
+              קיבלתי את הפרטים שלך
+            </h1>
+            <p className="text-muted-foreground leading-relaxed text-sm md:text-base mb-6">
+              אעבור על הצוואה ואחזור אליך היום עם השלמה מלאה והערות מדויקות
+            </p>
+            {selectedCta === "cold" && fullDraft && (
+              <button
+                onClick={handleDownloadDraft}
+                className="inline-flex items-center gap-2 rounded-lg border border-border bg-secondary px-6 py-3 text-sm font-medium text-foreground hover:bg-secondary/80 transition-all"
+              >
+                <FileText className="w-4 h-4" />
+                הורד את הטיוטה
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen py-10 md:py-14 bg-background">
       <div className="container max-w-2xl space-y-6 md:space-y-8 px-4 md:px-6">
-        {/* Header card */}
-        <div className="bg-card rounded-xl border border-border shadow-md p-6 md:p-8 animate-slide-up">
+
+        {/* ── Hero Section ── */}
+        <div className="bg-card rounded-2xl border border-border shadow-md p-6 md:p-10 animate-slide-up text-center">
           <div className="gold-line mx-auto mb-6" />
-          <h1 className="text-xl md:text-2xl font-bold text-center mb-4 text-foreground" style={{ lineHeight: 1.5 }}>
-            {mode === "draft"
-              ? "נוסח הצוואה שלך מוכן"
-              : reviewHeadline || "נמצאו נושאים שמומלץ לבדוק בצוואה הקיימת"}
+          <h1 className="text-xl md:text-2xl font-bold mb-3 text-foreground leading-relaxed">
+            הצוואה שלך טובה — אך המערכת זיהתה מספר חוסרים מהותיים
           </h1>
-
-          <div className="bg-secondary/50 rounded-lg p-4 mb-4">
-            <div className="flex justify-between items-center">
-              <span className="text-sm text-muted-foreground">סוג צוואה:</span>
-              <span className="font-bold text-foreground">{willType}</span>
-            </div>
-            {reviewRiskLevel && (
-              <div className="flex justify-between items-center mt-2">
-                <span className="text-sm text-muted-foreground">רמת סיכון:</span>
-                <span className="font-bold text-foreground">{reviewRiskLevel}</span>
-              </div>
-            )}
-          </div>
-
-          {mode === "draft" && (
-            <div className="rounded-lg border border-amber-300 bg-amber-50 px-4 py-3 text-sm leading-relaxed text-amber-900 mb-6 space-y-2">
-              <p>{legalWarning}</p>
-              <p>המשתמש מצהיר כי ידוע לו שעל מנת להקנות תוקף משפטי לצוואה, נדרש ניסוח מותאם אישית, בדיקה משפטית פרטנית ועמידה בדרישות הדין, לרבות דרישות צורניות וראייתיות.</p>
-            </div>
-          )}
-        </div>
-
-        {/* Draft content */}
-        {mode === "draft" && fullDraft && (
-          <div
-            className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
-            style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
-          >
-            <pre
-              className="whitespace-pre-wrap text-sm leading-relaxed text-foreground font-heebo"
-              dir="rtl"
-              style={{ fontFamily: "inherit" }}
-            >
-              {fullDraft}
-            </pre>
-          </div>
-        )}
-
-        {/* Review issues */}
-        {mode === "review" && reviewIssues && reviewIssues.length > 0 && (
-          <div
-            className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
-            style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
-          >
-            <h2 className="text-base md:text-lg font-bold mb-5 text-foreground">
-              הנושאים שזוהו בבדיקה
-            </h2>
-            <ul className="space-y-3">
-              {reviewIssues.map((item, i) => (
-                <li
-                  key={i}
-                  className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
-                >
-                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full shrink-0 bg-primary" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Download button (draft mode only) */}
-        {mode === "draft" && fullDraft && (
-          <div
-            className="animate-slide-up"
-            style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
-          >
-            <button
-              onClick={handleDownload}
-              className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] flex items-center justify-center gap-2"
-            >
-              <Download className="w-4 h-4" />
-              הורד את נוסח הצוואה
-            </button>
-          </div>
-        )}
-
-        {/* Gaps / Insights section */}
-        {gaps && gaps.length > 0 && <GapsSection gaps={gaps} />}
-
-        {/* Practical meaning */}
-        <div
-          className="bg-card rounded-xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
-          style={{ animationDelay: "250ms", animationFillMode: "backwards" }}
-        >
-          <h2 className="text-base md:text-lg font-bold mb-3 text-foreground">המשמעות המעשית</h2>
-          <p className="text-muted-foreground leading-relaxed text-sm">
-            צוואה שאינה מותאמת למצב המשפחתי, לנכסים ולסיכונים הקיימים — עלולה
-            ליצור מחלוקות בין יורשים, לעכב את חלוקת העיזבון או להביא לתוצאה שאינה
-            תואמת את רצון המצווה. בחינה מקצועית יכולה לזהות פערים אלה ולהתאים את
-            ההסדר לנסיבות בפועל.
+          <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
+            הטיוטה שבנית נותנת בסיס, אך כרגע אינה מלאה ואינה מגנה עליך באופן מלא
           </p>
         </div>
 
-        {/* CTA callback */}
+        {/* ── Gaps Section ── */}
         <div
-          className="bg-accent rounded-xl border border-accent p-6 md:p-8 text-center animate-slide-up"
-          style={{ animationDelay: "300ms", animationFillMode: "backwards" }}
+          className="bg-card rounded-2xl border border-border shadow-sm p-6 md:p-8 animate-slide-up"
+          style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
+        >
+          <div className="flex items-center gap-2 mb-5">
+            <AlertTriangle className="w-5 h-5 text-[hsl(var(--risk-high))]" />
+            <h2 className="text-base md:text-lg font-bold text-foreground">
+              המערכת זיהתה {displayGapCount} חוסרים מהותיים:
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {ALWAYS_SHOW_GAPS.map((gap, i) => {
+              const Icon = gap.icon;
+              return (
+                <div key={i} className="flex items-start gap-3 rounded-lg border border-[hsl(var(--risk-high)/0.2)] bg-[hsl(var(--risk-high)/0.04)] p-4">
+                  <Icon className="w-5 h-5 mt-0.5 shrink-0 text-[hsl(var(--risk-high))]" />
+                  <p className="text-sm leading-relaxed text-foreground">{gap.text}</p>
+                </div>
+              );
+            })}
+            {extraGaps.map((gap, i) => (
+              <div key={`extra-${i}`} className="flex items-start gap-3 rounded-lg border border-[hsl(var(--risk-high)/0.2)] bg-[hsl(var(--risk-high)/0.04)] p-4">
+                <AlertTriangle className="w-5 h-5 mt-0.5 shrink-0 text-[hsl(var(--risk-high))]" />
+                <p className="text-sm leading-relaxed text-foreground">{gap.title}: {gap.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ── Offer Section ── */}
+        <div
+          className="bg-accent rounded-2xl border border-accent p-6 md:p-8 animate-slide-up"
+          style={{ animationDelay: "200ms", animationFillMode: "backwards" }}
         >
           <div className="gold-line mx-auto mb-5" />
-          <h2 className="text-lg md:text-xl font-bold mb-3 text-accent-foreground">
-            אני רוצה בדיקה משפטית והשלמה סופית
+          <h2 className="text-lg md:text-xl font-bold text-center mb-2 text-accent-foreground">
+            קבל צוואה שלמה, חוקית ותקינה בהתאם לדין
           </h2>
-          <p className="text-sm text-accent-foreground/60 mb-6 leading-relaxed max-w-md mx-auto">
-            השאירו פרטים ונחזור אליכם לשיחת ייעוץ ראשונית — ללא התחייבות.
+          <p className="text-sm text-accent-foreground/70 text-center mb-6 leading-relaxed max-w-lg mx-auto">
+            השלמה מלאה של הצוואה על בסיס הנתונים שלך, כולל ניסוח משפטי מותאם — ללא צורך בפגישה
           </p>
 
-          {cbSubmitted ? (
-            <div className="flex items-center justify-center gap-2 text-risk-low font-medium">
-              <CheckCircle className="w-5 h-5" />
-              <span>הפרטים נקלטו בהצלחה. ניצור קשר בהקדם.</span>
+          {/* Price */}
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <span className="text-3xl md:text-4xl font-bold text-accent-foreground">500 ₪</span>
+          </div>
+
+          {/* Process explanation */}
+          <div className="bg-accent-foreground/5 rounded-xl p-5 mb-6 space-y-3">
+            <p className="text-xs font-semibold text-accent-foreground/80 mb-2">לאחר קבלת הצוואה:</p>
+            <div className="flex items-start gap-2.5">
+              <Pen className="w-4 h-4 mt-0.5 shrink-0 text-accent-foreground/60" />
+              <p className="text-xs text-accent-foreground/70 leading-relaxed">ניתן לכתוב אותה בכתב יד או להדפיס</p>
             </div>
-          ) : !showCallbackForm ? (
-            <button
-              onClick={() => setShowCallbackForm(true)}
-              className="inline-flex items-center justify-center gap-2 rounded-md bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.97]"
-            >
-              <Phone className="w-4 h-4" />
-              בקשת שיחה מהמשרד
-            </button>
+            <div className="flex items-start gap-2.5">
+              <Users className="w-4 h-4 mt-0.5 shrink-0 text-accent-foreground/60" />
+              <p className="text-xs text-accent-foreground/70 leading-relaxed">לחתום בפני שני עדים בהתאם להנחיות</p>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <Building className="w-4 h-4 mt-0.5 shrink-0 text-accent-foreground/60" />
+              <p className="text-xs text-accent-foreground/70 leading-relaxed">ניתן גם לקבוע תור להפקדה אצל האפוטרופוס הכללי</p>
+            </div>
+          </div>
+
+          {/* CTA Buttons */}
+          {!selectedCta ? (
+            <div className="space-y-3">
+              <button
+                onClick={() => setSelectedCta("hot_no_call")}
+                className="w-full rounded-xl bg-primary px-6 py-4 text-base font-bold text-primary-foreground shadow-lg transition-all duration-200 hover:shadow-xl hover:brightness-110 active:scale-[0.98]"
+              >
+                אני רוצה השלמה מלאה עכשיו — ללא צורך ביצירת קשר
+              </button>
+              <button
+                onClick={() => setSelectedCta("hot_call")}
+                className="w-full rounded-xl border-2 border-primary bg-transparent px-6 py-4 text-base font-semibold text-accent-foreground transition-all duration-200 hover:bg-primary/10 active:scale-[0.98] flex items-center justify-center gap-2"
+              >
+                <Phone className="w-4 h-4" />
+                אני רוצה השלמה ב־500 ₪ — חזור אליי
+              </button>
+              <button
+                onClick={() => setSelectedCta("cold")}
+                className="w-full rounded-xl border border-accent-foreground/20 bg-transparent px-6 py-3 text-sm text-accent-foreground/60 transition-all duration-200 hover:bg-accent-foreground/5 active:scale-[0.98]"
+              >
+                שלח לי את הטיוטה בלבד
+              </button>
+            </div>
           ) : (
-            <form onSubmit={handleCallbackSubmit} className="max-w-sm mx-auto space-y-4 text-right">
+            /* Lead form after CTA selection */
+            <form onSubmit={handleSubmit} className="max-w-sm mx-auto space-y-4 text-right animate-slide-up">
+              <p className="text-xs text-accent-foreground/60 text-center mb-2">
+                {selectedCta === "hot_no_call"
+                  ? "השאר פרטים וקבל צוואה מלאה — ללא שיחה"
+                  : selectedCta === "hot_call"
+                  ? "השאר פרטים ונחזור אליך בהקדם"
+                  : "השאר פרטים ונשלח לך את הטיוטה"}
+              </p>
               <input
                 type="text"
                 value={cbName}
@@ -277,18 +255,41 @@ export function ResultPage({
                 dir="ltr"
                 maxLength={15}
               />
+              {(selectedCta === "hot_no_call" || selectedCta === "cold") && (
+                <input
+                  type="email"
+                  value={cbEmail}
+                  onChange={(e) => setCbEmail(e.target.value)}
+                  className="w-full rounded-lg border border-accent-foreground/20 bg-accent-foreground/5 px-4 py-3 text-sm text-accent-foreground outline-none focus:ring-2 focus:ring-primary/30 transition-all placeholder:text-accent-foreground/30"
+                  placeholder="דוא״ל"
+                  dir="ltr"
+                  maxLength={255}
+                />
+              )}
               <button
                 type="submit"
-                disabled={cbSubmitting}
-                className="w-full rounded-lg bg-primary px-6 py-3 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] disabled:opacity-60"
+                disabled={submitting}
+                className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] disabled:opacity-60 flex items-center justify-center gap-2"
               >
-                {cbSubmitting ? "שולח..." : "שליחת פרטים"}
+                {submitting ? "שולח..." : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    שליחה
+                  </>
+                )}
+              </button>
+              <button
+                type="button"
+                onClick={() => setSelectedCta(null)}
+                className="w-full text-xs text-accent-foreground/40 hover:text-accent-foreground/60 transition-colors"
+              >
+                ← חזרה לבחירה
               </button>
             </form>
           )}
         </div>
 
-        {/* Disclaimer */}
+        {/* ── Disclaimer ── */}
         <p className="text-[11px] text-muted-foreground/60 text-center max-w-xl mx-auto leading-relaxed pb-6">
           {legalWarning}
         </p>
