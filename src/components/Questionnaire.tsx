@@ -142,10 +142,10 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
               />
               <button
                 type="submit"
-                disabled={!currentAnswer.trim()}
+                disabled={!currentAnswer.trim() && !question.optional}
                 className="w-full rounded-lg bg-primary px-6 py-4 text-base font-semibold text-primary-foreground shadow-lg transition-all duration-200 hover:brightness-110 active:scale-[0.97] disabled:opacity-40"
               >
-                המשך
+                {question.optional && !currentAnswer.trim() ? "דלג/י" : "המשך"}
               </button>
             </form>
           )}
