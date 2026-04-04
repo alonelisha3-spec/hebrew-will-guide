@@ -44,6 +44,7 @@ export const noWillQuestions: Question[] = [
     text: "מספר תעודת הזהות של בן/בת הזוג (לא חובה)",
     type: "text",
     placeholder: "מספר תעודת זהות",
+    optional: true,
     condition: (a) => !!a.familyStructure?.includes("בן/בת זוג") && !!a.spouseName?.trim(),
   },
   {
