@@ -424,19 +424,19 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
 
   // Inheritance structure
   lines.push(`${section}. מבנה כללי של ההורשה`);
-  if (inheritanceModel === "כל העיזבון לבן/בת הזוג") {
+  if (inheritanceModel.includes("הכל לבן/בת הזוג") || inheritanceModel.includes("כל העיזבון לבן/בת הזוג")) {
     lines.push(
       `אני מצווה את מלוא עיזבוני לבן/בת זוגי. ככל שיידרש, יש להשלים את פרטי בן/בת הזוג בצוואה הסופית.`
     );
-  } else if (inheritanceModel === "בן/בת הזוג קודם ואחריו יורשים נוספים") {
+  } else if (inheritanceModel.includes("קודם לבן/בת הזוג") || inheritanceModel.includes("בן/בת הזוג קודם")) {
     lines.push(
       `אני מצווה כי תחילה יעבור עיזבוני לבן/בת הזוג, ולאחר מכן ליורשים הבאים אחריו בהתאם להוראות צוואה זו.`
     );
-  } else if (inheritanceModel === "חלוקה ישירה בין כמה יורשים") {
+  } else if (inheritanceModel.includes("לחלק בין") || inheritanceModel.includes("חלוקה ישירה")) {
     lines.push(
       `אני מצווה את עיזבוני לחלוקה ישירה בין כמה יורשים, בהתאם למנגנון החלוקה המפורט בצוואה זו.`
     );
-  } else if (inheritanceModel === "חלוקה לא שוויונית או מותאמת אישית") {
+  } else if (inheritanceModel.includes("חלוקה מיוחדת") || inheritanceModel.includes("חלוקה לא שוויונית")) {
     lines.push(
       `אני מצווה את עיזבוני בהתאם לחלוקה מותאמת אישית, שאינה בהכרח שוויונית, כמפורט בצוואה זו.`
     );
