@@ -76,7 +76,7 @@ export function ResultPage({
           riskLevel: reviewRiskLevel || "",
           riskItems: reviewIssues || [],
           ctaTag: selectedCta,
-          fullDraft: selectedCta === "cold" ? fullDraft : undefined,
+          fullDraft: fullDraft || undefined,
         },
       });
       setSubmitted(true);
