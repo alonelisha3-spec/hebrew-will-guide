@@ -31,6 +31,21 @@ export const noWillQuestions: Question[] = [
     explanation: "זה עוזר לנו להתאים את המבנה הבסיסי של הצוואה.",
   },
   {
+    id: "spouseName",
+    text: "מה שם בן/בת הזוג שלך?",
+    type: "text",
+    placeholder: "שם פרטי ושם משפחה",
+    explanation: "השם ישמש בצוואה לציון היורש/ת.",
+    condition: (a) => !!a.familyStructure?.includes("בן/בת זוג"),
+  },
+  {
+    id: "spouseId",
+    text: "מספר תעודת הזהות של בן/בת הזוג (לא חובה)",
+    type: "text",
+    placeholder: "מספר תעודת זהות",
+    condition: (a) => !!a.familyStructure?.includes("בן/בת זוג") && !!a.spouseName?.trim(),
+  },
+  {
     id: "inheritanceModel",
     text: "למי תרצה/י להוריש?",
     type: "select",
