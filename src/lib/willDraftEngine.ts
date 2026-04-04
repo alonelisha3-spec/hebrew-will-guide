@@ -136,7 +136,7 @@ export function generateWillPreview(answers: Record<string, string>): {
     points.push("החלוקה אינה סטנדרטית ודורשת ניסוח קפדני.");
   }
 
-  if (familyStructure === "מבנה משפחתי מורכב אחר") {
+  if (familyStructure.includes("מורכב") || familyStructure === "מצב אחר") {
     points.push("מדובר במבנה משפחתי מורכב שמצריך התאמה משפטית פרטנית.");
   }
 
