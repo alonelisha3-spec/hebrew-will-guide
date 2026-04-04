@@ -2,6 +2,7 @@ import { AlertTriangle, FileText, Download, Users, Shield } from "lucide-react";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
 import type { WillGap } from "@/lib/willGapsEngine";
 import jsPDF from "jspdf";
+import { rubikFontBase64 } from "@/lib/rubik-font";
 
 interface Props {
   mode: "draft" | "review";
