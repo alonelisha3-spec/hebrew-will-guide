@@ -476,12 +476,14 @@ function buildRegularWillText(a: Record<string, string>, willType: WillDraftData
   // Distribution methods
   if (distributionMethod.includes("שווה בשווה") || distributionMethod === "בחלקים שווים") {
     lines.push(`${section}. אופן החלוקה בין היורשים`);
-    if (childrenNames.length > 0) {
-      lines.push(
-        `החלוקה בין היורשים תהיה בחלקים שווים. בהתאם לנתונים שנמסרו, מדובר ביורשים הבאים: ${childrenNames.join(", ")}.`
-      );
+    if (allHeirs.length > 0) {
+      const share = (100 / allHeirs.length).toFixed(0);
+      lines.push(`החלוקה בין היורשים תהיה בחלקים שווים:`);
+      allHeirs.forEach((heir, i) => {
+        lines.push(`   ${i + 1}. ${heir} – ${share}% מן העיזבון.`);
+      });
     } else {
-      lines.push(`החלוקה בין היורשים תהיה בחלקים שווים.`);
+      lines.push(`החלוקה בין היורשים תהיה בחלקים שווים. [יש להשלים שמות היורשים]`);
     }
     lines.push("");
     section++;
