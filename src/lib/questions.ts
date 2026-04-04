@@ -44,6 +44,26 @@ export const noWillQuestions: Question[] = [
     explanation: "אפשר לשנות את זה בהמשך — רק כדי להבין את הכיוון.",
   },
   {
+    id: "childrenNames",
+    text: "מה שמות הילדים שלך?",
+    type: "text",
+    placeholder: "לדוגמה: דני כהן, מיכל כהן, יוסי כהן",
+    explanation: "הפרד/י בין השמות בפסיק. השמות ישמשו בצוואה.",
+    condition: (a) =>
+      a.familyStructure?.includes("ילדים") ||
+      a.inheritanceModel?.includes("לחלק"),
+  },
+  {
+    id: "otherHeirNames",
+    text: "למי עוד תרצה/י להוריש? (מלבד בן/בת זוג וילדים)",
+    type: "text",
+    placeholder: "לדוגמה: אחי דוד לוי, חברתי שרה כהן",
+    explanation: "הפרד/י בין השמות בפסיק. אם אין — דלג/י.",
+    condition: (a) =>
+      a.inheritanceModel?.includes("לחלק") ||
+      a.inheritanceModel?.includes("חלוקה מיוחדת"),
+  },
+  {
     id: "multipleHeirs",
     text: "יש יותר מאדם אחד שתרצה/י להוריש לו?",
     type: "select",
