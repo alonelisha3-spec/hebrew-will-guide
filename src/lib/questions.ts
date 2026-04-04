@@ -37,7 +37,7 @@ export const noWillQuestions: Question[] = [
     type: "text",
     placeholder: "שם פרטי ושם משפחה",
     explanation: "השם ישמש בצוואה לציון היורש/ת.",
-    condition: (a) => !!a.familyStructure?.includes("בן/בת זוג"),
+    condition: (a) => !!a.familyStructure && a.familyStructure.includes("בן/בת זוג") && !a.familyStructure.startsWith("אין"),
   },
   {
     id: "spouseId",
@@ -45,7 +45,7 @@ export const noWillQuestions: Question[] = [
     type: "text",
     placeholder: "מספר תעודת זהות",
     optional: true,
-    condition: (a) => !!a.familyStructure?.includes("בן/בת זוג") && !!a.spouseName?.trim(),
+    condition: (a) => !!a.familyStructure && a.familyStructure.includes("בן/בת זוג") && !a.familyStructure.startsWith("אין") && !!a.spouseName?.trim(),
   },
   {
     id: "inheritanceModel",
