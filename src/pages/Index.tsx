@@ -460,10 +460,14 @@ export default function Index() {
       {showHeaderFooter && <Header />}
 
       {step === "landing" && (
-        <LandingPage
-          onNoWill={() => startTrack("noWill")}
-          onExistingWill={() => startTrack("existingWill")}
-        />
+        <>
+          <LandingPage
+            onNoWill={() => startTrack("noWill")}
+            onExistingWill={() => startTrack("existingWill")}
+            isFromFacebook={isFromSource("facebook")}
+          />
+          <ExitIntentPopup onStart={() => startTrack("noWill")} />
+        </>
       )}
 
       {step === "questionnaire" && (
