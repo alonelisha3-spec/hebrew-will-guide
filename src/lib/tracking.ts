@@ -13,7 +13,7 @@ function getSessionId(): string {
 
 export function trackEvent(
   eventName: string,
-  extra?: { stepIndex?: number; questionId?: string; metadata?: Record<string, unknown> }
+  extra?: { stepIndex?: number; questionId?: string; metadata?: Record<string, string | number | boolean> }
 ) {
   const payload = {
     session_id: getSessionId(),
