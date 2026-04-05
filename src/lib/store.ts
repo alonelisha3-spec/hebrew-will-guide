@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getUtmData } from "./utm";
 
 export interface LeadData {
   fullName: string;
@@ -33,6 +34,7 @@ export async function saveLead(
 
   // Send to backend
   try {
+    const utmData = getUtmData();
     const { error } = await supabase.functions.invoke("notify-lead", {
       body: {
         fullName: lead.fullName,
@@ -43,6 +45,7 @@ export async function saveLead(
         riskLevel: result?.riskLevel,
         riskItems: result?.riskItems,
         fullDraft: result?.fullDraft,
+        utmData,
       },
     });
 

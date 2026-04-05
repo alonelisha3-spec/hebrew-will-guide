@@ -6,6 +6,7 @@ import portraitImg from "@/assets/portrait-alon.png";
 interface Props {
   onNoWill: () => void;
   onExistingWill: () => void;
+  isFromFacebook?: boolean;
 }
 
 function AnimatedCounter({ target, duration = 2000 }: { target: number; duration?: number }) {
@@ -27,7 +28,13 @@ function AnimatedCounter({ target, duration = 2000 }: { target: number; duration
   return <span>{count.toLocaleString("he-IL")}+</span>;
 }
 
-export function LandingPage({ onNoWill, onExistingWill }: Props) {
+export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props) {
+  const headline = isFromFacebook
+    ? "ראיתם את הפוסט? עכשיו תבדקו בעצמכם"
+    : "רוצים להסדיר צוואה?";
+  const subHeadline = isFromFacebook
+    ? "ענו על מספר שאלות פשוטות וקבלו נוסח צוואה ראשוני — ללא התחייבות, תוך 2 דקות."
+    : "התחילו עכשיו וקבלו נוסח צוואה מוכן בהתאמה אישית";
   return (
     <div className="min-h-screen">
       <section className="py-20 md:py-32 bg-accent text-accent-foreground relative overflow-hidden">
@@ -39,9 +46,9 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
             className="text-3xl md:text-5xl font-bold leading-tight text-white"
             style={{ lineHeight: 1.25 }}
           >
-            רוצים להסדיר צוואה?
+            {headline}
             <br />
-            התחילו עכשיו וקבלו נוסח צוואה מוכן בהתאמה אישית
+            {subHeadline}
           </h1>
           <p className="mt-6 text-base md:text-lg text-accent-foreground/85 leading-relaxed max-w-2xl mx-auto">
             ענו על מספר שאלות פשוטות וקבלו נוסח צוואה מלא, ברור ומותאם למצב
@@ -134,6 +141,7 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
           <img
             src={portraitImg}
             alt="עו״ד אלון אלישע"
+            loading="lazy"
             className="w-36 h-36 md:w-44 md:h-44 rounded-full object-cover object-top shadow-lg border-4 border-accent/20 flex-shrink-0"
           />
           <div className="text-center md:text-right">

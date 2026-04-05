@@ -142,6 +142,7 @@ export type Database = {
           phone: string
           risk_items: string[] | null
           risk_level: string | null
+          utm_data: Json | null
           will_type: string | null
         }
         Insert: {
@@ -154,6 +155,7 @@ export type Database = {
           phone: string
           risk_items?: string[] | null
           risk_level?: string | null
+          utm_data?: Json | null
           will_type?: string | null
         }
         Update: {
@@ -166,6 +168,7 @@ export type Database = {
           phone?: string
           risk_items?: string[] | null
           risk_level?: string | null
+          utm_data?: Json | null
           will_type?: string | null
         }
         Relationships: []

@@ -8,7 +8,9 @@ import { Questionnaire } from "@/components/Questionnaire";
 import { PreviewPage } from "@/components/PreviewPage";
 import { LeadCapture } from "@/components/LeadCapture";
 import { ResultPage } from "@/components/ResultPage";
+import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { noWillQuestions, existingWillQuestions } from "@/lib/questions";
+import { isFromSource } from "@/lib/utm";
 import {
   generateWillPreview,
   generateFullWillDraft,
@@ -458,10 +460,14 @@ export default function Index() {
       {showHeaderFooter && <Header />}
 
       {step === "landing" && (
-        <LandingPage
-          onNoWill={() => startTrack("noWill")}
-          onExistingWill={() => startTrack("existingWill")}
-        />
+        <>
+          <LandingPage
+            onNoWill={() => startTrack("noWill")}
+            onExistingWill={() => startTrack("existingWill")}
+            isFromFacebook={isFromSource("facebook")}
+          />
+          <ExitIntentPopup onStart={() => startTrack("noWill")} />
+        </>
       )}
 
       {step === "questionnaire" && (
