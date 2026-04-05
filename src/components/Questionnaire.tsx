@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Question } from "@/lib/questions";
+import { trackEvent } from "@/lib/tracking";
 
 interface Props {
   questions: Question[];
