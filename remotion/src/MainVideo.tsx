@@ -1,7 +1,7 @@
 import { AbsoluteFill } from "remotion";
-import { TransitionSeries, linearTiming } from "@remotion/transitions";
+import { TransitionSeries, springTiming } from "@remotion/transitions";
 import { fade } from "@remotion/transitions/fade";
-import { slide } from "@remotion/transitions/slide";
+import { wipe } from "@remotion/transitions/wipe";
 import { Scene1Intro } from "./scenes/Scene1";
 import { Scene2Problem } from "./scenes/Scene2";
 import { Scene3HowItWorks } from "./scenes/Scene3";
@@ -14,35 +14,35 @@ export const MainVideo = () => {
     <AbsoluteFill>
       <PersistentBackground />
       <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={200}>
+        <TransitionSeries.Sequence durationInFrames={120}>
           <Scene1Intro />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={fade()}
-          timing={linearTiming({ durationInFrames: 20 })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
         />
-        <TransitionSeries.Sequence durationInFrames={200}>
+        <TransitionSeries.Sequence durationInFrames={110}>
           <Scene2Problem />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
-          presentation={slide({ direction: "from-bottom" })}
-          timing={linearTiming({ durationInFrames: 20 })}
+          presentation={wipe({ direction: "from-top-left" })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
         />
-        <TransitionSeries.Sequence durationInFrames={220}>
+        <TransitionSeries.Sequence durationInFrames={130}>
           <Scene3HowItWorks />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={fade()}
-          timing={linearTiming({ durationInFrames: 20 })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
         />
-        <TransitionSeries.Sequence durationInFrames={200}>
+        <TransitionSeries.Sequence durationInFrames={110}>
           <Scene4Benefits />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
-          presentation={fade()}
-          timing={linearTiming({ durationInFrames: 20 })}
+          presentation={wipe({ direction: "from-left" })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
         />
-        <TransitionSeries.Sequence durationInFrames={220}>
+        <TransitionSeries.Sequence durationInFrames={110}>
           <Scene5CTA />
         </TransitionSeries.Sequence>
       </TransitionSeries>
