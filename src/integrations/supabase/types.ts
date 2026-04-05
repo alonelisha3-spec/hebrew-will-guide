@@ -101,6 +101,36 @@ export type Database = {
         }
         Relationships: []
       }
+      funnel_events: {
+        Row: {
+          created_at: string
+          event_name: string
+          id: string
+          metadata: Json | null
+          question_id: string | null
+          session_id: string
+          step_index: number | null
+        }
+        Insert: {
+          created_at?: string
+          event_name: string
+          id?: string
+          metadata?: Json | null
+          question_id?: string | null
+          session_id: string
+          step_index?: number | null
+        }
+        Update: {
+          created_at?: string
+          event_name?: string
+          id?: string
+          metadata?: Json | null
+          question_id?: string | null
+          session_id?: string
+          step_index?: number | null
+        }
+        Relationships: []
+      }
       leads: {
         Row: {
           answers: Json | null
