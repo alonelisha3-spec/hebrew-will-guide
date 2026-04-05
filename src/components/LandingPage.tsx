@@ -6,6 +6,7 @@ import portraitImg from "@/assets/portrait-alon.png";
 interface Props {
   onNoWill: () => void;
   onExistingWill: () => void;
+  isFromFacebook?: boolean;
 }
 
 function AnimatedCounter({ target, duration = 2000 }: { target: number; duration?: number }) {
