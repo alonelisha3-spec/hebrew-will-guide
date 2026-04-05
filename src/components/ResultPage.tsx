@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { AlertTriangle, FileText, Users, Shield } from "lucide-react";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
+import { trackEvent } from "@/lib/tracking";
 import type { WillGap } from "@/lib/willGapsEngine";
 
 interface Props {
