@@ -47,6 +47,10 @@ export function ResultPage({
   const extraGaps = gaps?.filter((g) => g.severity === "high").slice(0, 1) || [];
   const displayGapCount = ALWAYS_SHOW_GAPS.length + extraGaps.length;
 
+  useEffect(() => {
+    trackEvent("results_viewed", { metadata: { mode, willType } });
+  }, []);
+
   function handleDownloadTxt() {
     if (!fullDraft) return;
     const blob = new Blob([fullDraft], { type: "text/plain;charset=utf-8" });
