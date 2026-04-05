@@ -26,7 +26,7 @@ export const Scene2Problem = () => {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 44, width: "100%" }}>
         {problems.map((text, i) => {
-          const s = spring({ frame: frame - 30 - i * 18, fps, config: { damping: 14, stiffness: 140 } });
+          const s = spring({ frame: frame - 18 - i * 12, fps, config: { damping: 14, stiffness: 140 } });
           return (
             <div key={i} style={{
               opacity: interpolate(s, [0, 1], [0, 1]),

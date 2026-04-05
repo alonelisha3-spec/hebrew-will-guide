@@ -13,7 +13,7 @@ export const Scene4Benefits = () => {
   const { fps } = useVideoConfig();
 
   const headS = spring({ frame: frame - 5, fps, config: { damping: 18 } });
-  const freeS = spring({ frame: frame - 90, fps, config: { damping: 12 } });
+  const freeS = spring({ frame: frame - 60, fps, config: { damping: 12 } });
 
   return (
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 70, direction: "rtl" }}>
@@ -27,7 +27,7 @@ export const Scene4Benefits = () => {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 36, width: "100%" }}>
         {benefits.map((b, i) => {
-          const s = spring({ frame: frame - 18 - i * 14, fps, config: { damping: 13, stiffness: 170 } });
+          const s = spring({ frame: frame - 10 - i * 10, fps, config: { damping: 13, stiffness: 170 } });
           return (
             <div key={i} style={{
               opacity: interpolate(s, [0, 1], [0, 1]),

@@ -25,7 +25,7 @@ export const Scene3HowItWorks = () => {
 
       <div style={{ display: "flex", flexDirection: "column", gap: 50, width: "100%" }}>
         {steps.map((step, i) => {
-          const s = spring({ frame: frame - 25 - i * 22, fps, config: { damping: 16 } });
+          const s = spring({ frame: frame - 15 - i * 14, fps, config: { damping: 16 } });
           return (
             <div key={i} style={{
               opacity: interpolate(s, [0, 1], [0, 1]),
@@ -57,7 +57,7 @@ export const Scene3HowItWorks = () => {
 
       <div style={{
         position: "absolute", bottom: 260,
-        opacity: interpolate(spring({ frame: frame - 90, fps, config: { damping: 20 } }), [0, 1], [0, 1]),
+        opacity: interpolate(spring({ frame: frame - 65, fps, config: { damping: 20 } }), [0, 1], [0, 1]),
         fontSize: 30, color: "rgba(255,255,255,0.5)",
         fontFamily: heebo, fontWeight: 300, textAlign: "center",
       }}>
