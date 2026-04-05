@@ -34,7 +34,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
     : "רוצים להסדיר צוואה?";
   const subHeadline = isFromFacebook
     ? "ענו על מספר שאלות פשוטות וקבלו נוסח צוואה ראשוני — ללא התחייבות, תוך 2 דקות."
-    : "לחצו עכשיו וקבלו נוסח צוואה מוכן — ללא עלות וללא התחייבות";
+    : "התחילו עכשיו וקבלו נוסח צוואה מוכן בהתאמה אישית";
   return (
     <div className="min-h-screen">
       <section className="py-20 md:py-32 bg-accent text-accent-foreground relative overflow-hidden">
