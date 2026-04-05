@@ -89,6 +89,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             >
               יש לי כבר צוואה ואני רוצה לבדוק אותה
             </button>
+            <p className="text-xs text-accent-foreground/60 mt-1">ללא עלות וללא התחייבות</p>
           </div>
 
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm max-w-3xl mx-auto">
