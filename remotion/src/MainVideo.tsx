@@ -21,28 +21,28 @@ export const MainVideo = () => {
           presentation={fade()}
           timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={95}>
+        <TransitionSeries.Sequence durationInFrames={120}>
           <Scene2Problem />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={wipe({ direction: "from-top-left" })}
           timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={110}>
+        <TransitionSeries.Sequence durationInFrames={140}>
           <Scene3HowItWorks />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={fade()}
           timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={92}>
+        <TransitionSeries.Sequence durationInFrames={115}>
           <Scene4Benefits />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={wipe({ direction: "from-left" })}
           timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={93}>
+        <TransitionSeries.Sequence durationInFrames={105}>
           <Scene5CTA />
         </TransitionSeries.Sequence>
       </TransitionSeries>
