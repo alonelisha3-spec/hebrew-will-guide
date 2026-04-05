@@ -54,33 +54,48 @@ export function ResultPage({
   function handleDownloadTxt() {
     if (!fullDraft) return;
     const blob = new Blob(["\uFEFF" + fullDraft], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
     const fileName = `טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-    // Try native share on mobile (works reliably on iOS/Android)
-    if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+    // 1) Try Web Share API with file (best on mobile)
+    if (isMobile && navigator.share) {
       const file = new File([blob], fileName, { type: "text/plain;charset=utf-8" });
-      navigator.share({ files: [file], title: fileName }).catch(() => {
-        // Fallback if share fails
-        fallbackDownload(url, fileName);
-      });
+      const canShare = navigator.canShare?.({ files: [file] });
+      if (canShare) {
+        navigator.share({ files: [file], title: fileName }).catch(() => {
+          openBlobInNewTab(blob);
+        });
+        return;
+      }
+    }
+
+    // 2) On desktop or non-share mobile: try <a download>
+    if (!isMobile) {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = fileName;
+      a.style.display = "none";
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 100);
       return;
     }
 
-    fallbackDownload(url, fileName);
+    // 3) Mobile fallback: open in new tab so user can long-press to save
+    openBlobInNewTab(blob);
   }
 
-  function fallbackDownload(url: string, fileName: string) {
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = fileName;
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    }, 100);
+  function openBlobInNewTab(blob: Blob) {
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, "_blank");
+    if (!w) {
+      // popup blocked — navigate current window
+      window.location.href = url;
+    }
   }
 
 
