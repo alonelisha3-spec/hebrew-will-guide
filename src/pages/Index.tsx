@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { trackEvent } from "@/lib/tracking";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LandingPage } from "@/components/LandingPage";
@@ -348,12 +349,14 @@ export default function Index() {
 
   function startTrack(nextTrack: Track) {
     resetFlowForTrack(nextTrack);
+    trackEvent("cta_click", { metadata: { track: nextTrack } });
     setStep("questionnaire");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   function handleQuestionnaireComplete(ans: Record<string, string>) {
     setAnswers(ans);
+    trackEvent("questionnaire_complete", { metadata: { track } });
 
     const commercialPreview = buildCommercialPreview(track, ans);
     setPreviewType(commercialPreview.willType);
@@ -365,6 +368,7 @@ export default function Index() {
 
   function handlePreviewAction(action: Intent) {
     setIntent(action);
+    trackEvent("preview_action", { metadata: { intent: action } });
     setStep("lead");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -393,6 +397,7 @@ export default function Index() {
       setReviewData(commercialReview);
     }
 
+    trackEvent("lead_submitted", { metadata: { intent, track, temperature: analysis.temperature } });
     setStep("results");
 
     if (intent === "callback") {

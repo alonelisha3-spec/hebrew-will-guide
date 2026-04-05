@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { AlertTriangle, FileText, Users, Shield } from "lucide-react";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
+import { trackEvent } from "@/lib/tracking";
 import type { WillGap } from "@/lib/willGapsEngine";
 
 interface Props {
@@ -44,6 +46,10 @@ export function ResultPage({
 }: Props) {
   const extraGaps = gaps?.filter((g) => g.severity === "high").slice(0, 1) || [];
   const displayGapCount = ALWAYS_SHOW_GAPS.length + extraGaps.length;
+
+  useEffect(() => {
+    trackEvent("results_viewed", { metadata: { mode, willType } });
+  }, []);
 
   function handleDownloadTxt() {
     if (!fullDraft) return;

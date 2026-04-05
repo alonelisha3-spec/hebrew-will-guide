@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Question } from "@/lib/questions";
+import { trackEvent } from "@/lib/tracking";
 
 interface Props {
   questions: Question[];
@@ -40,6 +41,10 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
   }
 
   function advance(currentAnswers: Record<string, string>) {
+    trackEvent("question_answered", {
+      stepIndex: currentIndex,
+      questionId: question.id,
+    });
     const nextActive = questionList.filter(
       (q) => !q.condition || q.condition(currentAnswers)
     );
