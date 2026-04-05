@@ -53,13 +53,34 @@ export function ResultPage({
 
   function handleDownloadTxt() {
     if (!fullDraft) return;
-    const blob = new Blob([fullDraft], { type: "text/plain;charset=utf-8" });
+    const blob = new Blob(["\uFEFF" + fullDraft], { type: "text/plain;charset=utf-8" });
     const url = URL.createObjectURL(blob);
+    const fileName = `טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
+
+    // Try native share on mobile (works reliably on iOS/Android)
+    if (navigator.share && /Mobi|Android/i.test(navigator.userAgent)) {
+      const file = new File([blob], fileName, { type: "text/plain;charset=utf-8" });
+      navigator.share({ files: [file], title: fileName }).catch(() => {
+        // Fallback if share fails
+        fallbackDownload(url, fileName);
+      });
+      return;
+    }
+
+    fallbackDownload(url, fileName);
+  }
+
+  function fallbackDownload(url: string, fileName: string) {
     const a = document.createElement("a");
     a.href = url;
-    a.download = `טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.txt`;
+    a.download = fileName;
+    a.style.display = "none";
+    document.body.appendChild(a);
     a.click();
-    URL.revokeObjectURL(url);
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 100);
   }
 
 
