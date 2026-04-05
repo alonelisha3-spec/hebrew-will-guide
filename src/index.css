@@ -109,3 +109,19 @@
   from { opacity: 0; transform: translateX(-14px); filter: blur(3px); }
   to { opacity: 1; transform: translateX(0); filter: blur(0); }
 }
+
+/* Accessibility overrides */
+.accessibility-high-contrast {
+  filter: contrast(1.5);
+}
+.accessibility-grayscale {
+  filter: grayscale(1);
+}
+.accessibility-high-contrast.accessibility-grayscale {
+  filter: contrast(1.5) grayscale(1);
+}
+.accessibility-link-highlight a {
+  outline: 2px solid hsl(38 50% 58%) !important;
+  outline-offset: 2px;
+  text-decoration: underline !important;
+}
