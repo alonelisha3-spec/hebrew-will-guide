@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { trackEvent } from "@/lib/tracking";
+import { saveLead } from "@/lib/store";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LandingPage } from "@/components/LandingPage";
