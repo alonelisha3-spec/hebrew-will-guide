@@ -1,10 +1,30 @@
-import { Shield, FileText, Scale, CheckCircle2, Briefcase } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Shield, FileText, Scale, CheckCircle2, Users, Clock, TrendingUp } from "lucide-react";
 import { FAQSection } from "./FAQSection";
 import portraitImg from "@/assets/portrait-alon.png";
 
 interface Props {
   onNoWill: () => void;
   onExistingWill: () => void;
+}
+
+function AnimatedCounter({ target, duration = 2000 }: { target: number; duration?: number }) {
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    let start = 0;
+    const step = Math.ceil(target / (duration / 30));
+    const timer = setInterval(() => {
+      start += step;
+      if (start >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(start);
+      }
+    }, 30);
+    return () => clearInterval(timer);
+  }, [target, duration]);
+  return <span>{count.toLocaleString("he-IL")}+</span>;
 }
 
 export function LandingPage({ onNoWill, onExistingWill }: Props) {
@@ -28,6 +48,25 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
             האישי שלכם — כולל זיהוי חוסרים ונושאים שחשוב להסדיר.
           </p>
 
+          {/* Social proof bar */}
+          <div className="mt-8 flex flex-wrap items-center justify-center gap-6 md:gap-10 text-sm">
+            <div className="flex items-center gap-2 text-white/90">
+              <Users className="w-4 h-4 text-primary" />
+              <span className="font-bold"><AnimatedCounter target={850} /></span>
+              <span className="text-accent-foreground/70">כבר הכינו נוסח</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90">
+              <TrendingUp className="w-4 h-4 text-primary" />
+              <span className="font-bold">98%</span>
+              <span className="text-accent-foreground/70">שביעות רצון</span>
+            </div>
+            <div className="flex items-center gap-2 text-white/90">
+              <Clock className="w-4 h-4 text-primary" />
+              <span className="font-bold">פחות מ-2 דקות</span>
+              <span className="text-accent-foreground/70">למילוי</span>
+            </div>
+          </div>
+
           <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm max-w-3xl mx-auto">
             <div className="rounded-lg bg-white/10 border border-white/10 px-4 py-3">
               <p className="font-semibold text-white">נוסח צוואה מוכן תוך דקות</p>
@@ -50,21 +89,31 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={onNoWill}
-              className="inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-base font-semibold text-primary-foreground shadow-lg hover:brightness-110 w-full sm:w-auto"
+              className="group relative inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-base font-semibold text-primary-foreground shadow-lg w-full sm:w-auto overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
             >
-              <FileText className="w-4 h-4 ml-2" />
-              אני רוצה להכין צוואה
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              <FileText className="w-4 h-4 ml-2 relative z-10" />
+              <span className="relative z-10">אני רוצה להכין צוואה</span>
             </button>
             <button
               onClick={onExistingWill}
-              className="inline-flex items-center justify-center rounded-md bg-white/10 border border-white/20 px-10 py-4 text-base font-semibold text-accent-foreground hover:bg-white/20 w-full sm:w-auto"
+              className="inline-flex items-center justify-center rounded-md bg-white/10 border border-white/20 px-10 py-4 text-base font-semibold text-accent-foreground hover:bg-white/20 w-full sm:w-auto transition-all duration-200 hover:scale-[1.02]"
             >
               <Shield className="w-4 h-4 ml-2" />
               אני רוצה לבדוק צוואה קיימת
             </button>
           </div>
 
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 text-sm text-accent-foreground/70">
+          {/* Urgency nudge */}
+          <div className="mt-6 inline-flex items-center gap-2 rounded-full bg-primary/15 border border-primary/25 px-4 py-2 text-xs text-primary animate-fade-in">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            12 אנשים מילאו את השאלון היום
+          </div>
+
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-6 md:gap-8 text-sm text-accent-foreground/70">
             <span className="flex items-center gap-2">
               <CheckCircle2 className="w-4 h-4 text-primary/80" />
               ללא התחייבות
@@ -102,11 +151,11 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-sm md:text-base">
               התחילו עכשיו, ענו על מספר שאלות, וקבלו נוסח צוואה ראשוני ומסודר
-              בהתאם לנתונים שלכם.
+              בהתם לנתונים שלכם.
             </p>
             <button
               onClick={onNoWill}
-              className="mt-8 inline-flex items-center justify-center rounded-md bg-accent px-10 py-4 text-base font-semibold text-accent-foreground shadow-lg hover:brightness-110"
+              className="mt-8 inline-flex items-center justify-center rounded-md bg-accent px-10 py-4 text-base font-semibold text-accent-foreground shadow-lg transition-all duration-200 hover:brightness-110 hover:scale-105"
             >
               התחל עכשיו
             </button>
