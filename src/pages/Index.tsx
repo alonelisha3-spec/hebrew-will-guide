@@ -356,6 +356,7 @@ export default function Index() {
 
   function handleQuestionnaireComplete(ans: Record<string, string>) {
     setAnswers(ans);
+    trackEvent("questionnaire_complete", { metadata: { track } });
 
     const commercialPreview = buildCommercialPreview(track, ans);
     setPreviewType(commercialPreview.willType);
