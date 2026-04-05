@@ -368,6 +368,7 @@ export default function Index() {
 
   function handlePreviewAction(action: Intent) {
     setIntent(action);
+    trackEvent("preview_action", { metadata: { intent: action } });
     setStep("lead");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
