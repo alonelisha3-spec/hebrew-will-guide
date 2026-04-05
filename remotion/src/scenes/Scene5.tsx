@@ -60,12 +60,24 @@ export const Scene5CTA = () => {
       </div>
 
       <div style={{
-        position: "absolute", bottom: 320,
+        position: "absolute", bottom: 340,
         opacity: interpolate(urlS, [0, 1], [0, 1]),
         fontSize: 30, color: "#c9a855",
         fontFamily: heebo, fontWeight: 600, letterSpacing: "0.08em",
       }}>
         ללא עלות · ללא התחייבות
+      </div>
+
+      <div style={{
+        position: "absolute", bottom: 260,
+        opacity: interpolate(urlS, [0, 1], [0, 1]),
+        transform: `translateY(${interpolate(urlS, [0, 1], [10, 0])}px)`,
+        fontSize: 28, color: "rgba(255,255,255,0.7)",
+        fontFamily: heebo, fontWeight: 400,
+        letterSpacing: "0.02em",
+        direction: "ltr",
+      }}>
+        hebrew-will-guide.lovable.app
       </div>
 
       <div style={{
