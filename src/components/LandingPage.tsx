@@ -86,21 +86,20 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
             </div>
           </div>
 
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="mt-10 flex flex-col items-center justify-center gap-4">
             <button
               onClick={onNoWill}
-              className="group relative inline-flex items-center justify-center rounded-md bg-primary px-10 py-4 text-base font-semibold text-primary-foreground shadow-lg w-full sm:w-auto overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
+              className="group relative inline-flex items-center justify-center rounded-md bg-primary px-12 py-5 text-lg font-bold text-primary-foreground shadow-lg w-full sm:w-auto sm:min-w-[320px] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              <FileText className="w-4 h-4 ml-2 relative z-10" />
+              <FileText className="w-5 h-5 ml-2 relative z-10" />
               <span className="relative z-10">אני רוצה להכין צוואה</span>
             </button>
             <button
               onClick={onExistingWill}
-              className="inline-flex items-center justify-center rounded-md bg-white/10 border border-white/20 px-10 py-4 text-base font-semibold text-accent-foreground hover:bg-white/20 w-full sm:w-auto transition-all duration-200 hover:scale-[1.02]"
+              className="inline-flex items-center justify-center text-sm text-accent-foreground/60 hover:text-accent-foreground transition-colors underline underline-offset-4"
             >
-              <Shield className="w-4 h-4 ml-2" />
-              אני רוצה לבדוק צוואה קיימת
+              יש לי כבר צוואה ואני רוצה לבדוק אותה
             </button>
           </div>
 
