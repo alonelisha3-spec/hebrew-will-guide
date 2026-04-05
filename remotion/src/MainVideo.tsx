@@ -14,35 +14,35 @@ export const MainVideo = () => {
     <AbsoluteFill>
       <PersistentBackground />
       <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={120}>
+        <TransitionSeries.Sequence durationInFrames={90}>
           <Scene1Intro />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={fade()}
-          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={110}>
+        <TransitionSeries.Sequence durationInFrames={85}>
           <Scene2Problem />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={wipe({ direction: "from-top-left" })}
-          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={130}>
+        <TransitionSeries.Sequence durationInFrames={100}>
           <Scene3HowItWorks />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={fade()}
-          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={110}>
+        <TransitionSeries.Sequence durationInFrames={85}>
           <Scene4Benefits />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={wipe({ direction: "from-left" })}
-          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
         />
-        <TransitionSeries.Sequence durationInFrames={110}>
+        <TransitionSeries.Sequence durationInFrames={90}>
           <Scene5CTA />
         </TransitionSeries.Sequence>
       </TransitionSeries>
