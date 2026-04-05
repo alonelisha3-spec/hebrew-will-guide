@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { trackEvent } from "@/lib/tracking";
+import { saveLead } from "@/lib/store";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LandingPage } from "@/components/LandingPage";
@@ -373,7 +374,7 @@ export default function Index() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function handleLeadSubmit(info: { name: string; phone: string; email?: string }) {
+  async function handleLeadSubmit(info: { name: string; phone: string; email?: string }) {
     const cleanLead: LeadInfo = {
       name: info.name,
       phone: info.phone,
@@ -384,6 +385,11 @@ export default function Index() {
 
     const analysis = calculateLeadScore(track, answers);
 
+    let resultWillType = "";
+    let resultRiskLevel = "";
+    let resultRiskItems: string[] = [];
+    let resultFullDraft = "";
+
     if (track === "noWill") {
       const draft = generateFullWillDraft(answers);
       const commercialDraft = buildCommercialDraft(
@@ -391,11 +397,34 @@ export default function Index() {
         analysis
       );
       setDraftData(commercialDraft);
+      resultWillType = commercialDraft.willType;
+      resultFullDraft = commercialDraft.fullDraft;
     } else {
       const review = generateExistingWillReview(answers);
       const commercialReview = buildCommercialReview(review, analysis);
       setReviewData(commercialReview);
+      resultWillType = commercialReview.willType;
+      resultRiskLevel = commercialReview.riskLevel;
+      resultRiskItems = commercialReview.issues;
     }
+
+    // Save lead to DB and send notification email
+    saveLead(
+      {
+        fullName: cleanLead.name,
+        phone: cleanLead.phone,
+        email: cleanLead.email || undefined,
+        answers,
+        timestamp: new Date().toISOString(),
+      },
+      {
+        willType: resultWillType,
+        riskLevel: resultRiskLevel,
+        headline: "",
+        riskItems: resultRiskItems,
+        fullDraft: resultFullDraft,
+      }
+    ).catch((err) => console.error("saveLead error:", err));
 
     trackEvent("lead_submitted", { metadata: { intent, track, temperature: analysis.temperature } });
     setStep("results");
