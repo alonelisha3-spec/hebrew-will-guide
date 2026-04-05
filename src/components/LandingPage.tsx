@@ -134,6 +134,7 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
           <img
             src={portraitImg}
             alt="עו״ד אלון אלישע"
+            loading="lazy"
             className="w-36 h-36 md:w-44 md:h-44 rounded-full object-cover object-top shadow-lg border-4 border-accent/20 flex-shrink-0"
           />
           <div className="text-center md:text-right">

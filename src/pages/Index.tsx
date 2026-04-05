@@ -8,7 +8,9 @@ import { Questionnaire } from "@/components/Questionnaire";
 import { PreviewPage } from "@/components/PreviewPage";
 import { LeadCapture } from "@/components/LeadCapture";
 import { ResultPage } from "@/components/ResultPage";
+import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { noWillQuestions, existingWillQuestions } from "@/lib/questions";
+import { isFromSource } from "@/lib/utm";
 import {
   generateWillPreview,
   generateFullWillDraft,
