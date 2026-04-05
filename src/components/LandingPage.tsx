@@ -67,7 +67,24 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
             </div>
           </div>
 
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm max-w-3xl mx-auto">
+          <div className="mt-10 flex flex-col items-center justify-center gap-4">
+            <button
+              onClick={onNoWill}
+              className="group relative inline-flex items-center justify-center rounded-md bg-primary px-14 py-6 text-xl font-bold text-primary-foreground shadow-xl w-full sm:w-auto sm:min-w-[360px] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
+            >
+              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+              <FileText className="w-6 h-6 ml-2 relative z-10" />
+              <span className="relative z-10">אני רוצה להכין צוואה</span>
+            </button>
+            <button
+              onClick={onExistingWill}
+              className="inline-flex items-center justify-center text-sm text-accent-foreground/60 hover:text-accent-foreground transition-colors underline underline-offset-4"
+            >
+              יש לי כבר צוואה ואני רוצה לבדוק אותה
+            </button>
+          </div>
+
+          <div className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm max-w-3xl mx-auto">
             <div className="rounded-lg bg-white/10 border border-white/10 px-4 py-3">
               <p className="font-semibold text-white">נוסח צוואה מוכן תוך דקות</p>
               <p className="text-accent-foreground/70 mt-1">מבוסס על הנתונים שלך</p>
@@ -84,23 +101,6 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
                 בדיקה משפטית והשלמה סופית
               </p>
             </div>
-          </div>
-
-          <div className="mt-10 flex flex-col items-center justify-center gap-4">
-            <button
-              onClick={onNoWill}
-              className="group relative inline-flex items-center justify-center rounded-md bg-primary px-12 py-5 text-lg font-bold text-primary-foreground shadow-lg w-full sm:w-auto sm:min-w-[320px] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-              <FileText className="w-5 h-5 ml-2 relative z-10" />
-              <span className="relative z-10">אני רוצה להכין צוואה</span>
-            </button>
-            <button
-              onClick={onExistingWill}
-              className="inline-flex items-center justify-center text-sm text-accent-foreground/60 hover:text-accent-foreground transition-colors underline underline-offset-4"
-            >
-              יש לי כבר צוואה ואני רוצה לבדוק אותה
-            </button>
           </div>
 
           {/* Urgency nudge */}
