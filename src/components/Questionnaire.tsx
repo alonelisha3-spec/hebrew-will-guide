@@ -41,6 +41,10 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
   }
 
   function advance(currentAnswers: Record<string, string>) {
+    trackEvent("question_answered", {
+      stepIndex: currentIndex,
+      questionId: question.id,
+    });
     const nextActive = questionList.filter(
       (q) => !q.condition || q.condition(currentAnswers)
     );
