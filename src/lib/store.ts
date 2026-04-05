@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { getUtmData } from "./utm";
 
 export interface LeadData {
   fullName: string;
