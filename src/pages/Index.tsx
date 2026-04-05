@@ -349,6 +349,7 @@ export default function Index() {
 
   function startTrack(nextTrack: Track) {
     resetFlowForTrack(nextTrack);
+    trackEvent("cta_click", { metadata: { track: nextTrack } });
     setStep("questionnaire");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
