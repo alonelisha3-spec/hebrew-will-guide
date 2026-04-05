@@ -28,7 +28,13 @@ function AnimatedCounter({ target, duration = 2000 }: { target: number; duration
   return <span>{count.toLocaleString("he-IL")}+</span>;
 }
 
-export function LandingPage({ onNoWill, onExistingWill }: Props) {
+export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props) {
+  const headline = isFromFacebook
+    ? "ראיתם את הפוסט? עכשיו תבדקו בעצמכם"
+    : "רוצים להסדיר צוואה?";
+  const subHeadline = isFromFacebook
+    ? "ענו על מספר שאלות פשוטות וקבלו נוסח צוואה ראשוני — ללא התחייבות, תוך 2 דקות."
+    : "התחילו עכשיו וקבלו נוסח צוואה מוכן בהתאמה אישית";
   return (
     <div className="min-h-screen">
       <section className="py-20 md:py-32 bg-accent text-accent-foreground relative overflow-hidden">
