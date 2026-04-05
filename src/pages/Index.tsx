@@ -397,6 +397,7 @@ export default function Index() {
       setReviewData(commercialReview);
     }
 
+    trackEvent("lead_submitted", { metadata: { intent, track, temperature: analysis.temperature } });
     setStep("results");
 
     if (intent === "callback") {
