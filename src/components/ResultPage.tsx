@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { AlertTriangle, FileText, Users, Shield } from "lucide-react";
 import { legalWarningText as legalWarning } from "@/lib/legalTexts";
 import type { WillGap } from "@/lib/willGapsEngine";
