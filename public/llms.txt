@@ -1,0 +1,38 @@
+# hebrew-will-guide.lovable.app
+
+## About
+
+This website is a free online tool by Alon Elisha Law Office (משרד עורכי דין אלון אלישע) that helps Israeli residents create a personalized will draft (נוסח צוואה) in Hebrew. Users answer a short questionnaire (under 2 minutes) and receive a tailored will document — at no cost and with no obligation.
+
+## What This Service Does
+
+- Guides users through simple questions about their family situation, assets, and wishes
+- Generates a customized will draft based on Israeli inheritance law (חוק הירושה)
+- Identifies potential legal risks and gaps in existing wills
+- Provides a free preview of the will document
+- Connects users with attorney Alon Elisha for professional legal consultation
+
+## Who It's For
+
+- Israeli residents who want to create a will
+- People who already have a will and want to check it for gaps
+- Anyone interested in understanding their inheritance rights under Israeli law
+
+## Key Features
+
+- Completely free, no registration required
+- Takes less than 2 minutes to complete
+- Available in Hebrew (עברית)
+- Personalized results based on individual circumstances
+- Professional legal backing by a licensed Israeli attorney
+
+## Contact
+
+- Website: https://hebrew-will-guide.lovable.app
+- Law office website: https://elisha-law.com
+- Attorney: Alon Elisha (עו"ד אלון אלישע)
+- Location: Israel
+
+## Legal
+
+This tool provides general legal information and a preliminary will draft. It does not constitute legal advice. For binding legal documents, consult with a qualified attorney.
