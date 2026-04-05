@@ -8,10 +8,10 @@ export const Scene1Intro = () => {
   const lineY = interpolate(frame, [0, 30], [1920, 960], { extrapolateRight: "clamp" });
   const lineOp = interpolate(frame, [0, 25], [0, 0.3], { extrapolateRight: "clamp" });
 
-  const badgeS = spring({ frame: frame - 15, fps, config: { damping: 18 } });
-  const titleS = spring({ frame: frame - 30, fps, config: { damping: 16, stiffness: 120 } });
-  const subS = spring({ frame: frame - 55, fps, config: { damping: 20 } });
-  const tagS = spring({ frame: frame - 75, fps, config: { damping: 20 } });
+  const badgeS = spring({ frame: frame - 5, fps, config: { damping: 18 } });
+  const titleS = spring({ frame: frame - 15, fps, config: { damping: 16, stiffness: 120 } });
+  const subS = spring({ frame: frame - 35, fps, config: { damping: 20 } });
+  const tagS = spring({ frame: frame - 50, fps, config: { damping: 20 } });
 
   return (
     <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 70, direction: "rtl" }}>
