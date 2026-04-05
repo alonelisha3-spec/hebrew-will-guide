@@ -1,25 +1,19 @@
 import { AbsoluteFill, useCurrentFrame, spring, interpolate, useVideoConfig } from "remotion";
+import { heebo } from "../fonts";
 
 export const Scene5CTA = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const titleSpring = spring({ frame: frame - 5, fps, config: { damping: 15 } });
-  const titleOp = interpolate(titleSpring, [0, 1], [0, 1]);
-  const titleScale = interpolate(titleSpring, [0, 1], [0.8, 1]);
+  const titleS = spring({ frame: frame - 5, fps, config: { damping: 14 } });
+  const btnS = spring({ frame: frame - 35, fps, config: { damping: 11, stiffness: 100 } });
+  const urlS = spring({ frame: frame - 60, fps, config: { damping: 20 } });
+  const brandS = spring({ frame: frame - 80, fps, config: { damping: 20 } });
 
-  const btnSpring = spring({ frame: frame - 30, fps, config: { damping: 12, stiffness: 100 } });
-  const btnScale = interpolate(btnSpring, [0, 1], [0.5, 1]);
-  const btnOp = interpolate(btnSpring, [0, 1], [0, 1]);
-
-  const urlSpring = spring({ frame: frame - 55, fps, config: { damping: 20 } });
-  const urlOp = interpolate(urlSpring, [0, 1], [0, 1]);
-
-  const pulse = Math.sin(frame * 0.1) * 0.03 + 1;
+  const pulse = Math.sin(frame * 0.08) * 0.025 + 1;
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 60, direction: "rtl" }}>
-      {/* Gold glow behind CTA */}
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 70, direction: "rtl" }}>
       <div style={{
         position: "absolute",
         width: 600, height: 600, borderRadius: "50%",
@@ -28,50 +22,70 @@ export const Scene5CTA = () => {
       }} />
 
       <div style={{
-        opacity: titleOp, transform: `scale(${titleScale})`,
-        textAlign: "center", marginBottom: 60,
+        opacity: interpolate(titleS, [0, 1], [0, 1]),
+        transform: `scale(${interpolate(titleS, [0, 1], [0.8, 1])})`,
+        textAlign: "center", marginBottom: 70,
       }}>
-        <div style={{
-          fontSize: 60, fontWeight: 700, color: "white",
-          lineHeight: 1.3, fontFamily: "sans-serif",
-        }}>
+        <div style={{ fontSize: 62, fontWeight: 700, color: "white", lineHeight: 1.4, fontFamily: heebo }}>
           אל תחכו.
         </div>
-        <div style={{
-          fontSize: 60, fontWeight: 700, color: "#c9a855",
-          lineHeight: 1.3, fontFamily: "sans-serif",
-        }}>
+        <div style={{ fontSize: 62, fontWeight: 700, color: "#c9a855", lineHeight: 1.4, fontFamily: heebo }}>
           התחילו עכשיו.
         </div>
       </div>
 
       <div style={{
-        opacity: btnOp, transform: `scale(${btnScale * pulse})`,
+        opacity: interpolate(btnS, [0, 1], [0, 1]),
+        transform: `scale(${interpolate(btnS, [0, 1], [0.5, 1]) * pulse})`,
         background: "linear-gradient(135deg, #c9a855, #b8943e)",
-        borderRadius: 20, padding: "36px 70px",
+        borderRadius: 22, padding: "38px 72px",
         fontSize: 44, fontWeight: 700, color: "#0f1923",
-        fontFamily: "sans-serif",
-        boxShadow: "0 10px 40px rgba(201,168,85,0.3)",
+        fontFamily: heebo,
+        boxShadow: "0 12px 50px rgba(201,168,85,0.3)",
       }}>
         אני רוצה להכין צוואה
       </div>
 
       <div style={{
-        position: "absolute", bottom: 280,
-        opacity: urlOp,
-        fontSize: 30, color: "rgba(255,255,255,0.5)",
-        fontFamily: "sans-serif",
+        position: "absolute", bottom: 360,
+        opacity: interpolate(urlS, [0, 1], [0, 1]),
+        fontSize: 28, color: "rgba(255,255,255,0.45)",
+        fontFamily: heebo, fontWeight: 300,
       }}>
         hebrew-will-guide.lovable.app
       </div>
 
       <div style={{
-        position: "absolute", bottom: 200,
-        opacity: urlOp,
-        fontSize: 26, color: "rgba(201,168,85,0.6)",
-        fontFamily: "sans-serif", letterSpacing: "0.12em",
+        position: "absolute", bottom: 300,
+        opacity: interpolate(urlS, [0, 1], [0, 1]),
+        fontSize: 30, color: "#c9a855",
+        fontFamily: heebo, fontWeight: 600, letterSpacing: "0.08em",
       }}>
         ללא עלות · ללא התחייבות
+      </div>
+
+      {/* Firm branding */}
+      <div style={{
+        position: "absolute", bottom: 180,
+        opacity: interpolate(brandS, [0, 1], [0, 1]),
+        display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+      }}>
+        <div style={{
+          width: 80, height: 1,
+          background: "linear-gradient(90deg, transparent, rgba(201,168,85,0.4), transparent)",
+        }} />
+        <div style={{
+          fontSize: 26, color: "rgba(255,255,255,0.4)",
+          fontFamily: heebo, fontWeight: 400, marginTop: 12,
+        }}>
+          משרד עו״ד אלון אלישע
+        </div>
+        <div style={{
+          fontSize: 22, color: "rgba(255,255,255,0.3)",
+          fontFamily: heebo, fontWeight: 300,
+        }}>
+          מומחים לדיני ירושה וצוואות
+        </div>
       </div>
     </AbsoluteFill>
   );
