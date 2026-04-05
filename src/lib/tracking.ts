@@ -24,7 +24,7 @@ export function trackEvent(
   };
 
   // Fire and forget
-  supabase.from("funnel_events").insert(payload).then(({ error }) => {
+  supabase.from("funnel_events").insert([payload]).then(({ error }) => {
     if (error) console.warn("tracking error:", error.message);
   });
 }
