@@ -81,7 +81,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <FileText className="w-7 h-7 ml-3 relative z-10" />
-              <span className="relative z-10">אני רוצה להכין בסיס לצוואה</span>
+              <span className="relative z-10">בואו נתחיל</span>
             </button>
             <button
               onClick={onExistingWill}
