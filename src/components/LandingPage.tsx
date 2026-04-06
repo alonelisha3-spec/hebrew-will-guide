@@ -52,8 +52,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             {subHeadline}
           </p>
           <p className="mt-4 text-base md:text-lg text-accent-foreground/70 leading-relaxed max-w-2xl mx-auto">
-            ענו על מספר שאלות וקבלו טיוטה ראשונית שתעזור לכם לארגן
-            את הרצונות — כולל זיהוי נושאים שכדאי להסדיר עם עורך דין.
+            ענו על מספר שאלות וקבלו טיוטה מסודרת שתעזור לכם לארגן
+            את הרצונות — כולל זיהוי נושאים שכדאי להסדיר.
           </p>
 
           {/* Social proof bar */}
