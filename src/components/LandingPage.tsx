@@ -33,8 +33,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
     ? "ראיתם את הפוסט? עכשיו תבדקו בעצמכם"
     : "הכינו בסיס לצוואה — בכמה דקות";
   const subHeadline = isFromFacebook
-    ? "סדרו את הרצונות שלכם בטיוטה ראשונית — בסיס לעבודה, לא מסמך סופי."
-    : "סדרו את הרצונות שלכם בטיוטה ראשונית על בסיס שאלות פשוטות";
+    ? "סדרו את הרצונות שלכם בטיוטה מבוססת על שאלות פשוטות — ללא התחייבות."
+    : "סדרו את הרצונות שלכם בטיוטה מבוססת על בסיס שאלות פשוטות";
   return (
     <div className="min-h-screen">
       <section className="py-24 md:py-36 bg-accent text-accent-foreground relative overflow-hidden">
