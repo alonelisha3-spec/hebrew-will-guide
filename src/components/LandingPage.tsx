@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Shield, FileText, Scale, CheckCircle2, Users, Clock, TrendingUp } from "lucide-react";
+import { Shield, FileText, Scale, CheckCircle2, Users, Clock, TrendingUp, Phone, Mail } from "lucide-react";
 import { FAQSection } from "./FAQSection";
 import portraitImg from "@/assets/portrait-alon.png";
 
@@ -31,10 +31,10 @@ function AnimatedCounter({ target, duration = 2000 }: { target: number; duration
 export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props) {
   const headline = isFromFacebook
     ? "ראיתם את הפוסט? עכשיו תבדקו בעצמכם"
-    : "סדרו את הרצונות שלכם — בכמה דקות";
+    : "הכינו בסיס לצוואה — בכמה דקות";
   const subHeadline = isFromFacebook
-    ? "קבלו טיוטת נוסח ראשונית לצוואה — בסיס לעבודה, לא מסמך סופי. ללא התחייבות."
-    : "קבלו טיוטת נוסח ראשונית כבסיס לצוואה — לארגון הרצונות שלכם";
+    ? "סדרו את הרצונות שלכם בטיוטה ראשונית — בסיס לעבודה, לא מסמך סופי."
+    : "סדרו את הרצונות שלכם בטיוטה ראשונית על בסיס שאלות פשוטות";
   return (
     <div className="min-h-screen">
       <section className="py-24 md:py-36 bg-accent text-accent-foreground relative overflow-hidden">
@@ -52,8 +52,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             {subHeadline}
           </p>
           <p className="mt-4 text-base md:text-lg text-accent-foreground/70 leading-relaxed max-w-2xl mx-auto">
-            ענו על מספר שאלות פשוטות וקבלו נוסח ראשוני — מותאם למצב האישי שלכם,
-            כולל זיהוי נושאים שחשוב להסדיר עם עורך דין.
+            ענו על מספר שאלות וקבלו טיוטה ראשונית שתעזור לכם לארגן
+            את הרצונות — כולל זיהוי נושאים שכדאי להסדיר עם עורך דין.
           </p>
 
           {/* Social proof bar */}
@@ -61,7 +61,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             <div className="flex items-center gap-2 text-white/90">
               <Users className="w-5 h-5 text-primary" />
               <span className="font-bold text-lg"><AnimatedCounter target={850} /></span>
-              <span className="text-accent-foreground/70">כבר הכינו נוסח</span>
+              <span className="text-accent-foreground/70">כבר יצרו בסיס</span>
             </div>
             <div className="flex items-center gap-2 text-white/90">
               <TrendingUp className="w-5 h-5 text-primary" />
@@ -82,7 +82,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <FileText className="w-7 h-7 ml-3 relative z-10" />
-              <span className="relative z-10">אני רוצה להכין נוסח</span>
+              <span className="relative z-10">אני רוצה להכין בסיס לצוואה</span>
             </button>
             <button
               onClick={onExistingWill}
@@ -95,19 +95,19 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-base max-w-3xl mx-auto">
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">טיוטת נוסח תוך דקות</p>
-              <p className="text-accent-foreground/70 mt-1">בסיס ראשוני לעבודה</p>
+              <p className="font-semibold text-white text-lg">ארגון רצונות תוך דקות</p>
+              <p className="text-accent-foreground/70 mt-1">טיוטה ראשונית כבסיס לעבודה</p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">ארגון רצונות ונכסים</p>
+              <p className="font-semibold text-white text-lg">זיהוי נושאים להסדרה</p>
               <p className="text-accent-foreground/70 mt-1">
-                זיהוי נושאים שמצריכים הסדרה
+                מצב משפחתי, נכסים וחוסרים
               </p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">המשך טיפול אישי במשרד</p>
+              <p className="font-semibold text-white text-lg">המשך עם עורך דין</p>
               <p className="text-accent-foreground/70 mt-1">
-                בדיקה משפטית והשלמה סופית
+                בדיקה משפטית והשלמה לצוואה תקפה
               </p>
             </div>
           </div>
@@ -123,14 +123,16 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             </span>
             <span className="flex items-center gap-2">
               <Shield className="w-5 h-5 text-primary/80" />
-              ניתן להשלים בהמשך עם עו״ד
+              לא מחליף ייעוץ משפטי
             </span>
           </div>
 
           {/* Legal disclaimer - prominent */}
-          <div className="mt-12 max-w-3xl mx-auto rounded-lg border border-primary/30 bg-white/[0.08] px-6 py-5 text-sm text-accent-foreground/80 leading-relaxed text-right">
-            <p className="font-bold text-primary mb-3 text-base text-center">הבהרה משפטית — חובה לקרוא לפני השימוש</p>
-            <p>
+          <div className="mt-14 max-w-3xl mx-auto rounded-xl border-2 border-primary/40 bg-white/[0.08] px-7 py-6 text-right">
+            <p className="font-bold text-primary mb-4 text-lg text-center">
+              ⚖️ הבהרה משפטית — חובה לקרוא לפני השימוש
+            </p>
+            <p className="text-sm text-accent-foreground/80 leading-relaxed">
               הכלי מייצר טיוטת מסמך ראשונית בלבד לצורכי עבודה מקדימה, ואינו מהווה ייעוץ משפטי.
               השימוש בכלי אינו יוצר יחסי עורך דין–לקוח בין המשתמש למשרד עו״ד אלון אלישע,
               ואינו מתיימר להחליף ייעוץ או ליווי של עורך דין מוסמך.
@@ -138,9 +140,17 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
               אין להסתמך על הטיוטה כמסמך משפטי תקף.
               המשרד ממליץ ליצור צוואה תקפה על פי דין לאחר ייעוץ משפטי.
             </p>
-            <p className="mt-3 text-primary/90 font-medium text-center">
-              לייעוץ משפטי מקצועי: 054-9260698 &nbsp;|&nbsp; alonelisha3@gmail.com
-            </p>
+            <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-4 text-primary font-medium text-base">
+              <a href="tel:054-9260698" className="flex items-center gap-2 hover:text-primary/80 transition-colors">
+                <Phone className="w-4 h-4" />
+                054-9260698
+              </a>
+              <span className="hidden sm:inline text-accent-foreground/30">|</span>
+              <a href="mailto:alonelisha3@gmail.com" className="flex items-center gap-2 hover:text-primary/80 transition-colors">
+                <Mail className="w-4 h-4" />
+                alonelisha3@gmail.com
+              </a>
+            </div>
           </div>
         </div>
       </section>
@@ -160,8 +170,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
               אל תשאירו את הדברים החשובים לאי-ודאות
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-base md:text-lg">
-              התחילו עכשיו, ענו על מספר שאלות, וקבלו טיוטת נוסח ראשונית —
-              בסיס לצוואה מסודרת עם ליווי משפטי.
+              התחילו עכשיו, ענו על מספר שאלות, וצרו בסיס ראשוני לצוואה —
+              ארגון הרצונות שלכם כהכנה לייעוץ משפטי.
             </p>
             <button
               onClick={onNoWill}
