@@ -170,8 +170,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
               אל תשאירו את הדברים החשובים לאי-ודאות
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-base md:text-lg">
-              התחילו עכשיו, ענו על מספר שאלות, וצרו בסיס ראשוני לצוואה —
-              ארגון הרצונות שלכם כהכנה לייעוץ משפטי.
+              התחילו עכשיו, ענו על מספר שאלות, וקבלו טיוטה מסודרת —
+              בסיס מותאם לרצונות שלכם.
             </p>
             <button
               onClick={onNoWill}
