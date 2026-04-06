@@ -33,8 +33,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
     ? "ראיתם את הפוסט? עכשיו תבדקו בעצמכם"
     : "הכינו בסיס לצוואה — בכמה דקות";
   const subHeadline = isFromFacebook
-    ? "סדרו את הרצונות שלכם בטיוטה ראשונית — בסיס לעבודה, לא מסמך סופי."
-    : "סדרו את הרצונות שלכם בטיוטה ראשונית על בסיס שאלות פשוטות";
+    ? "סדרו את הרצונות שלכם בטיוטה מבוססת על שאלות פשוטות — ללא התחייבות."
+    : "סדרו את הרצונות שלכם בטיוטה מבוססת על בסיס שאלות פשוטות";
   return (
     <div className="min-h-screen">
       <section className="py-24 md:py-36 bg-accent text-accent-foreground relative overflow-hidden">
@@ -52,8 +52,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             {subHeadline}
           </p>
           <p className="mt-4 text-base md:text-lg text-accent-foreground/70 leading-relaxed max-w-2xl mx-auto">
-            ענו על מספר שאלות וקבלו טיוטה ראשונית שתעזור לכם לארגן
-            את הרצונות — כולל זיהוי נושאים שכדאי להסדיר עם עורך דין.
+            ענו על מספר שאלות וקבלו טיוטה מסודרת שתעזור לכם לארגן
+            את הרצונות — כולל זיהוי נושאים שכדאי להסדיר.
           </p>
 
           {/* Social proof bar */}
@@ -95,8 +95,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-base max-w-3xl mx-auto">
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">ארגון רצונות תוך דקות</p>
-              <p className="text-accent-foreground/70 mt-1">טיוטה ראשונית כבסיס לעבודה</p>
+              <p className="font-semibold text-white text-lg">טיוטה מסודרת תוך דקות</p>
+              <p className="text-accent-foreground/70 mt-1">בסיס מבוסס על הנתונים שלכם</p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
               <p className="font-semibold text-white text-lg">זיהוי נושאים להסדרה</p>
@@ -170,8 +170,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
               אל תשאירו את הדברים החשובים לאי-ודאות
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-base md:text-lg">
-              התחילו עכשיו, ענו על מספר שאלות, וצרו בסיס ראשוני לצוואה —
-              ארגון הרצונות שלכם כהכנה לייעוץ משפטי.
+              התחילו עכשיו, ענו על מספר שאלות, וקבלו טיוטה מסודרת —
+              בסיס מותאם לרצונות שלכם.
             </p>
             <button
               onClick={onNoWill}
