@@ -33,8 +33,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
     ? "ראיתם את הפוסט? עכשיו תבדקו בעצמכם"
     : "הכינו בסיס לצוואה — בכמה דקות";
   const subHeadline = isFromFacebook
-    ? "סדרו את הרצונות שלכם בטיוטה מבוססת על שאלות פשוטות — ללא התחייבות."
-    : "סדרו את הרצונות שלכם בטיוטה מבוססת על בסיס שאלות פשוטות";
+    ? "ענו על מספר שאלות וקבלו טיוטה מסודרת של הרצונות שלכם — כולל זיהוי נושאים שכדאי להסדיר."
+    : "ענו על מספר שאלות וקבלו טיוטה מסודרת של הרצונות שלכם — כולל זיהוי נושאים שכדאי להסדיר.";
   return (
     <div className="min-h-screen">
       <section className="py-24 md:py-36 bg-accent text-accent-foreground relative overflow-hidden">
@@ -52,8 +52,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             {subHeadline}
           </p>
           <p className="mt-4 text-base md:text-lg text-accent-foreground/70 leading-relaxed max-w-2xl mx-auto">
-            ענו על מספר שאלות וקבלו טיוטה מסודרת שתעזור לכם לארגן
-            את הרצונות — כולל זיהוי נושאים שכדאי להסדיר.
+            ללא עלות · ללא התחייבות · תוך דקות ספורות
           </p>
 
           {/* Social proof bar */}
