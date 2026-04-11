@@ -1,7 +1,6 @@
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, Video, staticFile } from "remotion";
 import { heebo } from "../fonts";
 
-/* Scene 4 — Process: 3 steps with animated icons */
 const steps = [
   { icon: "📝", text: "מילוי שאלון קצר באתר", sub: "5 דקות" },
   { icon: "⚖️", text: "עו״ד בודק ומכין צוואה", sub: "תוך 48 שעות" },
@@ -14,20 +13,13 @@ export const Scene4Proof = () => {
 
   const titleS = spring({ frame: frame - 3, fps, config: { damping: 14 } });
 
-  const line1 = interpolate(
-    spring({ frame: frame - 35, fps, config: { damping: 20 } }),
-    [0, 1], [0, 1]
-  );
-  const line2 = interpolate(
-    spring({ frame: frame - 55, fps, config: { damping: 20 } }),
-    [0, 1], [0, 1]
-  );
-
   return (
     <AbsoluteFill>
+      <Video src={staticFile("videos/scene4-signing.mp4")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+
       <div style={{
         position: "absolute", inset: 0,
-        background: "linear-gradient(170deg, #0a0f18 0%, #0f1520 50%, #0a0f18 100%)",
+        background: "linear-gradient(180deg, rgba(5,5,10,0.55) 0%, rgba(5,5,10,0.75) 50%, rgba(5,5,10,0.85) 100%)",
       }} />
 
       <div style={{
@@ -41,6 +33,7 @@ export const Scene4Proof = () => {
           fontFamily: heebo, textAlign: "center", marginBottom: 60,
           opacity: interpolate(titleS, [0, 1], [0, 1]),
           transform: `translateY(${interpolate(titleS, [0, 1], [30, 0])}px)`,
+          textShadow: "0 4px 20px rgba(0,0,0,0.6)",
         }}>
           איך זה עובד?
         </div>
@@ -58,8 +51,12 @@ export const Scene4Proof = () => {
                 {i < 2 && (
                   <div style={{
                     position: "absolute", right: 38, top: 80,
-                    width: 3, height: 45 * (i === 0 ? line1 : line2),
-                    background: "linear-gradient(180deg, rgba(201,168,85,0.4), rgba(201,168,85,0.1))",
+                    width: 3,
+                    height: 45 * interpolate(
+                      spring({ frame: frame - 35 - i * 20, fps, config: { damping: 20 } }),
+                      [0, 1], [0, 1]
+                    ),
+                    background: "linear-gradient(180deg, rgba(232,201,106,0.5), rgba(232,201,106,0.15))",
                     borderRadius: 2,
                   }} />
                 )}
@@ -71,12 +68,12 @@ export const Scene4Proof = () => {
                 }}>
                   <div style={{
                     width: 78, height: 78, borderRadius: "50%",
-                    background: "linear-gradient(135deg, rgba(201,168,85,0.2), rgba(201,168,85,0.05))",
-                    border: "2px solid rgba(201,168,85,0.4)",
+                    background: "rgba(232,201,106,0.15)",
+                    border: "2px solid rgba(232,201,106,0.5)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     flexShrink: 0,
                     transform: `scale(${interpolate(iconBounce, [0, 1], [0.3, 1])})`,
-                    boxShadow: "0 0 30px rgba(201,168,85,0.1)",
+                    boxShadow: "0 0 30px rgba(232,201,106,0.15)",
                   }}>
                     <span style={{ fontSize: 36 }}>{step.icon}</span>
                   </div>
@@ -85,12 +82,14 @@ export const Scene4Proof = () => {
                     <div style={{
                       fontSize: 34, fontWeight: 600, color: "white",
                       fontFamily: heebo, lineHeight: 1.4,
+                      textShadow: "0 2px 10px rgba(0,0,0,0.5)",
                     }}>
                       {step.text}
                     </div>
                     <div style={{
-                      fontSize: 22, fontWeight: 400, color: "#c9a855",
+                      fontSize: 22, fontWeight: 400, color: "#e8c96a",
                       fontFamily: heebo, marginTop: 4,
+                      textShadow: "0 1px 5px rgba(0,0,0,0.4)",
                     }}>
                       {step.sub}
                     </div>
