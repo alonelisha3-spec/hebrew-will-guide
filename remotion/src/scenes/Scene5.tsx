@@ -81,7 +81,7 @@ export const Scene5CTA = () => {
               fontSize: 30, fontWeight: 500, color: "#c9a855",
               fontFamily: heebo, letterSpacing: "0.03em", direction: "ltr",
             }}>
-              hebrew-will-guide.lovable.app
+              elisha-law.com
             </span>
           </div>
         </div>
