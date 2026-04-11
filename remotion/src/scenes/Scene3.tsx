@@ -1,157 +1,85 @@
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, Video, staticFile } from "remotion";
 import { heebo } from "../fonts";
 
-/* Scene 3 — Solution: Technology + Law = unique approach */
 export const Scene3Solution = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const bgShift = interpolate(frame, [0, 120], [0, 25], { extrapolateRight: "clamp" });
-
-  // Two circles merging
-  const circle1X = interpolate(
-    spring({ frame: frame - 10, fps, config: { damping: 12, stiffness: 100 } }),
-    [0, 1], [-120, -40]
-  );
-  const circle2X = interpolate(
-    spring({ frame: frame - 10, fps, config: { damping: 12, stiffness: 100 } }),
-    [0, 1], [120, 40]
-  );
-  const circleOpacity = interpolate(
-    spring({ frame: frame - 8, fps, config: { damping: 20 } }),
-    [0, 1], [0, 1]
-  );
-
-  // Merge flash
-  const mergeS = spring({ frame: frame - 35, fps, config: { damping: 8 } });
-  const mergeGlow = interpolate(mergeS, [0, 1], [0, 0.4]);
-
-  // Labels
-  const label1S = spring({ frame: frame - 20, fps, config: { damping: 16 } });
-  const label2S = spring({ frame: frame - 26, fps, config: { damping: 16 } });
-
-  // Result text
+  const titleS = spring({ frame: frame - 10, fps, config: { damping: 14 } });
+  const subS = spring({ frame: frame - 30, fps, config: { damping: 18 } });
   const resultS = spring({ frame: frame - 50, fps, config: { damping: 14 } });
-  const subResultS = spring({ frame: frame - 65, fps, config: { damping: 18 } });
-
-  // Orbiting dots around merge point
-  const orbitDots = Array.from({ length: 6 }, (_, i) => {
-    const angle = (frame * 0.02) + (i * Math.PI / 3);
-    const radius = 160 + Math.sin(frame * 0.05 + i) * 15;
-    return {
-      x: Math.cos(angle) * radius,
-      y: Math.sin(angle) * radius,
-      opacity: interpolate(mergeS, [0, 1], [0, 0.25]),
-    };
-  });
+  const firmS = spring({ frame: frame - 65, fps, config: { damping: 18 } });
 
   return (
     <AbsoluteFill>
+      <Video src={staticFile("videos/scene3-tech.mp4")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+
       <div style={{
         position: "absolute", inset: 0,
-        background: `linear-gradient(${140 + bgShift}deg, #0a0f18 0%, #0f1a25 50%, #0a0f18 100%)`,
+        background: "linear-gradient(180deg, rgba(0,10,20,0.45) 0%, rgba(0,10,20,0.65) 50%, rgba(0,10,20,0.8) 100%)",
       }} />
 
-      {/* Center visual: two circles merging */}
       <div style={{
-        position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-        display: "flex", justifyContent: "center", alignItems: "center",
+        position: "absolute", inset: 0,
+        display: "flex", flexDirection: "column",
+        justifyContent: "center", alignItems: "center",
+        direction: "rtl", padding: 60, textAlign: "center",
       }}>
-        {/* Orbiting dots */}
-        {orbitDots.map((dot, i) => (
-          <div key={i} style={{
-            position: "absolute",
-            left: `calc(50% + ${dot.x}px)`,
-            top: `calc(42% + ${dot.y}px)`,
-            width: 6, height: 6, borderRadius: "50%",
-            background: "#c9a855", opacity: dot.opacity,
-          }} />
-        ))}
-
-        {/* Circle 1 - Tech */}
         <div style={{
-          position: "absolute",
-          left: `calc(50% + ${circle1X}px - 80px)`,
-          top: "calc(42% - 80px)",
-          width: 160, height: 160, borderRadius: "50%",
-          border: "2px solid rgba(100,160,255,0.5)",
-          background: "rgba(100,160,255,0.08)",
-          opacity: circleOpacity,
-          display: "flex", alignItems: "center", justifyContent: "center",
+          fontSize: 40, fontWeight: 500, color: "rgba(255,255,255,0.7)",
+          fontFamily: heebo,
+          opacity: interpolate(titleS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(titleS, [0, 1], [30, 0])}px)`,
+          textShadow: "0 2px 10px rgba(0,0,0,0.5)",
         }}>
-          <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="rgba(100,160,255,0.8)" strokeWidth="1.5">
-            <rect x="2" y="3" width="20" height="14" rx="2" />
-            <path d="M8 21h8M12 17v4" />
-          </svg>
+          שילוב של
         </div>
 
-        {/* Circle 2 - Law */}
         <div style={{
-          position: "absolute",
-          left: `calc(50% + ${circle2X}px - 80px)`,
-          top: "calc(42% - 80px)",
-          width: 160, height: 160, borderRadius: "50%",
-          border: "2px solid rgba(201,168,85,0.5)",
-          background: "rgba(201,168,85,0.08)",
-          opacity: circleOpacity,
-          display: "flex", alignItems: "center", justifyContent: "center",
+          display: "flex", gap: 40, marginTop: 25, alignItems: "center",
+          opacity: interpolate(subS, [0, 1], [0, 1]),
+          transform: `scale(${interpolate(subS, [0, 1], [0.8, 1])})`,
         }}>
-          <svg width="55" height="55" viewBox="0 0 24 24" fill="none" stroke="rgba(201,168,85,0.8)" strokeWidth="1.5">
-            <path d="M12 2L2 7l10 5 10-5-10-5z" />
-            <path d="M2 17l10 5 10-5" />
-            <path d="M2 12l10 5 10-5" />
-          </svg>
+          <div style={{
+            fontSize: 48, fontWeight: 700, color: "#7cb8ff",
+            fontFamily: heebo, textShadow: "0 0 25px rgba(100,160,255,0.3)",
+          }}>
+            טכנולוגיה
+          </div>
+          <div style={{ fontSize: 48, color: "rgba(255,255,255,0.4)" }}>+</div>
+          <div style={{
+            fontSize: 48, fontWeight: 700, color: "#e8c96a",
+            fontFamily: heebo, textShadow: "0 0 25px rgba(232,201,106,0.3)",
+          }}>
+            משפט
+          </div>
         </div>
 
-        {/* Merge glow */}
         <div style={{
-          position: "absolute",
-          left: "calc(50% - 60px)", top: "calc(42% - 60px)",
-          width: 120, height: 120, borderRadius: "50%",
-          background: `radial-gradient(circle, rgba(201,168,85,${mergeGlow}) 0%, transparent 70%)`,
+          width: interpolate(
+            spring({ frame: frame - 45, fps, config: { damping: 15 } }),
+            [0, 1], [0, 400]
+          ),
+          height: 2,
+          background: "linear-gradient(90deg, transparent, rgba(232,201,106,0.5), transparent)",
+          margin: "40px 0",
         }} />
 
-        {/* Labels */}
-        <div style={{
-          position: "absolute", left: `calc(50% + ${circle1X}px - 80px)`, top: "calc(42% + 100px)",
-          width: 160, textAlign: "center",
-          opacity: interpolate(label1S, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(label1S, [0, 1], [15, 0])}px)`,
-        }}>
-          <span style={{ fontSize: 26, fontWeight: 600, color: "rgba(100,160,255,0.9)", fontFamily: heebo }}>
-            טכנולוגיה
-          </span>
-        </div>
-
-        <div style={{
-          position: "absolute", left: `calc(50% + ${circle2X}px - 80px)`, top: "calc(42% + 100px)",
-          width: 160, textAlign: "center",
-          opacity: interpolate(label2S, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(label2S, [0, 1], [15, 0])}px)`,
-        }}>
-          <span style={{ fontSize: 26, fontWeight: 600, color: "rgba(201,168,85,0.9)", fontFamily: heebo }}>
-            משפט
-          </span>
-        </div>
-      </div>
-
-      {/* Result text at bottom */}
-      <div style={{
-        position: "absolute", bottom: 140, left: 0, right: 0,
-        textAlign: "center", direction: "rtl", padding: "0 60px",
-      }}>
         <div style={{
           fontSize: 50, fontWeight: 700, color: "white",
           fontFamily: heebo, lineHeight: 1.5,
           opacity: interpolate(resultS, [0, 1], [0, 1]),
           transform: `translateY(${interpolate(resultS, [0, 1], [40, 0])}px)`,
+          textShadow: "0 4px 20px rgba(0,0,0,0.6)",
         }}>
           צוואה מקצועית — בלי מחירים מנופחים
         </div>
+
         <div style={{
-          fontSize: 30, fontWeight: 400, color: "rgba(255,255,255,0.5)",
+          fontSize: 30, fontWeight: 400, color: "rgba(255,255,255,0.6)",
           fontFamily: heebo, marginTop: 12,
-          opacity: interpolate(subResultS, [0, 1], [0, 1]),
+          opacity: interpolate(firmS, [0, 1], [0, 1]),
+          textShadow: "0 2px 10px rgba(0,0,0,0.5)",
         }}>
           משרד עו״ד אלון אלישע
         </div>
