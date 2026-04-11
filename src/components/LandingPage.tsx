@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { Shield, FileText, Scale, CheckCircle2, Users, Clock, TrendingUp, Phone, Mail } from "lucide-react";
+import { Shield, FileText, Scale, CheckCircle2, Users, Clock, TrendingUp, Phone, Mail, MessageCircle } from "lucide-react";
 import { FAQSection } from "./FAQSection";
+import { QuickAssessment } from "./QuickAssessment";
 import portraitImg from "@/assets/portrait-alon.png";
 
 interface Props {
@@ -74,22 +75,38 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             </div>
           </div>
 
-          <div className="mt-12 flex flex-col items-center justify-center gap-5">
+          {/* Quick Assessment */}
+          <div className="mt-12">
+            <QuickAssessment onStartFull={onNoWill} />
+          </div>
+
+          <div className="mt-8 flex flex-col items-center justify-center gap-4">
             <button
               onClick={onNoWill}
               className="group relative inline-flex items-center justify-center rounded-md bg-primary px-16 py-7 text-2xl font-bold text-primary-foreground shadow-xl w-full sm:w-auto sm:min-w-[400px] overflow-hidden transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
               <FileText className="w-7 h-7 ml-3 relative z-10" />
-              <span className="relative z-10">בואו נתחיל</span>
+              <span className="relative z-10">לבדיקה מלאה + טיוטת צוואה</span>
             </button>
+
+            {/* WhatsApp CTA */}
+            <a
+              href={`https://wa.me/972549260698?text=${encodeURIComponent("שלום, אשמח לשמוע פרטים על הכנת צוואה.")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 rounded-md border-2 border-[#25D366]/40 bg-[#25D366]/10 px-10 py-5 text-lg font-semibold text-[#25D366] w-full sm:w-auto sm:min-w-[400px] transition-all duration-200 hover:bg-[#25D366]/20 hover:scale-105"
+            >
+              <MessageCircle className="w-6 h-6" />
+              דברו איתי בוואטסאפ
+            </a>
+
             <button
               onClick={onExistingWill}
               className="inline-flex items-center justify-center text-base text-accent-foreground/60 hover:text-accent-foreground transition-colors underline underline-offset-4"
             >
               יש לי כבר צוואה ואני רוצה לבדוק אותה
             </button>
-            <p className="text-sm text-accent-foreground/60 mt-1">ללא עלות וללא התחייבות</p>
           </div>
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-base max-w-3xl mx-auto">
