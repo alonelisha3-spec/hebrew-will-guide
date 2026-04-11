@@ -1,105 +1,98 @@
-import { AbsoluteFill, Img, useCurrentFrame, spring, interpolate, useVideoConfig, staticFile } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { heebo } from "../fonts";
 
 export const Scene5CTA = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const portraitS = spring({ frame: frame - 3, fps, config: { damping: 16 } });
-  const titleS = spring({ frame: frame - 8, fps, config: { damping: 14 } });
-  const btnS = spring({ frame: frame - 22, fps, config: { damping: 11, stiffness: 100 } });
-  const urlS = spring({ frame: frame - 38, fps, config: { damping: 20 } });
-  const brandS = spring({ frame: frame - 50, fps, config: { damping: 20 } });
+  const titleS = spring({ frame: frame - 3, fps, config: { damping: 14, stiffness: 140 } });
+  const subS = spring({ frame: frame - 18, fps, config: { damping: 20 } });
+  const btnS = spring({ frame: frame - 30, fps, config: { damping: 10, stiffness: 180 } });
+  const urlS = spring({ frame: frame - 45, fps, config: { damping: 20 } });
 
-  const pulse = Math.sin(frame * 0.08) * 0.025 + 1;
+  // Pulsing button glow
+  const btnPulse = 1 + Math.sin(frame * 0.15) * 0.03;
+  const glowPulse = 0.4 + Math.sin(frame * 0.15) * 0.15;
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 60, direction: "rtl" }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 60 }}>
+      {/* Radial gold glow */}
       <div style={{
         position: "absolute",
         width: 600, height: 600, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(201,168,85,0.12) 0%, transparent 60%)",
-        filter: "blur(40px)",
+        background: "radial-gradient(circle, rgba(201,168,85,0.1) 0%, transparent 60%)",
+        filter: "blur(50px)",
       }} />
 
-      {/* Lawyer portrait */}
-      <div style={{
-        opacity: interpolate(portraitS, [0, 1], [0, 1]),
-        transform: `scale(${interpolate(portraitS, [0, 1], [0.7, 1])})`,
-        width: 180, height: 180, borderRadius: "50%",
-        overflow: "hidden", marginBottom: 30,
-        border: "3px solid rgba(201,168,85,0.6)",
-        boxShadow: "0 8px 30px rgba(0,0,0,0.4)",
-      }}>
-        <Img src={staticFile("images/lawyer-portrait.jpg")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-      </div>
-
-      <div style={{
-        opacity: interpolate(titleS, [0, 1], [0, 1]),
-        transform: `scale(${interpolate(titleS, [0, 1], [0.8, 1])})`,
-        textAlign: "center", marginBottom: 40,
-      }}>
-        <div style={{ fontSize: 62, fontWeight: 700, color: "white", lineHeight: 1.4, fontFamily: heebo }}>
+      <div style={{ textAlign: "center" }}>
+        <div style={{
+          fontSize: 64, fontWeight: 700, color: "white",
+          fontFamily: heebo, lineHeight: 1.4,
+          opacity: interpolate(titleS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(titleS, [0, 1], [50, 0])}px)`,
+        }}>
           אל תחכו.
+          <br />
+          <span style={{ color: "#c9a855" }}>תתחילו עכשיו.</span>
         </div>
-        <div style={{ fontSize: 62, fontWeight: 700, color: "#c9a855", lineHeight: 1.4, fontFamily: heebo }}>
-          התחילו עכשיו.
+
+        <div style={{
+          fontSize: 34, fontWeight: 400, color: "rgba(255,255,255,0.7)",
+          fontFamily: heebo, marginTop: 25, lineHeight: 1.6,
+          opacity: interpolate(subS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(subS, [0, 1], [25, 0])}px)`,
+        }}>
+          בדיקה מהירה בחינם
+          <br />
+          ללא התחייבות
         </div>
-      </div>
 
-      <div style={{
-        opacity: interpolate(btnS, [0, 1], [0, 1]),
-        transform: `scale(${interpolate(btnS, [0, 1], [0.5, 1]) * pulse})`,
-        background: "linear-gradient(135deg, #c9a855, #b8943e)",
-        borderRadius: 22, padding: "38px 72px",
-        fontSize: 44, fontWeight: 700, color: "#0f1923",
-        fontFamily: heebo,
-        boxShadow: "0 12px 50px rgba(201,168,85,0.3)",
-      }}>
-        אני רוצה להכין צוואה
-      </div>
-
-      <div style={{
-        position: "absolute", bottom: 340,
-        opacity: interpolate(urlS, [0, 1], [0, 1]),
-        fontSize: 30, color: "#c9a855",
-        fontFamily: heebo, fontWeight: 600, letterSpacing: "0.08em",
-      }}>
-        ללא עלות · ללא התחייבות
-      </div>
-
-      <div style={{
-        position: "absolute", bottom: 260,
-        opacity: interpolate(urlS, [0, 1], [0, 1]),
-        transform: `translateY(${interpolate(urlS, [0, 1], [10, 0])}px)`,
-        fontSize: 28, color: "rgba(255,255,255,0.7)",
-        fontFamily: heebo, fontWeight: 400,
-        letterSpacing: "0.02em",
-        direction: "ltr",
-      }}>
-        hebrew-will-guide.lovable.app
-      </div>
-
-      <div style={{
-        position: "absolute", bottom: 200,
-        opacity: interpolate(brandS, [0, 1], [0, 1]),
-        display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-      }}>
+        {/* CTA Button */}
         <div style={{
-          width: 80, height: 1,
-          background: "linear-gradient(90deg, transparent, rgba(201,168,85,0.4), transparent)",
-        }} />
+          marginTop: 50,
+          opacity: interpolate(btnS, [0, 1], [0, 1]),
+          transform: `scale(${interpolate(btnS, [0, 1], [0.5, 1]) * btnPulse})`,
+        }}>
+          <div style={{
+            background: "linear-gradient(135deg, #c9a855 0%, #e0c068 50%, #c9a855 100%)",
+            borderRadius: 20, padding: "28px 70px",
+            boxShadow: `0 0 ${60 * glowPulse}px rgba(201,168,85,${glowPulse})`,
+          }}>
+            <span style={{
+              fontSize: 44, fontWeight: 700, color: "#0a0f18",
+              fontFamily: heebo,
+            }}>
+              בואו נתחיל ←
+            </span>
+          </div>
+        </div>
+
+        {/* URL */}
         <div style={{
-          fontSize: 26, color: "rgba(255,255,255,0.4)",
-          fontFamily: heebo, fontWeight: 400, marginTop: 12,
+          marginTop: 40,
+          opacity: interpolate(urlS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(urlS, [0, 1], [15, 0])}px)`,
+        }}>
+          <div style={{
+            background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
+            borderRadius: 12, padding: "14px 40px", display: "inline-block",
+          }}>
+            <span style={{
+              fontSize: 30, fontWeight: 500, color: "#c9a855",
+              fontFamily: heebo, letterSpacing: "0.03em", direction: "ltr",
+            }}>
+              hebrew-will-guide.lovable.app
+            </span>
+          </div>
+        </div>
+
+        {/* Badge */}
+        <div style={{
+          position: "absolute", bottom: 50, left: "50%", transform: "translateX(-50%)",
+          opacity: interpolate(urlS, [0, 1], [0, 0.6]),
+          fontSize: 24, color: "rgba(255,255,255,0.4)", fontFamily: heebo,
         }}>
           משרד עו״ד אלון אלישע
-        </div>
-        <div style={{
-          fontSize: 22, color: "rgba(255,255,255,0.3)",
-          fontFamily: heebo, fontWeight: 300,
-        }}>
-          מומחים לדיני ירושה וצוואות
         </div>
       </div>
     </AbsoluteFill>

@@ -1,46 +1,62 @@
-import { AbsoluteFill, useCurrentFrame, spring, interpolate, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { heebo } from "../fonts";
-
-const problems = [
-  "😰  לא יודעים מאיפה להתחיל?",
-  "⚖️  חוששים מתהליך מסובך ויקר?",
-  "🕐  אין זמן לשבת עם עורך דין?",
-];
 
 export const Scene2Problem = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const headS = spring({ frame: frame - 8, fps, config: { damping: 18 } });
+  // Big number counter
+  const countTo = 70;
+  const countProgress = interpolate(frame, [5, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const currentCount = Math.round(countProgress * countTo);
+
+  const numScale = spring({ frame: frame - 5, fps, config: { damping: 12, stiffness: 100 } });
+  const textS = spring({ frame: frame - 35, fps, config: { damping: 20 } });
+  const line2S = spring({ frame: frame - 50, fps, config: { damping: 20 } });
+
+  // Pulsing red glow behind number
+  const pulse = 0.15 + Math.sin(frame * 0.1) * 0.05;
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 70, direction: "rtl" }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 60 }}>
+      {/* Red glow behind stat */}
       <div style={{
-        opacity: interpolate(headS, [0, 1], [0, 1]),
-        transform: `translateY(${interpolate(headS, [0, 1], [40, 0])}px)`,
-        fontSize: 54, fontWeight: 700, color: "white",
-        textAlign: "center", marginBottom: 90, fontFamily: heebo,
-      }}>
-        אנחנו מכירים את זה
-      </div>
+        position: "absolute",
+        width: 500, height: 500, borderRadius: "50%",
+        background: `radial-gradient(circle, rgba(224,64,64,${pulse}) 0%, transparent 60%)`,
+        filter: "blur(40px)",
+      }} />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 44, width: "100%" }}>
-        {problems.map((text, i) => {
-          const s = spring({ frame: frame - 18 - i * 12, fps, config: { damping: 14, stiffness: 140 } });
-          return (
-            <div key={i} style={{
-              opacity: interpolate(s, [0, 1], [0, 1]),
-              transform: `translateX(${interpolate(s, [0, 1], [250, 0])}px)`,
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: 22, padding: "32px 40px",
-              fontSize: 40, color: "rgba(255,255,255,0.9)",
-              fontFamily: heebo, fontWeight: 400, textAlign: "right",
-            }}>
-              {text}
-            </div>
-          );
-        })}
+      <div style={{ textAlign: "center" }}>
+        <div style={{
+          fontSize: 200, fontWeight: 700, color: "#e04040",
+          fontFamily: heebo, lineHeight: 1,
+          transform: `scale(${interpolate(numScale, [0, 1], [0.3, 1])})`,
+          opacity: interpolate(numScale, [0, 1], [0, 1]),
+          direction: "ltr",
+        }}>
+          {currentCount}%
+        </div>
+
+        <div style={{
+          fontSize: 48, fontWeight: 600, color: "white",
+          fontFamily: heebo, marginTop: 20, lineHeight: 1.5,
+          opacity: interpolate(textS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(textS, [0, 1], [30, 0])}px)`,
+        }}>
+          מהישראלים הולכים בלי צוואה
+        </div>
+
+        <div style={{
+          fontSize: 36, fontWeight: 400, color: "rgba(255,255,255,0.6)",
+          fontFamily: heebo, marginTop: 30, lineHeight: 1.6,
+          opacity: interpolate(line2S, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(line2S, [0, 1], [20, 0])}px)`,
+        }}>
+          הרכוש שלכם יחולק לפי החוק —
+          <br />
+          <span style={{ color: "#c9a855", fontWeight: 600 }}>לא לפי הרצון שלכם</span>
+        </div>
       </div>
     </AbsoluteFill>
   );

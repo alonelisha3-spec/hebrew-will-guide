@@ -1,63 +1,63 @@
-import { AbsoluteFill, useCurrentFrame, spring, interpolate, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { heebo } from "../fonts";
 
-const benefits = [
-  { icon: "✅", text: "ללא עלות" },
-  { icon: "✅", text: "ללא התחייבות" },
-  { icon: "⏱️", text: "פחות מ-2 דקות" },
-  { icon: "🎯", text: "מותאם למצב האישי שלכם" },
-];
-
-export const Scene4Benefits = () => {
+export const Scene4Proof = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const headS = spring({ frame: frame - 5, fps, config: { damping: 18 } });
-  const freeS = spring({ frame: frame - 60, fps, config: { damping: 12 } });
+  const countTo = 850;
+  const countProgress = interpolate(frame, [3, 35], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+  const currentCount = Math.round(countProgress * countTo);
+
+  const numS = spring({ frame: frame - 2, fps, config: { damping: 14, stiffness: 120 } });
+  const textS = spring({ frame: frame - 25, fps, config: { damping: 20 } });
+  const starsS = spring({ frame: frame - 35, fps, config: { damping: 15 } });
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", padding: 70, direction: "rtl" }}>
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 60 }}>
+      {/* Gold glow */}
       <div style={{
-        opacity: interpolate(headS, [0, 1], [0, 1]),
-        fontSize: 54, fontWeight: 700, color: "white",
-        textAlign: "center", marginBottom: 80, fontFamily: heebo,
-      }}>
-        מה מקבלים?
-      </div>
+        position: "absolute",
+        width: 400, height: 400, borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(201,168,85,0.12) 0%, transparent 60%)",
+        filter: "blur(40px)",
+      }} />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 36, width: "100%" }}>
-        {benefits.map((b, i) => {
-          const s = spring({ frame: frame - 10 - i * 10, fps, config: { damping: 13, stiffness: 170 } });
-          return (
-            <div key={i} style={{
-              opacity: interpolate(s, [0, 1], [0, 1]),
-              transform: `translateX(${interpolate(s, [0, 1], [-180, 0])}px)`,
-              display: "flex", alignItems: "center", gap: 24,
-              fontSize: 42, color: "white", fontFamily: heebo, fontWeight: 500,
-              padding: "22px 32px",
-              background: "rgba(255,255,255,0.04)",
-              borderRadius: 18,
-              borderRight: "4px solid #c9a855",
-            }}>
-              <span style={{ fontSize: 36 }}>{b.icon}</span>
-              <span>{b.text}</span>
-            </div>
-          );
-        })}
-      </div>
+      <div style={{ textAlign: "center" }}>
+        <div style={{
+          fontSize: 180, fontWeight: 700, color: "#c9a855",
+          fontFamily: heebo, lineHeight: 1, direction: "ltr",
+          opacity: interpolate(numS, [0, 1], [0, 1]),
+          transform: `scale(${interpolate(numS, [0, 1], [0.4, 1])})`,
+        }}>
+          {currentCount.toLocaleString("he-IL")}+
+        </div>
 
-      {/* Emphasis banner */}
-      <div style={{
-        position: "absolute", bottom: 280,
-        opacity: interpolate(freeS, [0, 1], [0, 1]),
-        transform: `scale(${interpolate(freeS, [0, 1], [0.8, 1])})`,
-        background: "linear-gradient(135deg, rgba(201,168,85,0.2), rgba(201,168,85,0.08))",
-        border: "2px solid rgba(201,168,85,0.4)",
-        borderRadius: 20, padding: "22px 50px",
-        fontSize: 36, color: "#c9a855", fontFamily: heebo, fontWeight: 700,
-        textAlign: "center",
-      }}>
-        השירות ללא עלות וללא התחייבות
+        <div style={{
+          fontSize: 46, fontWeight: 600, color: "white",
+          fontFamily: heebo, marginTop: 15,
+          opacity: interpolate(textS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(textS, [0, 1], [25, 0])}px)`,
+        }}>
+          כבר השתמשו בכלי
+        </div>
+
+        {/* Stars */}
+        <div style={{
+          marginTop: 40, fontSize: 50,
+          opacity: interpolate(starsS, [0, 1], [0, 1]),
+          transform: `scale(${interpolate(starsS, [0, 1], [0.5, 1])})`,
+        }}>
+          ⭐⭐⭐⭐⭐
+        </div>
+
+        <div style={{
+          fontSize: 34, color: "rgba(255,255,255,0.5)",
+          fontFamily: heebo, marginTop: 15, fontWeight: 400,
+          opacity: interpolate(starsS, [0, 1], [0, 1]),
+        }}>
+          98% שביעות רצון
+        </div>
       </div>
     </AbsoluteFill>
   );
