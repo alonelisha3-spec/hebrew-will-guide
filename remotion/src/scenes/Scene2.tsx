@@ -79,7 +79,7 @@ export const Scene2Problem = () => {
         {/* Consequences list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 22, maxWidth: 800 }}>
           {cons.map((text, i) => {
-            const s = spring({ frame: frame - 50 - i * 12, fps, config: { damping: 14 } });
+            const s = spring({ frame: frame - 40 - i * 12, fps, config: { damping: 14 } });
             return (
               <div key={i} style={{
                 display: "flex", alignItems: "center", gap: 18,
