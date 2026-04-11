@@ -5,57 +5,69 @@ export const Scene2Problem = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  // Big number counter
-  const countTo = 70;
-  const countProgress = interpolate(frame, [5, 40], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
-  const currentCount = Math.round(countProgress * countTo);
+  const line1S = spring({ frame: frame - 5, fps, config: { damping: 14, stiffness: 140 } });
+  const line2S = spring({ frame: frame - 20, fps, config: { damping: 16 } });
+  const line3S = spring({ frame: frame - 40, fps, config: { damping: 16 } });
+  const emphS = spring({ frame: frame - 55, fps, config: { damping: 12, stiffness: 180 } });
 
-  const numScale = spring({ frame: frame - 5, fps, config: { damping: 12, stiffness: 100 } });
-  const textS = spring({ frame: frame - 35, fps, config: { damping: 20 } });
-  const line2S = spring({ frame: frame - 50, fps, config: { damping: 20 } });
-
-  // Pulsing red glow behind number
-  const pulse = 0.15 + Math.sin(frame * 0.1) * 0.05;
+  // Subtle red pulse
+  const pulse = 0.12 + Math.sin(frame * 0.08) * 0.04;
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 60 }}>
-      {/* Red glow behind stat */}
+    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 70 }}>
+      {/* Red glow */}
       <div style={{
         position: "absolute",
         width: 500, height: 500, borderRadius: "50%",
         background: `radial-gradient(circle, rgba(224,64,64,${pulse}) 0%, transparent 60%)`,
-        filter: "blur(40px)",
+        filter: "blur(50px)",
       }} />
 
       <div style={{ textAlign: "center" }}>
         <div style={{
-          fontSize: 200, fontWeight: 700, color: "#e04040",
-          fontFamily: heebo, lineHeight: 1,
-          transform: `scale(${interpolate(numScale, [0, 1], [0.3, 1])})`,
-          opacity: interpolate(numScale, [0, 1], [0, 1]),
-          direction: "ltr",
+          fontSize: 52, fontWeight: 600, color: "rgba(255,255,255,0.85)",
+          fontFamily: heebo, lineHeight: 1.6,
+          opacity: interpolate(line1S, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(line1S, [0, 1], [40, 0])}px)`,
         }}>
-          {currentCount}%
+          בלי צוואה —
         </div>
 
         <div style={{
-          fontSize: 48, fontWeight: 600, color: "white",
-          fontFamily: heebo, marginTop: 20, lineHeight: 1.5,
-          opacity: interpolate(textS, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(textS, [0, 1], [30, 0])}px)`,
-        }}>
-          מהישראלים הולכים בלי צוואה
-        </div>
-
-        <div style={{
-          fontSize: 36, fontWeight: 400, color: "rgba(255,255,255,0.6)",
-          fontFamily: heebo, marginTop: 30, lineHeight: 1.6,
+          fontSize: 48, fontWeight: 500, color: "rgba(255,255,255,0.7)",
+          fontFamily: heebo, lineHeight: 1.6, marginTop: 15,
           opacity: interpolate(line2S, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(line2S, [0, 1], [20, 0])}px)`,
+          transform: `translateY(${interpolate(line2S, [0, 1], [30, 0])}px)`,
         }}>
-          הרכוש שלכם יחולק לפי החוק —
-          <br />
-          <span style={{ color: "#c9a855", fontWeight: 600 }}>לא לפי הרצון שלכם</span>
+          מישהו אחר יחליט
+        </div>
+
+        <div style={{
+          fontSize: 48, fontWeight: 500, color: "rgba(255,255,255,0.7)",
+          fontFamily: heebo, lineHeight: 1.6, marginTop: 5,
+          opacity: interpolate(line3S, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(line3S, [0, 1], [30, 0])}px)`,
+        }}>
+          מה יקרה עם הרכוש שלכם
+        </div>
+
+        {/* Emphasis line */}
+        <div style={{
+          marginTop: 50,
+          opacity: interpolate(emphS, [0, 1], [0, 1]),
+          transform: `scale(${interpolate(emphS, [0, 1], [0.8, 1])})`,
+        }}>
+          <div style={{
+            background: "rgba(224,64,64,0.12)", border: "1px solid rgba(224,64,64,0.3)",
+            borderRadius: 16, padding: "20px 40px",
+          }}>
+            <span style={{
+              fontSize: 40, fontWeight: 700, color: "#e04040",
+              fontFamily: heebo,
+            }}>
+              זה לא מה שרציתם, נכון?
+            </span>
+          </div>
         </div>
       </div>
     </AbsoluteFill>
