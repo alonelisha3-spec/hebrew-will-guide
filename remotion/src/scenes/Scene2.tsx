@@ -8,8 +8,6 @@ export const Scene2Problem = () => {
 
   const bgShift = interpolate(frame, [0, 120], [0, -15], { extrapolateRight: "clamp" });
 
-  // Big number counter
-  const countTo71 = Math.min(71, Math.round(interpolate(frame, [8, 50], [0, 71], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })));
   const numberS = spring({ frame: frame - 5, fps, config: { damping: 14 } });
 
   // Consequences appear
@@ -42,28 +40,28 @@ export const Scene2Problem = () => {
         justifyContent: "center", alignItems: "center",
         direction: "rtl", padding: 60,
       }}>
-        {/* Big stat number */}
+        {/* Warning headline */}
         <div style={{
           opacity: interpolate(numberS, [0, 1], [0, 1]),
-          transform: `scale(${interpolate(numberS, [0, 1], [0.5, 1])})`,
+          transform: `scale(${interpolate(numberS, [0, 1], [0.85, 1])})`,
           textAlign: "center",
         }}>
           <div style={{
-            fontSize: 160, fontWeight: 700, color: "#e85555",
-            fontFamily: heebo, lineHeight: 1,
-            textShadow: "0 0 60px rgba(232,85,85,0.3)",
+            fontSize: 56, fontWeight: 700, color: "#e85555",
+            fontFamily: heebo, lineHeight: 1.5,
+            textShadow: "0 0 40px rgba(232,85,85,0.2)",
           }}>
-            %{countTo71}
+            בלי צוואה תקפה?
           </div>
           <div style={{
-            fontSize: 36, fontWeight: 500, color: "rgba(255,255,255,0.7)",
-            fontFamily: heebo, marginTop: 10,
+            fontSize: 38, fontWeight: 500, color: "rgba(255,255,255,0.7)",
+            fontFamily: heebo, marginTop: 12,
             opacity: interpolate(
-              spring({ frame: frame - 35, fps, config: { damping: 20 } }),
+              spring({ frame: frame - 25, fps, config: { damping: 20 } }),
               [0, 1], [0, 1]
             ),
           }}>
-            מהישראלים ללא צוואה תקפה
+            זה מה שעלול לקרות:
           </div>
         </div>
 
@@ -81,7 +79,7 @@ export const Scene2Problem = () => {
         {/* Consequences list */}
         <div style={{ display: "flex", flexDirection: "column", gap: 22, maxWidth: 800 }}>
           {cons.map((text, i) => {
-            const s = spring({ frame: frame - 50 - i * 12, fps, config: { damping: 14 } });
+            const s = spring({ frame: frame - 40 - i * 12, fps, config: { damping: 14 } });
             return (
               <div key={i} style={{
                 display: "flex", alignItems: "center", gap: 18,
