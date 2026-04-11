@@ -1,92 +1,72 @@
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, Sequence } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { heebo } from "../fonts";
 
 const steps = [
-  { icon: "📋", text: "ענו על 5 שאלות פשוטות" },
-  { icon: "⚡", text: "קבלו טיוטת צוואה מותאמת" },
-  { icon: "✅", text: "דברו עם עורך דין להשלמה" },
+  { icon: "🖥️", text: "מילוי שאלון קצר באתר" },
+  { icon: "⚖️", text: "עו״ד בודק ומכין צוואה" },
+  { icon: "✅", text: "צוואה חתומה ומוכנה" },
 ];
 
 export const Scene3Solution = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const titleS = spring({ frame: frame - 3, fps, config: { damping: 16, stiffness: 140 } });
+  const titleS = spring({ frame: frame - 3, fps, config: { damping: 16 } });
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 60 }}>
-      {/* Title */}
+    <AbsoluteFill style={{
+      background: "linear-gradient(160deg, #0a0f18 0%, #121a2b 100%)",
+      justifyContent: "center", alignItems: "center", direction: "rtl", padding: 60,
+    }}>
+      {/* Gold accent line */}
       <div style={{
-        position: "absolute", top: 160, textAlign: "center",
+        position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)",
+        width: 2, height: interpolate(titleS, [0, 1], [0, 200]),
+        background: "linear-gradient(to bottom, #c9a855, transparent)",
+      }} />
+
+      <div style={{
+        fontSize: 50, fontWeight: 700, color: "white",
+        fontFamily: heebo, textAlign: "center", marginBottom: 60,
         opacity: interpolate(titleS, [0, 1], [0, 1]),
-        transform: `translateY(${interpolate(titleS, [0, 1], [40, 0])}px)`,
+        transform: `translateY(${interpolate(titleS, [0, 1], [30, 0])}px)`,
       }}>
-        <div style={{ fontSize: 56, fontWeight: 700, color: "#c9a855", fontFamily: heebo }}>
-          איך זה עובד?
-        </div>
-        <div style={{
-          width: 120, height: 4, margin: "20px auto",
-          background: "linear-gradient(90deg, transparent, #c9a855, transparent)",
-        }} />
+        איך זה עובד?
       </div>
 
-      {/* Steps */}
-      <div style={{ marginTop: 80, display: "flex", flexDirection: "column", gap: 40, width: "100%" }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 35, width: "100%" }}>
         {steps.map((step, i) => {
-          const delay = 15 + i * 18;
-          const s = spring({ frame: frame - delay, fps, config: { damping: 14, stiffness: 160 } });
-          const slideX = interpolate(s, [0, 1], [200, 0]);
-
+          const s = spring({ frame: frame - 18 - i * 15, fps, config: { damping: 14, stiffness: 160 } });
           return (
             <div key={i} style={{
-              display: "flex", alignItems: "center", gap: 30,
-              background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)",
-              borderRadius: 20, padding: "28px 36px",
+              display: "flex", alignItems: "center", gap: 25,
               opacity: interpolate(s, [0, 1], [0, 1]),
-              transform: `translateX(${slideX}px)`,
+              transform: `translateX(${interpolate(s, [0, 1], [-60, 0])}px)`,
             }}>
               <div style={{
-                fontSize: 50, width: 80, height: 80,
+                width: 80, height: 80, borderRadius: "50%",
+                background: "rgba(201,168,85,0.12)", border: "1.5px solid rgba(201,168,85,0.3)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                background: "rgba(201,168,85,0.15)", borderRadius: 16,
-                flexShrink: 0,
+                fontSize: 36, flexShrink: 0,
               }}>
                 {step.icon}
               </div>
-              <div style={{
-                fontSize: 38, fontWeight: 600, color: "white",
-                fontFamily: heebo, lineHeight: 1.4,
-              }}>
-                {step.text}
+              <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
+                <span style={{
+                  fontSize: 48, fontWeight: 700, color: "#c9a855", fontFamily: heebo,
+                }}>
+                  {i + 1}.
+                </span>
+                <span style={{
+                  fontSize: 36, fontWeight: 500, color: "white", fontFamily: heebo,
+                }}>
+                  {step.text}
+                </span>
               </div>
             </div>
           );
         })}
       </div>
-
-      {/* Time badge */}
-      <Sequence from={55}>
-        <TimeBadge />
-      </Sequence>
     </AbsoluteFill>
-  );
-};
-
-const TimeBadge = () => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const badgeS = spring({ frame, fps, config: { damping: 10, stiffness: 200 } });
-  return (
-    <div style={{
-      position: "absolute", bottom: 100,
-      background: "#c9a855", borderRadius: 40,
-      padding: "16px 50px",
-      opacity: interpolate(badgeS, [0, 1], [0, 1]),
-      transform: `scale(${interpolate(badgeS, [0, 1], [0.5, 1])})`,
-    }}>
-      <span style={{ fontSize: 36, fontWeight: 700, color: "#0a0f18", fontFamily: heebo }}>
-        ⏱ הכל תוך 2 דקות
-      </span>
-    </div>
   );
 };
