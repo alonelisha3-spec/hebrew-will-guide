@@ -26,11 +26,11 @@ await renderMedia({
   composition,
   serveUrl: bundled,
   codec: "h264",
-  outputLocation: "/mnt/documents/will-promo-vertical.mp4",
+  outputLocation: "/mnt/documents/will-promo-square.mp4",
   puppeteerInstance: browser,
   muted: true,
   concurrency: 1,
 });
 
 await browser.close({ silent: false });
-console.log("Done! Output: /mnt/documents/will-promo-vertical.mp4");
+console.log("Done! Output: /mnt/documents/will-promo-square.mp4");
