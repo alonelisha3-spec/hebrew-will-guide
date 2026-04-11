@@ -7,42 +7,40 @@ import { Scene2Problem } from "./scenes/Scene2";
 import { Scene3Solution } from "./scenes/Scene3";
 import { Scene4Proof } from "./scenes/Scene4";
 import { Scene5CTA } from "./scenes/Scene5";
-import { PersistentBackground } from "./components/PersistentBackground";
 
 export const MainVideo = () => {
   return (
-    <AbsoluteFill>
-      <PersistentBackground />
+    <AbsoluteFill style={{ background: "#0a0f18" }}>
       <TransitionSeries>
-        <TransitionSeries.Sequence durationInFrames={75}>
+        <TransitionSeries.Sequence durationInFrames={85}>
           <Scene1Hook />
+        </TransitionSeries.Sequence>
+        <TransitionSeries.Transition
+          presentation={fade()}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 12 })}
+        />
+        <TransitionSeries.Sequence durationInFrames={95}>
+          <Scene2Problem />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={wipe({ direction: "from-left" })}
           timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
         />
-        <TransitionSeries.Sequence durationInFrames={90}>
-          <Scene2Problem />
-        </TransitionSeries.Sequence>
-        <TransitionSeries.Transition
-          presentation={fade()}
-          timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
-        />
         <TransitionSeries.Sequence durationInFrames={100}>
           <Scene3Solution />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
-          presentation={wipe({ direction: "from-top-left" })}
+          presentation={fade()}
           timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
         />
-        <TransitionSeries.Sequence durationInFrames={75}>
+        <TransitionSeries.Sequence durationInFrames={80}>
           <Scene4Proof />
         </TransitionSeries.Sequence>
         <TransitionSeries.Transition
           presentation={fade()}
-          timing={springTiming({ config: { damping: 200 }, durationInFrames: 8 })}
+          timing={springTiming({ config: { damping: 200 }, durationInFrames: 10 })}
         />
-        <TransitionSeries.Sequence durationInFrames={110}>
+        <TransitionSeries.Sequence durationInFrames={100}>
           <Scene5CTA />
         </TransitionSeries.Sequence>
       </TransitionSeries>

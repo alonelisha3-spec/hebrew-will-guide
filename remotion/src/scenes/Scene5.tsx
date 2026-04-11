@@ -8,89 +8,76 @@ export const Scene5CTA = () => {
   const titleS = spring({ frame: frame - 3, fps, config: { damping: 14, stiffness: 140 } });
   const subS = spring({ frame: frame - 18, fps, config: { damping: 20 } });
   const btnS = spring({ frame: frame - 30, fps, config: { damping: 10, stiffness: 180 } });
-  const urlS = spring({ frame: frame - 45, fps, config: { damping: 20 } });
+  const urlS = spring({ frame: frame - 42, fps, config: { damping: 20 } });
 
-  // Pulsing button glow
-  const btnPulse = 1 + Math.sin(frame * 0.15) * 0.03;
-  const glowPulse = 0.4 + Math.sin(frame * 0.15) * 0.15;
+  const btnPulse = 1 + Math.sin(frame * 0.15) * 0.02;
+  const glowPulse = 0.3 + Math.sin(frame * 0.15) * 0.15;
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 60 }}>
-      {/* Radial gold glow */}
+    <AbsoluteFill style={{
+      background: "linear-gradient(160deg, #0a0f18 0%, #0d1424 50%, #111c30 100%)",
+      justifyContent: "center", alignItems: "center", direction: "rtl",
+    }}>
+      {/* Subtle radial glow */}
       <div style={{
-        position: "absolute",
-        width: 600, height: 600, borderRadius: "50%",
-        background: "radial-gradient(circle, rgba(201,168,85,0.1) 0%, transparent 60%)",
-        filter: "blur(50px)",
+        position: "absolute", width: 700, height: 700, borderRadius: "50%",
+        background: "radial-gradient(circle, rgba(201,168,85,0.08) 0%, transparent 60%)",
+        filter: "blur(40px)",
       }} />
 
-      <div style={{ textAlign: "center" }}>
+      <div style={{ textAlign: "center", padding: 60 }}>
         <div style={{
-          fontSize: 64, fontWeight: 700, color: "white",
-          fontFamily: heebo, lineHeight: 1.4,
+          fontSize: 58, fontWeight: 700, color: "white",
+          fontFamily: heebo, lineHeight: 1.5,
           opacity: interpolate(titleS, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(titleS, [0, 1], [50, 0])}px)`,
-        }}>
-          אל תחכו.
-          <br />
-          <span style={{ color: "#c9a855" }}>תתחילו עכשיו.</span>
-        </div>
-
-        <div style={{
-          fontSize: 34, fontWeight: 400, color: "rgba(255,255,255,0.7)",
-          fontFamily: heebo, marginTop: 25, lineHeight: 1.6,
-          opacity: interpolate(subS, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(subS, [0, 1], [25, 0])}px)`,
+          transform: `translateY(${interpolate(titleS, [0, 1], [40, 0])}px)`,
         }}>
           בדיקה מהירה בחינם
-          <br />
-          ללא התחייבות
         </div>
 
-        {/* CTA Button */}
+        <div style={{
+          fontSize: 36, fontWeight: 400, color: "rgba(255,255,255,0.6)",
+          fontFamily: heebo, marginTop: 15, lineHeight: 1.6,
+          opacity: interpolate(subS, [0, 1], [0, 1]),
+        }}>
+          גלו מה המצב שלכם — ללא התחייבות
+        </div>
+
+        {/* CTA */}
         <div style={{
           marginTop: 50,
           opacity: interpolate(btnS, [0, 1], [0, 1]),
           transform: `scale(${interpolate(btnS, [0, 1], [0.5, 1]) * btnPulse})`,
         }}>
           <div style={{
-            background: "linear-gradient(135deg, #c9a855 0%, #e0c068 50%, #c9a855 100%)",
-            borderRadius: 20, padding: "28px 70px",
-            boxShadow: `0 0 ${60 * glowPulse}px rgba(201,168,85,${glowPulse})`,
+            background: "linear-gradient(135deg, #c9a855 0%, #ddb862 50%, #c9a855 100%)",
+            borderRadius: 18, padding: "26px 65px",
+            boxShadow: `0 0 50px rgba(201,168,85,${glowPulse})`,
           }}>
-            <span style={{
-              fontSize: 44, fontWeight: 700, color: "#0a0f18",
-              fontFamily: heebo,
-            }}>
-              בואו נתחיל ←
+            <span style={{ fontSize: 42, fontWeight: 700, color: "#0a0f18", fontFamily: heebo }}>
+              התחילו עכשיו
             </span>
           </div>
         </div>
 
         {/* URL */}
         <div style={{
-          marginTop: 40,
+          marginTop: 35,
           opacity: interpolate(urlS, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(urlS, [0, 1], [15, 0])}px)`,
+          transform: `translateY(${interpolate(urlS, [0, 1], [10, 0])}px)`,
         }}>
-          <div style={{
-            background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.15)",
-            borderRadius: 12, padding: "14px 40px", display: "inline-block",
+          <span style={{
+            fontSize: 32, fontWeight: 600, color: "#c9a855",
+            fontFamily: heebo, direction: "ltr",
           }}>
-            <span style={{
-              fontSize: 30, fontWeight: 500, color: "#c9a855",
-              fontFamily: heebo, letterSpacing: "0.03em", direction: "ltr",
-            }}>
-              elisha-law.com
-            </span>
-          </div>
+            elisha-law.com
+          </span>
         </div>
 
-        {/* Badge */}
         <div style={{
-          position: "absolute", bottom: 50, left: "50%", transform: "translateX(-50%)",
-          opacity: interpolate(urlS, [0, 1], [0, 0.6]),
-          fontSize: 24, color: "rgba(255,255,255,0.4)", fontFamily: heebo,
+          marginTop: 30,
+          opacity: interpolate(urlS, [0, 1], [0, 0.5]),
+          fontSize: 22, color: "rgba(255,255,255,0.35)", fontFamily: heebo,
         }}>
           משרד עו״ד אלון אלישע
         </div>

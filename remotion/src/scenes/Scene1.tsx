@@ -1,65 +1,60 @@
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, Img, staticFile } from "remotion";
 import { heebo } from "../fonts";
 
 export const Scene1Hook = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const badgeS = spring({ frame: frame - 2, fps, config: { damping: 18 } });
-  const titleS = spring({ frame: frame - 8, fps, config: { damping: 14, stiffness: 130 } });
-  const subS = spring({ frame: frame - 22, fps, config: { damping: 18 } });
-  const tagS = spring({ frame: frame - 35, fps, config: { damping: 20 } });
+  // Slow zoom on family image
+  const zoom = interpolate(frame, [0, 90], [1, 1.15], { extrapolateRight: "clamp" });
+  
+  // Text overlay fades in
+  const textS = spring({ frame: frame - 10, fps, config: { damping: 20 } });
+  const subS = spring({ frame: frame - 30, fps, config: { damping: 18 } });
 
   return (
-    <AbsoluteFill style={{ justifyContent: "center", alignItems: "center", direction: "rtl", padding: 70 }}>
-      {/* Badge */}
+    <AbsoluteFill>
+      {/* Full-bleed family image with slow Ken Burns zoom */}
       <div style={{
-        position: "absolute", top: 180,
-        opacity: interpolate(badgeS, [0, 1], [0, 1]),
-        transform: `scale(${interpolate(badgeS, [0, 1], [0.5, 1])})`,
-        background: "rgba(201,168,85,0.12)", border: "1px solid rgba(201,168,85,0.3)",
-        borderRadius: 30, padding: "14px 36px",
-        fontSize: 28, color: "#c9a855", letterSpacing: "0.1em",
-        fontFamily: heebo, fontWeight: 500,
+        position: "absolute", inset: 0, overflow: "hidden",
       }}>
-        משרד עו״ד אלון אלישע
+        <Img
+          src={staticFile("images/family.jpg")}
+          style={{
+            width: "100%", height: "100%", objectFit: "cover",
+            transform: `scale(${zoom})`,
+          }}
+        />
+        {/* Dark gradient overlay for text readability */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.1) 100%)",
+        }} />
       </div>
 
-      {/* Main text */}
+      {/* Text at bottom */}
       <div style={{
-        textAlign: "center",
-        opacity: interpolate(titleS, [0, 1], [0, 1]),
-        transform: `translateY(${interpolate(titleS, [0, 1], [60, 0])}px)`,
+        position: "absolute", bottom: 120, left: 0, right: 0,
+        textAlign: "center", direction: "rtl", padding: "0 50px",
       }}>
-        <div style={{ fontSize: 72, fontWeight: 700, color: "white", lineHeight: 1.4, fontFamily: heebo }}>
-          רוצים להסדיר
+        <div style={{
+          fontSize: 68, fontWeight: 700, color: "white",
+          fontFamily: heebo, lineHeight: 1.4,
+          opacity: interpolate(textS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(textS, [0, 1], [40, 0])}px)`,
+          textShadow: "0 4px 20px rgba(0,0,0,0.5)",
+        }}>
+          להגן על המשפחה שלכם
         </div>
-        <div style={{ fontSize: 80, fontWeight: 700, color: "#c9a855", lineHeight: 1.4, fontFamily: heebo }}>
-          צוואה?
+        <div style={{
+          fontSize: 40, fontWeight: 400, color: "#c9a855",
+          fontFamily: heebo, marginTop: 15,
+          opacity: interpolate(subS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(subS, [0, 1], [20, 0])}px)`,
+          textShadow: "0 2px 10px rgba(0,0,0,0.5)",
+        }}>
+          מתחיל בצוואה נכונה
         </div>
-      </div>
-
-      {/* Sub text */}
-      <div style={{
-        position: "absolute", bottom: 280,
-        opacity: interpolate(subS, [0, 1], [0, 1]),
-        transform: `translateY(${interpolate(subS, [0, 1], [20, 0])}px)`,
-        textAlign: "center",
-        fontSize: 36, color: "rgba(255,255,255,0.7)",
-        fontFamily: heebo, fontWeight: 400, lineHeight: 1.7,
-      }}>
-        עכשיו זה קל, מהיר ומשתלם
-      </div>
-
-      {/* Tag */}
-      <div style={{
-        position: "absolute", bottom: 190,
-        opacity: interpolate(tagS, [0, 1], [0, 1]),
-        background: "rgba(201,168,85,0.15)", border: "1px solid rgba(201,168,85,0.25)",
-        borderRadius: 16, padding: "12px 36px",
-        fontSize: 30, color: "#c9a855", fontFamily: heebo, fontWeight: 600,
-      }}>
-        ללא עלות · ללא התחייבות
       </div>
     </AbsoluteFill>
   );
