@@ -14,7 +14,7 @@ export const Scene1Hook = () => {
 
   return (
     <AbsoluteFill>
-      <Video src={staticFile("videos/scene1-family.mp4")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+      <Video src={staticFile("videos/scene1-home-warm.mp4")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
 
       {/* Dark overlay for text readability */}
       <div style={{
