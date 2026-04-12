@@ -171,6 +171,141 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
         </div>
       </section>
 
+      {/* Comparison Section */}
+      <section className="py-20 md:py-28 bg-background">
+        <div className="container max-w-4xl px-4 md:px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground mb-4">
+            אנחנו לא מחליפים את עורך הדין.
+          </h2>
+          <h3 className="text-2xl md:text-3xl font-bold text-center text-primary mb-10">
+            אנחנו מחליפים את הפרוצדורה.
+          </h3>
+
+          <p className="text-center text-muted-foreground text-lg leading-relaxed max-w-3xl mx-auto mb-12">
+            הערך המשפטי של צוואה זהה — לוודא שהרצונות שלך מתמלאות במסמך מחייב.
+            מה שמשתנה זה איך הרצונות האלה מגיעות לעורך הדין.
+            רוב השלבים בתהליך הישן הם פרוצדורה טכנית — לא עבודה משפטית.
+            ובכל זאת, הם עולים ללקוח 80% מהזמן ומהתשלום.
+          </p>
+
+          {/* Comparison Table - Desktop */}
+          <div className="hidden md:block overflow-hidden rounded-xl border border-border shadow-lg">
+            <table className="w-full text-right" dir="rtl">
+              <thead>
+                <tr className="bg-muted/50">
+                  <th className="px-6 py-4 text-sm font-bold text-muted-foreground"></th>
+                  <th className="px-6 py-4 text-center text-sm font-bold text-muted-foreground">הדרך הישנה 🐌</th>
+                  <th className="px-6 py-4 text-center text-sm font-bold text-primary">הדרך של אלון אלישע ⚡</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                <tr className="bg-card">
+                  <td className="px-6 py-4 font-medium text-foreground">שלב 1</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">קביעת פגישה — תיאום של שבועות</td>
+                  <td className="px-6 py-4 text-center text-foreground font-medium">שאלון דיגיטלי — 2 דקות</td>
+                </tr>
+                <tr className="bg-card/50">
+                  <td className="px-6 py-4 font-medium text-foreground">שלב 2</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">פגישת אפיון — שעה במשרד</td>
+                  <td className="px-6 py-4 text-center text-foreground font-medium">הנתונים מוזנים אוטומטית</td>
+                </tr>
+                <tr className="bg-card">
+                  <td className="px-6 py-4 font-medium text-foreground">שלב 3</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">הכנת טיוטה — ימים עד שבועות</td>
+                  <td className="px-6 py-4 text-center text-foreground font-medium">טיוטה מוכנה מיידית</td>
+                </tr>
+                <tr className="bg-card/50">
+                  <td className="px-6 py-4 font-medium text-foreground">שלב 4</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">שליחה ללקוח + תיקונים</td>
+                  <td className="px-6 py-4 text-center text-foreground font-medium">הלקוח חותם בעצמו + מגיש</td>
+                </tr>
+                <tr className="bg-card">
+                  <td className="px-6 py-4 font-medium text-foreground">שלב 5</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">פגישה נוספת + חתימה</td>
+                  <td className="px-6 py-4 text-center text-primary font-bold">—</td>
+                </tr>
+                <tr className="bg-primary/5 border-t-2 border-primary/20">
+                  <td className="px-6 py-4 font-bold text-foreground">מחיר</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">5,000+ ש״ח</td>
+                  <td className="px-6 py-4 text-center text-primary font-bold text-lg">מאות ש״ח</td>
+                </tr>
+                <tr className="bg-primary/5">
+                  <td className="px-6 py-4 font-bold text-foreground">זמן</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">2–4 שבועות</td>
+                  <td className="px-6 py-4 text-center text-primary font-bold text-lg">באותו היום</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          {/* Comparison Cards - Mobile */}
+          <div className="md:hidden space-y-4">
+            {[
+              { step: "שלב 1", old: "קביעת פגישה — שבועות", new: "שאלון דיגיטלי — 2 דקות" },
+              { step: "שלב 2", old: "פגישת אפיון — שעה במשרד", new: "הנתונים מוזנים אוטומטית" },
+              { step: "שלב 3", old: "הכנת טיוטה — ימים עד שבועות", new: "טיוטה מוכנה מיידית" },
+              { step: "שלב 4", old: "שליחה + תיקונים", new: "הלקוח חותם ומגיש" },
+              { step: "שלב 5", old: "פגישה נוספת + חתימה", new: "—" },
+            ].map((item) => (
+              <div key={item.step} className="rounded-lg border border-border bg-card p-4">
+                <p className="font-bold text-foreground text-sm mb-2">{item.step}</p>
+                <div className="flex items-center gap-3">
+                  <span className="text-sm text-muted-foreground line-through flex-1">{item.old}</span>
+                  <span className="text-sm text-primary font-medium flex-1">{item.new}</span>
+                </div>
+              </div>
+            ))}
+            <div className="rounded-xl border-2 border-primary/30 bg-primary/5 p-5 text-center">
+              <div className="flex justify-around mb-2">
+                <div>
+                  <p className="text-xs text-muted-foreground">מחיר ישן</p>
+                  <p className="text-lg text-muted-foreground line-through">5,000+ ש״ח</p>
+                </div>
+                <div>
+                  <p className="text-xs text-primary font-medium">אצלנו</p>
+                  <p className="text-lg text-primary font-bold">מאות ש״ח</p>
+                </div>
+              </div>
+              <div className="flex justify-around">
+                <div>
+                  <p className="text-xs text-muted-foreground">זמן ישן</p>
+                  <p className="text-lg text-muted-foreground line-through">2–4 שבועות</p>
+                </div>
+                <div>
+                  <p className="text-xs text-primary font-medium">אצלנו</p>
+                  <p className="text-lg text-primary font-bold">באותו היום</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Quote */}
+          <blockquote className="mt-14 max-w-3xl mx-auto text-center">
+            <p className="text-xl md:text-2xl font-bold text-foreground leading-relaxed">
+              &ldquo;אנחנו 2026. יש AI, יש כלים דיגיטליים.
+              <br />
+              <span className="text-primary">תפסיקו לחיות את העולם הישן.</span>
+              <br />
+              תחליפו את הפרוצדורה, לא את השחקנים.&rdquo;
+            </p>
+            <footer className="mt-4 text-muted-foreground text-base">
+              — אלון אלישע, עו״ד
+            </footer>
+          </blockquote>
+
+          {/* CTA */}
+          <div className="mt-12 text-center">
+            <button
+              onClick={onNoWill}
+              className="inline-flex items-center justify-center rounded-md bg-primary px-14 py-6 text-xl font-bold text-primary-foreground shadow-xl transition-all duration-200 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
+            >
+              <FileText className="w-6 h-6 ml-3" />
+              התחילו עכשיו — בחינם
+            </button>
+          </div>
+        </div>
+      </section>
+
       <FAQSection />
 
       <section className="py-24 md:py-32 bg-background">
