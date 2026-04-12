@@ -282,11 +282,9 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
           {/* Quote */}
           <blockquote className="mt-14 max-w-3xl mx-auto text-center">
             <p className="text-xl md:text-2xl font-bold text-foreground leading-relaxed">
-              &ldquo;אנחנו 2026. יש AI, יש כלים דיגיטליים.
+              &ldquo;הלקוח לא צריך לשלם על פרוצדורה.
               <br />
-              <span className="text-primary">תפסיקו לחיות את העולם הישן.</span>
-              <br />
-              תחליפו את הפרוצדורה, לא את השחקנים.&rdquo;
+              <span className="text-primary">הוא צריך לשלם על שיקול דעת משפטי.</span>&rdquo;
             </p>
             <footer className="mt-4 text-muted-foreground text-base">
               — אלון אלישע, עו״ד
