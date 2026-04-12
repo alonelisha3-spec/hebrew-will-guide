@@ -40,25 +40,57 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     return Object.keys(errs).length === 0;
   }
 
+  const questionLabels: Record<string, string> = {
+    fullName: "שם מלא",
+    familyStructure: "מצב משפחתי",
+    spouseName: "שם בן/בת הזוג",
+    inheritanceModel: "מודל הורשה",
+    customDistribution: "חלוקה מותאמת",
+    hasChildren: "יש ילדים",
+    hasMoreThanOneChild: "יותר מילד אחד",
+    hasMinorChildren: "ילדים קטינים",
+    childrenNames: "שמות הילדים",
+    hasRealEstate: "נכסי מקרקעין",
+    significantAssets: "נכסים משמעותיים",
+    unequalDistribution: "חלוקה שווה",
+    familyConflict: "סיכון למחלוקת",
+    digitalAssets: "נכסים דיגיטליים",
+    wantExecutor: "מנהל עיזבון",
+    spouseProtection: "הגנה על בן/בת זוג",
+    specialCircumstances: "נסיבות מיוחדות",
+    guardianName: "אפוטרופוס",
+    existingWillType: "סוג צוואה קיימת",
+    familyChanged: "שינוי מצב משפחתי",
+    newAssets: "נכסים חדשים",
+    maritalStatus: "מצב אישי",
+  };
+
   function buildSummary() {
     return (
       Object.entries(answers)
         .filter(([, value]) => value && String(value).trim() !== "")
-        .map(([key, value]) => `${key}: ${value}`)
+        .map(([key, value]) => `${questionLabels[key] || key}: ${value}`)
         .join("\n") || "לא נרשמו תשובות"
     );
   }
 
   async function sendLeadToEmail() {
+    const intentLabel = intent === "full" ? "צפייה בנוסח מלא" : intent === "email" ? "שליחה למייל" : "בקשת חזרה";
+    const timestamp = new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" });
+
     const payload = new FormData();
-    payload.append("_subject", "ליד חדש - מערכת צוואות");
-    payload.append("שם מלא", fullName.trim());
-    payload.append("טלפון", phone.trim());
-    payload.append("אימייל", email.trim() || "לא נמסר");
-    payload.append("סוג פנייה", intent);
-    payload.append("סוג צוואה", willDraftData?.willType || "לא ידוע");
-    payload.append("תשובות", buildSummary());
-    payload.append("אישור שיווק", consentMarketing ? "כן" : "לא");
+    payload.append("_subject", `🔔 ליד חדש — צוואות | ${fullName.trim()} | ${willDraftData?.willType || "לא ידוע"}`);
+    payload.append("1. שם מלא", fullName.trim());
+    payload.append("2. טלפון", phone.trim());
+    payload.append("3. אימייל", email.trim() || "לא נמסר");
+    payload.append("4. סוג פנייה", intentLabel);
+    payload.append("5. סוג צוואה", willDraftData?.willType || "לא ידוע");
+    payload.append("6. תאריך ושעה", timestamp);
+    payload.append("7. אישור שיווק", consentMarketing ? "כן" : "לא");
+    payload.append("8. פירוט תשובות", buildSummary());
+    if (willDraftData?.fullDraft) {
+      payload.append("9. טיוטת צוואה", willDraftData.fullDraft.substring(0, 3000));
+    }
 
     await fetch("https://formspree.io/f/mgopabze", {
       method: "POST",
