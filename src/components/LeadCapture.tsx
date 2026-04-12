@@ -50,23 +50,21 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
   }
 
   async function sendLeadToEmail() {
-    const payload = new FormData();
-    payload.append("_subject", "ליד חדש - מערכת צוואות");
-    payload.append("_captcha", "false");
-    payload.append("_template", "table");
+    const payload = {
+      "שם מלא": fullName.trim(),
+      "טלפון": phone.trim(),
+      "אימייל": email.trim() || "לא נמסר",
+      "סוג פנייה": intent,
+      "סוג צוואה": willDraftData?.willType || "לא ידוע",
+      "תשובות": buildSummary(),
+      "אישור שיווק": consentMarketing ? "כן" : "לא",
+      "_subject": "ליד חדש - מערכת צוואות",
+    };
 
-    payload.append("שם מלא", fullName.trim());
-    payload.append("טלפון", phone.trim());
-    payload.append("אימייל", email.trim() || "לא נמסר");
-    payload.append("סוג פנייה", intent);
-    payload.append("סוג צוואה", willDraftData?.willType || "לא ידוע");
-    payload.append("תשובות", buildSummary());
-    payload.append("נוסח צוואה", willDraftData?.fullDraft || "לא הופק נוסח");
-    payload.append("אישור שיווק", consentMarketing ? "כן" : "לא");
-
-    await fetch("https://formsubmit.co/alonelisha3@gmail.com", {
+    await fetch("https://formspree.io/f/mgopabze", {
       method: "POST",
-      body: payload,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
     });
   }
 
