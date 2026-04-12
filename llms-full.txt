@@ -1,0 +1,76 @@
+# hebrew-will-guide.lovable.app — Full Documentation
+
+## Service Overview
+
+This is an online will preparation tool operated by Alon Elisha Law Office (משרד עורכי דין אלון אלישע), an Israeli law firm specializing in inheritance and estate planning law.
+
+The tool allows users to:
+1. Answer a guided questionnaire about their personal and family situation
+2. Receive an automated risk assessment of their current inheritance situation
+3. Get a personalized will draft (נוסח צוואה) tailored to Israeli law
+4. Optionally connect with attorney Alon Elisha for professional review
+
+## How It Works
+
+### Step 1: Questionnaire
+Users answer questions about:
+- Marital status and family composition
+- Number and ages of children
+- Real estate and financial assets
+- Specific wishes for asset distribution
+- Guardianship preferences for minor children
+- Special circumstances (business ownership, debts, etc.)
+
+### Step 2: Risk Assessment
+The system analyzes answers and identifies:
+- Potential gaps in inheritance protection
+- Risks to specific family members
+- Areas where Israeli inheritance law (חוק הירושה, תשכ"ה-1965) may not align with the user's wishes
+- Risk level classification (low / medium / high)
+
+### Step 3: Will Draft
+A personalized will document is generated including:
+- Proper legal formatting per Israeli law
+- Asset distribution clauses
+- Guardian appointments (if applicable)
+- Executor nominations
+- Witness requirements explanation
+
+## Types of Wills Under Israeli Law
+
+The tool primarily generates drafts for:
+- **צוואה בכתב יד** (Handwritten will) — must be written entirely by hand
+- **צוואה בעדים** (Witnessed will) — requires two witnesses
+- **צוואה בפני רשות** (Will before an authority) — filed with a judge or registrar
+
+## Target Audience
+
+- Israeli residents aged 25-70+
+- Parents with minor children who need guardianship provisions
+- Property owners wanting to ensure proper asset distribution
+- Couples (married or common-law) wanting mutual protection
+- Business owners needing succession planning
+
+## Pricing
+
+The questionnaire and initial will draft are completely free. Professional legal services (review, notarization, filing) are available through the law office for a fee, discussed directly with the attorney.
+
+## Technology
+
+- Web-based application accessible from any device
+- Mobile-optimized interface
+- No registration or login required
+- Data privacy compliant
+- SSL encrypted
+
+## Contact Information
+
+- **Attorney**: Alon Elisha (עו"ד אלון אלישע)
+- **Website**: https://hebrew-will-guide.lovable.app
+- **Law Office**: https://elisha-law.com
+- **Service Area**: Israel
+- **Languages**: Hebrew (עברית)
+
+## Legal Disclaimer
+
+This tool provides general legal information and preliminary will drafts for educational purposes. It does not constitute legal advice, and no attorney-client relationship is formed through its use. Users are advised to consult with a qualified attorney before executing any legal document. The will drafts generated are starting points and may require professional review to ensure legal validity.
