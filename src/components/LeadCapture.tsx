@@ -89,7 +89,7 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     payload.append("7. אישור שיווק", consentMarketing ? "כן" : "לא");
     payload.append("8. פירוט תשובות", buildSummary());
     if (willDraftData?.fullDraft) {
-      payload.append("9. טיוטת צוואה", willDraftData.fullDraft.substring(0, 3000));
+      payload.append("9. טיוטת צוואה", willDraftData.fullDraft);
     }
 
     await fetch("https://formspree.io/f/mgopabze", {
