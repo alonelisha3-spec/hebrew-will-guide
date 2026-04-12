@@ -40,14 +40,6 @@ export const noWillQuestions: Question[] = [
     condition: (a) => !!a.familyStructure && a.familyStructure.includes("בן/בת זוג") && !a.familyStructure.startsWith("אין"),
   },
   {
-    id: "spouseId",
-    text: "מספר תעודת הזהות של בן/בת הזוג (לא חובה)",
-    type: "text",
-    placeholder: "מספר תעודת זהות",
-    optional: true,
-    condition: (a) => !!a.familyStructure && a.familyStructure.includes("בן/בת זוג") && !a.familyStructure.startsWith("אין") && !!a.spouseName?.trim(),
-  },
-  {
     id: "inheritanceModel",
     text: "למי תרצה/י להוריש?",
     type: "select",
@@ -319,34 +311,6 @@ export const noWillQuestions: Question[] = [
     text: "תרצה/י לכלול הוראות לגבי קבורה או אזכרות?",
     type: "select",
     options: ["כן", "לא", "לא בטוח/ה"],
-  },
-  {
-    id: "provideIdNow",
-    text: "רוצה להזין תעודת זהות? (לא חובה)",
-    type: "select",
-    options: ["כן", "לא"],
-    explanation: "אפשר להשלים גם בהמשך.",
-  },
-  {
-    id: "idNumber",
-    text: "מספר תעודת הזהות שלך",
-    type: "text",
-    placeholder: "מספר תעודת זהות",
-    condition: (a) => a.provideIdNow === "כן",
-  },
-  {
-    id: "provideAddressNow",
-    text: "רוצה להזין כתובת מגורים? (לא חובה)",
-    type: "select",
-    options: ["כן", "לא"],
-    explanation: "אפשר להשלים גם בהמשך.",
-  },
-  {
-    id: "address",
-    text: "מה הכתובת שלך?",
-    type: "text",
-    placeholder: "רחוב, מספר, עיר",
-    condition: (a) => a.provideAddressNow === "כן",
   },
 ];
 

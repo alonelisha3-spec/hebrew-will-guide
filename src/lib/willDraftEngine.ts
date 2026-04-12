@@ -180,10 +180,10 @@ function buildDraftText(a: Record<string, string>, willType: WillDraftData["will
 
 function buildMutualWillText(a: Record<string, string>): string {
   const name = clean(a.fullName);
-  const idNum = clean(a.idNumber);
-  const address = clean(a.address);
+  const idNum = "___________";
+  const address = "___________";
   const spouseName = clean(a.spouseName);
-  const spouseId = clean(a.spouseId);
+  const spouseId = "___________";
   const today = currentDateHe();
   const childrenNames = collectChildrenNames(a);
   const otherHeirNames = splitNames(a.otherHeirNames);
@@ -380,8 +380,8 @@ function buildMutualWillText(a: Record<string, string>): string {
 
 function buildRegularWillText(a: Record<string, string>, willType: WillDraftData["willType"]): string {
   const name = clean(a.fullName);
-  const idNum = clean(a.idNumber);
-  const address = clean(a.address);
+  const idNum = "___________";
+  const address = "___________";
   const spouseName = clean(a.spouseName);
   const today = currentDateHe();
 
