@@ -28,4 +28,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://hebrew-will-guide.lovable.app/sitemap.xml
+Sitemap: https://hebrew-will-guide.vercel.app/sitemap.xml

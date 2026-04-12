@@ -1,4 +1,4 @@
-# hebrew-will-guide.lovable.app
+# hebrew-will-guide.vercel.app
 
 ## About
 
@@ -28,7 +28,7 @@ This website is a free online tool by Alon Elisha Law Office (משרד עורכ�
 
 ## Contact
 
-- Website: https://hebrew-will-guide.lovable.app
+- Website: https://hebrew-will-guide.vercel.app
 - Law office website: https://elisha-law.com
 - Attorney: Alon Elisha (עו"ד אלון אלישע)
 - Location: Israel

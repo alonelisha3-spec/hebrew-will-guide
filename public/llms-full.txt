@@ -1,4 +1,4 @@
-# hebrew-will-guide.lovable.app — Full Documentation
+# hebrew-will-guide.vercel.app — Full Documentation
 
 ## Service Overview
 
@@ -66,7 +66,7 @@ The questionnaire and initial will draft are completely free. Professional legal
 ## Contact Information
 
 - **Attorney**: Alon Elisha (עו"ד אלון אלישע)
-- **Website**: https://hebrew-will-guide.lovable.app
+- **Website**: https://hebrew-will-guide.vercel.app
 - **Law Office**: https://elisha-law.com
 - **Service Area**: Israel
 - **Languages**: Hebrew (עברית)
