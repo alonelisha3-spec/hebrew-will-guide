@@ -308,29 +308,83 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
 
       <FAQSection />
 
+      {/* Personal Story Section */}
       <section className="py-24 md:py-32 bg-background">
-        <div className="container max-w-3xl px-4 md:px-6 flex flex-col md:flex-row items-center gap-8 md:gap-12">
-          <img
-            src={portraitImg}
-            alt="עו״ד אלון אלישע"
-            loading="lazy"
-            className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover object-top shadow-lg border-4 border-accent/20 flex-shrink-0"
-          />
-          <div className="text-center md:text-right">
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-              אני אאפיין את הצוואה. אתאים אותה אליך. אקח אחריות.
-            </h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed text-base md:text-lg">
-              מה שאני לא צריך — זה להשקיע שעה בפגישה ראשונה ולבנות טיוטה מאפס.
-              הכלי הדיגיטלי עושה את זה בשבילך תוך דקות. אתה מגיע אליי מוכן, אני מתחיל מהנקודה שבאמת חשובה.
-              זה חוסך לך זמן, כסף, ונרבות.
-            </p>
-            <button
-              onClick={onNoWill}
-              className="mt-8 inline-flex items-center justify-center rounded-md bg-accent px-12 py-5 text-lg font-semibold text-accent-foreground shadow-lg transition-all duration-200 hover:brightness-110 hover:scale-105"
-            >
-              התחל עכשיו
-            </button>
+        <div className="container max-w-4xl px-4 md:px-6">
+          <div className="flex flex-col md:flex-row items-start gap-8 md:gap-12">
+            <img
+              src={portraitImg}
+              alt="עו״ד אלון אלישע"
+              loading="lazy"
+              className="w-40 h-40 md:w-48 md:h-48 rounded-full object-cover object-top shadow-lg border-4 border-accent/20 flex-shrink-0 mx-auto md:mx-0"
+            />
+            <div className="text-right">
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-6">
+                למה הפסקתי לגבות אלפי שקלים על צוואה
+              </h2>
+              <div className="space-y-4 text-muted-foreground leading-relaxed text-base md:text-lg">
+                <p>
+                  אני עושה צוואות כבר שנים. ליוויתי מאות משפחות, ראיתי מה קורה כשאין צוואה, ומה קורה כשיש צוואה שנכתבה נכון. <strong className="text-foreground">הניסיון הזה לא הולך לשום מקום.</strong>
+                </p>
+                <p>
+                  אבל הייתי גובה אלפי שקלים. לא כי העבודה המשפטית שווה כל כך הרבה — אלא כי התהליך היה ארוך: פגישה ראשונה, אפיון, בניית טיוטה מאפס, תיקונים, פגישה נוספת. <strong className="text-foreground">80% מהזמן הזה היה פרוצדורה, לא משפט.</strong>
+                </p>
+                <p>
+                  היום הכלי הדיגיטלי שלי עושה את הפרוצדורה בדקות. הטיוטה שפעם הייתי בונה בימים — מוכנה לפני שאתה מגיע אליי. <strong className="text-foreground">ואני כבר לא מוכן לגבות על זה. כי זה לא הוגן.</strong>
+                </p>
+                <p className="text-foreground font-medium">
+                  אני גובה רק על מה שבאמת דורש עורך דין:
+                </p>
+              </div>
+
+              <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-start gap-3 bg-primary/5 rounded-lg p-4 border border-primary/10">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground">התאמה אישית</p>
+                    <p className="text-sm text-muted-foreground">אני לוקח את הטיוטה ומתאים אותה בדיוק למצב שלך</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-primary/5 rounded-lg p-4 border border-primary/10">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground">אפיון סופי</p>
+                    <p className="text-sm text-muted-foreground">שימה על כל סעיף, בדיקה שהכל עומד משפטית</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-primary/5 rounded-lg p-4 border border-primary/10">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground">אחריות משפטית</p>
+                    <p className="text-sm text-muted-foreground">אני חותם, אני אחראי. לא AI, לא כלי — עורך דין</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3 bg-primary/5 rounded-lg p-4 border border-primary/10">
+                  <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
+                  <div>
+                    <p className="font-semibold text-foreground">הגנה על המשפחה</p>
+                    <p className="text-sm text-muted-foreground">שהצוואה תעמוד במבחן — ואף אחד לא ייפגע</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-8 p-5 bg-accent/10 rounded-xl border border-accent/20 text-center">
+                <p className="text-lg font-bold text-foreground mb-1">
+                  אותו ניסיון. אותה אחריות. אותה איכות.
+                </p>
+                <p className="text-primary font-bold text-xl">
+                  בלי לשלם על פרוצדורה שהטכנולוגיה כבר עושה בשבילך.
+                </p>
+              </div>
+
+              <button
+                onClick={onNoWill}
+                className="mt-8 w-full sm:w-auto inline-flex items-center justify-center rounded-md bg-primary px-14 py-6 text-xl font-bold text-primary-foreground shadow-xl transition-all duration-200 hover:scale-105 hover:shadow-[0_0_30px_hsl(38_50%_58%/0.4)]"
+              >
+                <FileText className="w-6 h-6 ml-3" />
+                התחילו עכשיו — בחינם
+              </button>
+            </div>
           </div>
         </div>
       </section>
