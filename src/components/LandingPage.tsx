@@ -111,19 +111,19 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-base max-w-3xl mx-auto">
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">הפגישה הראשונה? מיותרת</p>
-              <p className="text-accent-foreground/70 mt-1">שאלון דיגיטלי מחליף שעה במשרד</p>
+              <p className="font-semibold text-white text-lg">האפיון הראשוני? דיגיטלי</p>
+              <p className="text-accent-foreground/70 mt-1">שאלון חכם שחוסך לעורך הדין שעות הכנה</p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">הטיוטה? אוטומטית</p>
+              <p className="font-semibold text-white text-lg">השירות? מלא</p>
               <p className="text-accent-foreground/70 mt-1">
-                אתה מגיע לעורך דין עם מסמך — לא עם שאלות
+                שיחה אישית, אפיון סופי, התאמות והתאמה אליך
               </p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">עורך הדין? נשאר</p>
+              <p className="font-semibold text-white text-lg">המחיר? הוגן</p>
               <p className="text-accent-foreground/70 mt-1">
-                אפיון סופי, אחריות משפטית, התאמה אישית
+                כי זמן העבודה באמת התקצר — והמחיר משקף את זה
               </p>
             </div>
           </div>
@@ -327,13 +327,16 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
                   אני עושה צוואות כבר שנים. ליוויתי מאות משפחות, ראיתי מה קורה כשאין צוואה, ומה קורה כשיש צוואה שנכתבה נכון. <strong className="text-foreground">הניסיון הזה לא הולך לשום מקום.</strong>
                 </p>
                 <p>
-                  אבל הייתי גובה אלפי שקלים. לא כי העבודה המשפטית שווה כל כך הרבה — אלא כי התהליך היה ארוך: פגישה ראשונה, אפיון, בניית טיוטה מאפס, תיקונים, פגישה נוספת. <strong className="text-foreground">80% מהזמן הזה היה פרוצדורה, לא משפט.</strong>
+                  אבל הייתי גובה אלפי שקלים. לא כי העבודה המשפטית שלי שווה פחות — אלא כי התהליך היה ארוך: פגישה ראשונה, אפיון, בניית טיוטה מאפס, תיקונים, פגישה נוספת. <strong className="text-foreground">80% מהזמן שלי הלך על פרוצדורה — לא על עבודה משפטית.</strong>
                 </p>
                 <p>
-                  היום הכלי הדיגיטלי שלי עושה את הפרוצדורה בדקות. הטיוטה שפעם הייתי בונה בימים — מוכנה לפני שאתה מגיע אליי. <strong className="text-foreground">ואני כבר לא מוכן לגבות על זה. כי זה לא הוגן.</strong>
+                  היום בניתי כלי דיגיטלי שעושה את האפיון הראשוני ומכין לי טיוטה בדקות — עבודה שפעם לקחה לי ימים. <strong className="text-foreground">אבל אתה עדיין מקבל הכל:</strong> אני אקרא כל מילה, נדבר, אאפיין, אתאים, ואקח אחריות. הכלי חוסך לי שעות — והחיסכון הזה עובר אליך.
+                </p>
+                <p>
+                  <strong className="text-foreground">אני כבר לא מוכן לגבות על פרוצדורה שהטכנולוגיה עושה בשבילי. כי זה לא הוגן.</strong>
                 </p>
                 <p className="text-foreground font-medium">
-                  אני גובה רק על מה שבאמת דורש עורך דין:
+                  מה אתה כן מקבל:
                 </p>
               </div>
 
@@ -341,8 +344,8 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
                 <div className="flex items-start gap-3 bg-primary/5 rounded-lg p-4 border border-primary/10">
                   <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 shrink-0" />
                   <div>
-                    <p className="font-semibold text-foreground">התאמה אישית</p>
-                    <p className="text-sm text-muted-foreground">אני לוקח את הטיוטה ומתאים אותה בדיוק למצב שלך</p>
+                    <p className="font-semibold text-foreground">שיחה אישית + התאמה</p>
+                    <p className="text-sm text-muted-foreground">נדבר, נבין את המצב שלך, ואתאים את הצוואה בדיוק אליך</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3 bg-primary/5 rounded-lg p-4 border border-primary/10">
