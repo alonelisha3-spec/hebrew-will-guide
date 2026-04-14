@@ -31,11 +31,11 @@ function AnimatedCounter({ target, duration = 2000 }: { target: number; duration
 
 export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props) {
   const headline = isFromFacebook
-    ? "ראיתם את הפוסט? עכשיו תבדקו בעצמכם"
-    : "הכינו בסיס לצוואה — בכמה דקות";
+    ? "אם זמן העבודה התקצר ב-80% — למה אתה משלם אותו דבר?"
+    : "אם זמן העבודה התקצר ב-80% — למה אתה משלם אותו דבר?";
   const subHeadline = isFromFacebook
-    ? "ענו על מספר שאלות וקבלו טיוטה מסודרת של הרצונות שלכם — כולל זיהוי נושאים שכדאי להסדיר."
-    : "ענו על מספר שאלות וקבלו טיוטה מסודרת של הרצונות שלכם — כולל זיהוי נושאים שכדאי להסדיר.";
+    ? "הטכנולוגיה קיצרה את הפרוצדורה. אנחנו גובים רק על מה שבאמת דורש עורך דין — ההתאמה האישית, האחריות המשפטית, והאפיון הסופי."
+    : "הטכנולוגיה קיצרה את הפרוצדורה. אנחנו גובים רק על מה שבאמת דורש עורך דין — ההתאמה האישית, האחריות המשפטית, והאפיון הסופי.";
   return (
     <div className="min-h-screen">
       <section className="py-24 md:py-36 bg-accent text-accent-foreground relative overflow-hidden">
@@ -53,7 +53,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             {subHeadline}
           </p>
           <p className="mt-4 text-base md:text-lg text-accent-foreground/70 leading-relaxed max-w-2xl mx-auto">
-            ללא עלות · ללא התחייבות · תוך דקות ספורות
+            אותו שירות משפטי · אותה אחריות · בלי לשלם על פרוצדורה מיושנת
           </p>
 
           {/* Social proof bar */}
@@ -111,19 +111,19 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
 
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-base max-w-3xl mx-auto">
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">טיוטה מסודרת תוך דקות</p>
-              <p className="text-accent-foreground/70 mt-1">בסיס מבוסס על הנתונים שלכם</p>
+              <p className="font-semibold text-white text-lg">הפגישה הראשונה? מיותרת</p>
+              <p className="text-accent-foreground/70 mt-1">שאלון דיגיטלי מחליף שעה במשרד</p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">זיהוי נושאים להסדרה</p>
+              <p className="font-semibold text-white text-lg">הטיוטה? אוטומטית</p>
               <p className="text-accent-foreground/70 mt-1">
-                מצב משפחתי, נכסים וחוסרים
+                אתה מגיע לעורך דין עם מסמך — לא עם שאלות
               </p>
             </div>
             <div className="rounded-lg bg-white/10 border border-white/10 px-5 py-4">
-              <p className="font-semibold text-white text-lg">המשך עם עורך דין</p>
+              <p className="font-semibold text-white text-lg">עורך הדין? נשאר</p>
               <p className="text-accent-foreground/70 mt-1">
-                בדיקה משפטית והשלמה לצוואה תקפה
+                אפיון סופי, אחריות משפטית, התאמה אישית
               </p>
             </div>
           </div>
@@ -181,11 +181,13 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
             אנחנו מחליפים את הפרוצדורה.
           </h3>
 
-          <p className="text-center text-muted-foreground text-lg leading-relaxed max-w-3xl mx-auto mb-12">
-            הערך המשפטי של צוואה זהה — לוודא שהרצונות שלך מתמלאות במסמך מחייב.
-            מה שמשתנה זה איך הרצונות האלה מגיעות לעורך הדין.
-            רוב השלבים בתהליך הישן הם פרוצדורה טכנית — לא עבודה משפטית.
-            ובכל זאת, הם עולים ללקוח 80% מהזמן ומהתשלום.
+          <p className="text-center text-muted-foreground text-lg leading-relaxed max-w-3xl mx-auto mb-6">
+            פגישה ראשונה, אפיון, בניית טיוטה — כל זה פרוצדורה טכנית, לא עבודה משפטית.
+            הטכנולוגיה עושה את זה תוך דקות. אז למה אתה עדיין משלם עליה?
+          </p>
+          <p className="text-center text-foreground text-lg leading-relaxed max-w-3xl mx-auto mb-12 font-medium">
+            אצלנו אתה משלם רק על הדלתא — ההתאמה האישית, האפיון הסופי, והאחריות המשפטית.
+            אותו שירות. אותו עורך דין. בלי לצאת פראייר.
           </p>
 
           {/* Comparison Table - Desktop */}
@@ -316,11 +318,12 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
           />
           <div className="text-center md:text-right">
             <h2 className="text-2xl md:text-3xl font-bold text-foreground">
-              אל תשאירו את הדברים החשובים לאי-ודאות
+              אני אאפיין את הצוואה. אתאים אותה אליך. אקח אחריות.
             </h2>
             <p className="mt-4 text-muted-foreground leading-relaxed text-base md:text-lg">
-              התחילו עכשיו, ענו על מספר שאלות, וקבלו טיוטה מסודרת —
-              בסיס מותאם לרצונות שלכם.
+              מה שאני לא צריך — זה להשקיע שעה בפגישה ראשונה ולבנות טיוטה מאפס.
+              הכלי הדיגיטלי עושה את זה בשבילך תוך דקות. אתה מגיע אליי מוכן, אני מתחיל מהנקודה שבאמת חשובה.
+              זה חוסך לך זמן, כסף, ונרבות.
             </p>
             <button
               onClick={onNoWill}
