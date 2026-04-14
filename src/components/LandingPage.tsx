@@ -224,7 +224,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
                 <tr className="bg-card">
                   <td className="px-6 py-4 font-medium text-foreground">שלב 5</td>
                   <td className="px-6 py-4 text-center text-muted-foreground">פגישה נוספת + חתימה</td>
-                  <td className="px-6 py-4 text-center text-primary font-bold">—</td>
+                  <td className="px-6 py-4 text-center text-foreground font-medium">אפיון אישי מול עורך הדין — צוואה מותאמת ומקצועית שמגלמת את רצונך</td>
                 </tr>
                 <tr className="bg-primary/5 border-t-2 border-primary/20">
                   <td className="px-6 py-4 font-bold text-foreground">מחיר</td>
@@ -247,7 +247,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
               { step: "שלב 2", old: "פגישת אפיון — שעה במשרד", new: "הנתונים מוזנים אוטומטית" },
               { step: "שלב 3", old: "הכנת טיוטה — ימים עד שבועות", new: "טיוטה מוכנה מיידית" },
               { step: "שלב 4", old: "שליחה + תיקונים", new: "הלקוח חותם ומגיש" },
-              { step: "שלב 5", old: "פגישה נוספת + חתימה", new: "—" },
+              { step: "שלב 5", old: "פגישה נוספת + חתימה", new: "אפיון אישי — צוואה מותאמת שמגלמת את רצונך" },
             ].map((item) => (
               <div key={item.step} className="rounded-lg border border-border bg-card p-4">
                 <p className="font-bold text-foreground text-sm mb-2">{item.step}</p>
