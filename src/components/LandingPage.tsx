@@ -228,7 +228,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
                 </tr>
                 <tr className="bg-primary/5 border-t-2 border-primary/20">
                   <td className="px-6 py-4 font-bold text-foreground">מחיר</td>
-                  <td className="px-6 py-4 text-center text-muted-foreground">5,000+ ש״ח</td>
+                  <td className="px-6 py-4 text-center text-muted-foreground">אלפי ש״ח</td>
                   <td className="px-6 py-4 text-center text-primary font-bold text-lg">מאות ש״ח</td>
                 </tr>
                 <tr className="bg-primary/5">
@@ -261,7 +261,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
               <div className="flex justify-around mb-2">
                 <div>
                   <p className="text-xs text-muted-foreground">מחיר ישן</p>
-                  <p className="text-lg text-muted-foreground line-through">5,000+ ש״ח</p>
+                  <p className="text-lg text-muted-foreground line-through">אלפי ש״ח</p>
                 </div>
                 <div>
                   <p className="text-xs text-primary font-medium">אצלנו</p>
