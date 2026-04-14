@@ -59,19 +59,19 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
           {/* Social proof bar */}
           <div className="mt-10 flex flex-wrap items-center justify-center gap-8 md:gap-12 text-base">
             <div className="flex items-center gap-2 text-white/90">
-              <Users className="w-5 h-5 text-primary" />
-              <span className="font-bold text-lg"><AnimatedCounter target={850} /></span>
-              <span className="text-accent-foreground/70">כבר השתמשו בכלי</span>
+              <Scale className="w-5 h-5 text-primary" />
+              <span className="font-bold text-lg">ניסיון של שנים</span>
+              <span className="text-accent-foreground/70">בדיני צוואות וירושות</span>
             </div>
             <div className="flex items-center gap-2 text-white/90">
-              <TrendingUp className="w-5 h-5 text-primary" />
-              <span className="font-bold text-lg">98%</span>
-              <span className="text-accent-foreground/70">שביעות רצון</span>
+              <Shield className="w-5 h-5 text-primary" />
+              <span className="font-bold text-lg">אחריות מלאה</span>
+              <span className="text-accent-foreground/70">של עורך דין</span>
             </div>
             <div className="flex items-center gap-2 text-white/90">
               <Clock className="w-5 h-5 text-primary" />
               <span className="font-bold text-lg">פחות מ-2 דקות</span>
-              <span className="text-accent-foreground/70">למילוי</span>
+              <span className="text-accent-foreground/70">למילוי השאלון</span>
             </div>
           </div>
 
