@@ -1,7 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 const SESSION_KEY = "funnel_session_id";
-const COUNTER_BASE = "https://api.counterapi.dev/v1/elisha-law";
+const COUNTER_BASE = "https://api.counterapi.dev/v1/elisha-law-live";
 
 function getSessionId(): string {
   let id = sessionStorage.getItem(SESSION_KEY);
