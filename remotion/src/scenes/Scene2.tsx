@@ -53,7 +53,7 @@ export const Scene2Problem = () => {
           transform: `translateY(${interpolate(titleS, [0, 1], [30, 0])}px)`,
           textShadow: "0 3px 20px rgba(0,0,0,0.7)",
         }}>
-          על מה אתה <span style={{ color: "#ff7b7b" }}>באמת</span> משלם?
+          על מה משלמים <span style={{ color: "#ff7b7b" }}>בצוואה</span> היום?
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 22, width: "100%", maxWidth: 750 }}>

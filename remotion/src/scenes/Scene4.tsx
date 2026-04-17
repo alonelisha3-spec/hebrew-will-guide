@@ -34,7 +34,7 @@ export const Scene4Proof = () => {
           transform: `translateY(${interpolate(line1S, [0, 1], [40, 0])}px)`,
           textShadow: "0 4px 20px rgba(0,0,0,0.7)",
         }}>
-          אז למה להמשיך לשלם
+          אז למה להמשיך לשלם על צוואה
         </div>
 
         <div style={{
@@ -50,7 +50,7 @@ export const Scene4Proof = () => {
           transform: `translateY(${interpolate(line2S, [0, 1], [40, 0])}px) scale(${interpolate(line2S, [0, 1], [0.92, 1])})`,
           textShadow: "0 0 30px rgba(232,201,106,0.3), 0 4px 20px rgba(0,0,0,0.6)",
         }}>
-          על מה שטכנולוגיה כבר עושה?
+          על מה שהטכנולוגיה כבר עושה?
         </div>
       </div>
     </AbsoluteFill>
