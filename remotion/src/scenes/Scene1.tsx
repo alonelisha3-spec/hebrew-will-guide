@@ -37,7 +37,7 @@ export const Scene1Hook = () => {
           marginBottom: 20,
           textShadow: "0 2px 10px rgba(0,0,0,0.6)",
         }}>
-          ‎2025
+          ‎2026
         </div>
 
         <div style={{

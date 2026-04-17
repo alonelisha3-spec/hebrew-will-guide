@@ -34,7 +34,7 @@ export const Scene3Solution = () => {
           fontSize: 22, fontWeight: 700, color: "#7cb8ff",
           fontFamily: heebo, letterSpacing: 4, direction: "rtl",
         }}>
-          השיטה של 2025
+          השיטה של 2026
         </div>
       </div>
 
