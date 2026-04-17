@@ -306,6 +306,29 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="py-12 md:py-16 bg-[#f9f7f3]">
+        <div className="container max-w-3xl px-4 md:px-6">
+          <h3 className="text-center text-sm font-bold text-[#0d1b2e]/50 tracking-wide mb-6">מה אומרים לקוחות המשרד</h3>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            {[
+              { name: 'אוריאן ישראל', text: 'אלון ליווה אותי בצורה מקצועית ואישית. הרגשתי שיש מישהו שבאמת דואג לאינטרסים שלי, גם בלי להיפגש פיזית. הכל היה ברור, שקוף ומדויק.' },
+              { name: 'אביב קריקון', text: 'הגעתי עם חשש מתהליך דיגיטלי, אבל אלון הפתיע אותי. זמין, מקצועי, ועם תשומת לב לכל פרט. קיבלתי שירות ברמה שלא חוויתי גם במשרדים גדולים.' },
+              { name: 'אלה בן דוד', text: 'עורך דין שמדבר בגובה העיניים ולא מסבך. הכל נעשה בצורה נוחה ומהירה, עם ליווי אישי לאורך כל הדרך. ממליצה בחום.' },
+            ].map(t => (
+              <div key={t.name} className="bg-white rounded-lg p-4 border border-[#e8e0d0] text-right">
+                <p className="text-[12px] md:text-[13px] text-[#555] leading-relaxed mb-2">"{t.text}"</p>
+                <p className="text-[12px] font-bold text-[#c9a84c]">— {t.name}</p>
+              </div>
+            ))}
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-5 mt-5 text-[11px] text-[#0d1b2e]/35">
+            <span>⚖️ חבר לשכת עורכי הדין בישראל</span>
+            <span>📍 מוהליבר 11, הרצליה</span>
+          </div>
+        </div>
+      </section>
+
       <FAQSection />
 
       {/* Personal Story Section */}
