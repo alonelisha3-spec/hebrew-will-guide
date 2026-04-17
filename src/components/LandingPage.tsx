@@ -37,7 +37,7 @@ export function LandingPage({ onNoWill, onExistingWill, isFromFacebook }: Props)
     ? "הטכנולוגיה קיצרה את הפרוצדורה. אנחנו גובים רק על מה שבאמת דורש עורך דין — ההתאמה האישית, האחריות המשפטית, והאפיון הסופי."
     : "הטכנולוגיה קיצרה את הפרוצדורה. אנחנו גובים רק על מה שבאמת דורש עורך דין — ההתאמה האישית, האחריות המשפטית, והאפיון הסופי.";
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen" style={{ fontSize: '80%' }}>
       <section className="py-24 md:py-36 bg-accent text-accent-foreground relative overflow-hidden">
         <div className="container max-w-4xl text-center px-4 md:px-6 relative z-10">
           <p className="text-xs tracking-[0.25em] text-primary uppercase mb-5">
