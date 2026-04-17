@@ -40,6 +40,19 @@ export const Scene1Hook = () => {
         justifyContent: "center", alignItems: "center",
         direction: "rtl", padding: "0 80px", textAlign: "center",
       }}>
+        {/* Topic label */}
+        <div style={{
+          border: "1.5px solid rgba(232,201,106,0.6)",
+          padding: "8px 24px", borderRadius: 100,
+          fontSize: 22, fontWeight: 600, color: "#e8c96a",
+          fontFamily: heebo, letterSpacing: 6,
+          marginBottom: 40,
+          opacity: interpolate(line1, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(line1, [0, 1], [-15, 0])}px)`,
+        }}>
+          צוואות · 2026
+        </div>
+
         <div style={{
           fontSize: 56, fontWeight: 700, color: "white",
           fontFamily: heebo, lineHeight: 1.4,
