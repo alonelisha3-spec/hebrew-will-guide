@@ -1,17 +1,15 @@
 import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, Video, staticFile } from "remotion";
 import { heebo } from "../fonts";
 
-const steps = [
-  { icon: "📝", text: "מילוי שאלון קצר באתר", sub: "5 דקות" },
-  { icon: "⚖️", text: "עו״ד בודק ומכין צוואה", sub: "תוך 48 שעות" },
-  { icon: "✅", text: "צוואה חתומה ומוכנה", sub: "מסמך משפטי מחייב" },
-];
-
 export const Scene4Proof = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
   const titleS = spring({ frame: frame - 3, fps, config: { damping: 14 } });
+  const oldCardS = spring({ frame: frame - 18, fps, config: { damping: 14 } });
+  const vsS = spring({ frame: frame - 38, fps, config: { damping: 8, stiffness: 180 } });
+  const newCardS = spring({ frame: frame - 50, fps, config: { damping: 12, stiffness: 140 } });
+  const newGlow = 0.3 + Math.sin(frame * 0.2) * 0.15;
 
   return (
     <AbsoluteFill>
@@ -19,7 +17,7 @@ export const Scene4Proof = () => {
 
       <div style={{
         position: "absolute", inset: 0,
-        background: "linear-gradient(180deg, rgba(5,5,10,0.55) 0%, rgba(5,5,10,0.75) 50%, rgba(5,5,10,0.85) 100%)",
+        background: "linear-gradient(180deg, rgba(5,5,10,0.6) 0%, rgba(5,5,10,0.88) 100%)",
       }} />
 
       <div style={{
@@ -29,75 +27,85 @@ export const Scene4Proof = () => {
         direction: "rtl", padding: 50,
       }}>
         <div style={{
-          fontSize: 50, fontWeight: 700, color: "white",
-          fontFamily: heebo, textAlign: "center", marginBottom: 60,
+          fontSize: 46, fontWeight: 700, color: "white",
+          fontFamily: heebo, textAlign: "center", marginBottom: 50, lineHeight: 1.4,
           opacity: interpolate(titleS, [0, 1], [0, 1]),
           transform: `translateY(${interpolate(titleS, [0, 1], [30, 0])}px)`,
           textShadow: "0 4px 20px rgba(0,0,0,0.6)",
         }}>
-          איך זה עובד?
+          אותה צוואה. <span style={{ color: "#e8c96a" }}>חצי מהמחיר.</span>
         </div>
 
+        {/* Comparison */}
         <div style={{
-          display: "flex", flexDirection: "column", gap: 45,
-          width: "100%", maxWidth: 750, position: "relative",
+          display: "flex", flexDirection: "column", gap: 18,
+          width: "100%", maxWidth: 780, position: "relative",
         }}>
-          {steps.map((step, i) => {
-            const s = spring({ frame: frame - 15 - i * 18, fps, config: { damping: 12, stiffness: 140 } });
-            const iconBounce = spring({ frame: frame - 20 - i * 18, fps, config: { damping: 6, stiffness: 200 } });
-
-            return (
-              <div key={i} style={{ position: "relative" }}>
-                {i < 2 && (
-                  <div style={{
-                    position: "absolute", right: 38, top: 80,
-                    width: 3,
-                    height: 45 * interpolate(
-                      spring({ frame: frame - 35 - i * 20, fps, config: { damping: 20 } }),
-                      [0, 1], [0, 1]
-                    ),
-                    background: "linear-gradient(180deg, rgba(232,201,106,0.5), rgba(232,201,106,0.15))",
-                    borderRadius: 2,
-                  }} />
-                )}
-
-                <div style={{
-                  display: "flex", alignItems: "center", gap: 25,
-                  opacity: interpolate(s, [0, 1], [0, 1]),
-                  transform: `translateX(${interpolate(s, [0, 1], [-80, 0])}px)`,
-                }}>
-                  <div style={{
-                    width: 78, height: 78, borderRadius: "50%",
-                    background: "rgba(232,201,106,0.15)",
-                    border: "2px solid rgba(232,201,106,0.5)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    flexShrink: 0,
-                    transform: `scale(${interpolate(iconBounce, [0, 1], [0.3, 1])})`,
-                    boxShadow: "0 0 30px rgba(232,201,106,0.15)",
-                  }}>
-                    <span style={{ fontSize: 36 }}>{step.icon}</span>
-                  </div>
-
-                  <div>
-                    <div style={{
-                      fontSize: 34, fontWeight: 600, color: "white",
-                      fontFamily: heebo, lineHeight: 1.4,
-                      textShadow: "0 2px 10px rgba(0,0,0,0.5)",
-                    }}>
-                      {step.text}
-                    </div>
-                    <div style={{
-                      fontSize: 22, fontWeight: 400, color: "#e8c96a",
-                      fontFamily: heebo, marginTop: 4,
-                      textShadow: "0 1px 5px rgba(0,0,0,0.4)",
-                    }}>
-                      {step.sub}
-                    </div>
-                  </div>
-                </div>
+          {/* OLD card */}
+          <div style={{
+            opacity: interpolate(oldCardS, [0, 1], [0, 0.55]),
+            transform: `translateX(${interpolate(oldCardS, [0, 1], [-50, 0])}px)`,
+            background: "rgba(255,123,123,0.08)",
+            border: "1.5px solid rgba(255,123,123,0.3)",
+            borderRadius: 14, padding: "22px 30px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            filter: `grayscale(${interpolate(oldCardS, [0, 1], [0, 0.6])})`,
+          }}>
+            <div>
+              <div style={{ fontSize: 22, color: "rgba(255,255,255,0.5)", fontFamily: heebo, marginBottom: 4 }}>
+                השיטה הישנה
               </div>
-            );
-          })}
+              <div style={{ fontSize: 32, fontWeight: 600, color: "rgba(255,255,255,0.7)", fontFamily: heebo, textDecoration: "line-through", textDecorationColor: "#ff7b7b" }}>
+                ₪3,000 – ₪6,000
+              </div>
+            </div>
+            <div style={{ fontSize: 20, color: "rgba(255,255,255,0.45)", fontFamily: heebo, textAlign: "left" }}>
+              משפט<br />+ פרוצדורה
+            </div>
+          </div>
+
+          {/* VS badge */}
+          <div style={{
+            position: "absolute", left: "50%", top: "50%",
+            transform: `translate(-50%, -50%) scale(${interpolate(vsS, [0, 1], [0, 1])}) rotate(${interpolate(vsS, [0, 1], [-30, 0])}deg)`,
+            opacity: interpolate(vsS, [0, 1], [0, 1]),
+            zIndex: 5,
+          }}>
+            <div style={{
+              width: 70, height: 70, borderRadius: "50%",
+              background: "#0a0f18",
+              border: "2px solid #e8c96a",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              fontSize: 24, fontWeight: 800, color: "#e8c96a",
+              fontFamily: heebo, letterSpacing: 1,
+              boxShadow: "0 0 30px rgba(232,201,106,0.4)",
+            }}>
+              VS
+            </div>
+          </div>
+
+          {/* NEW card */}
+          <div style={{
+            opacity: interpolate(newCardS, [0, 1], [0, 1]),
+            transform: `translateX(${interpolate(newCardS, [0, 1], [50, 0])}px) scale(${interpolate(newCardS, [0, 1], [0.95, 1])})`,
+            background: "linear-gradient(135deg, rgba(232,201,106,0.18) 0%, rgba(232,201,106,0.08) 100%)",
+            border: "2px solid rgba(232,201,106,0.7)",
+            borderRadius: 14, padding: "22px 30px",
+            display: "flex", alignItems: "center", justifyContent: "space-between",
+            boxShadow: `0 0 ${30 + newGlow * 30}px rgba(232,201,106,${newGlow})`,
+          }}>
+            <div>
+              <div style={{ fontSize: 22, color: "#e8c96a", fontFamily: heebo, marginBottom: 4, fontWeight: 600 }}>
+                השיטה שלנו
+              </div>
+              <div style={{ fontSize: 38, fontWeight: 800, color: "white", fontFamily: heebo }}>
+                רק על המשפט
+              </div>
+            </div>
+            <div style={{ fontSize: 20, color: "rgba(255,255,255,0.7)", fontFamily: heebo, textAlign: "left" }}>
+              AI עושה<br />את השאר
+            </div>
+          </div>
         </div>
       </div>
     </AbsoluteFill>
