@@ -3,6 +3,7 @@ import { trackEvent } from "@/lib/tracking";
 import { saveLead } from "@/lib/store";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { Testimonials } from "@/components/Testimonials";
 import { LandingPage } from "@/components/LandingPage";
 import { Questionnaire } from "@/components/Questionnaire";
 import { PreviewPage } from "@/components/PreviewPage";
@@ -522,6 +523,7 @@ export default function Index() {
         />
       )}
 
+      {showHeaderFooter && <Testimonials />}
       {showHeaderFooter && <Footer />}
     </>
   );
