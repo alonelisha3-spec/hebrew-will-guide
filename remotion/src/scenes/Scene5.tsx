@@ -1,25 +1,27 @@
-import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig, Video, staticFile } from "remotion";
+import { AbsoluteFill, useCurrentFrame, interpolate, spring, useVideoConfig } from "remotion";
 import { heebo } from "../fonts";
 
 export const Scene5CTA = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const line1S = spring({ frame: frame - 5, fps, config: { damping: 14 } });
-  const line2S = spring({ frame: frame - 22, fps, config: { damping: 14 } });
-  const line3S = spring({ frame: frame - 40, fps, config: { damping: 10, stiffness: 150 } });
-  const urlS = spring({ frame: frame - 60, fps, config: { damping: 18 } });
-  const firmS = spring({ frame: frame - 75, fps, config: { damping: 20 } });
+  const yearS = spring({ frame: frame - 5, fps, config: { damping: 16 } });
+  const punchS = spring({ frame: frame - 18, fps, config: { damping: 12, stiffness: 140 } });
+  const emphS = spring({ frame: frame - 35, fps, config: { damping: 10, stiffness: 160 } });
+  const closingS = spring({ frame: frame - 55, fps, config: { damping: 16 } });
+  const urlS = spring({ frame: frame - 70, fps, config: { damping: 18 } });
+  const firmS = spring({ frame: frame - 82, fps, config: { damping: 20 } });
 
   const glowPulse = 0.3 + Math.sin(frame * 0.15) * 0.15;
+  const drift = Math.sin(frame * 0.025) * 6;
 
   return (
-    <AbsoluteFill>
-      <Video src={staticFile("videos/scene5-home.mp4")} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-
+    <AbsoluteFill style={{ background: "#0a0f18" }}>
+      {/* Subtle gold radial */}
       <div style={{
         position: "absolute", inset: 0,
-        background: "linear-gradient(180deg, rgba(0,5,15,0.5) 0%, rgba(0,5,15,0.75) 100%)",
+        background: "radial-gradient(circle at 50% 60%, rgba(232,201,106,0.1) 0%, transparent 65%)",
+        transform: `translate(${drift}px, ${drift * 0.5}px)`,
       }} />
 
       <div style={{
@@ -28,31 +30,48 @@ export const Scene5CTA = () => {
         justifyContent: "center", alignItems: "center",
         direction: "rtl", padding: 60, textAlign: "center",
       }}>
-        {/* Three-line manifesto */}
+        {/* Year */}
         <div style={{
-          fontSize: 54, fontWeight: 700, color: "white",
-          fontFamily: heebo, lineHeight: 1.4,
-          opacity: interpolate(line1S, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(line1S, [0, 1], [30, 0])}px)`,
-          textShadow: "0 4px 20px rgba(0,0,0,0.7)",
+          fontSize: 26, fontWeight: 600, color: "#e8c96a",
+          fontFamily: heebo, letterSpacing: 8, marginBottom: 25,
+          opacity: interpolate(yearS, [0, 1], [0, 0.85]),
+          transform: `translateY(${interpolate(yearS, [0, 1], [15, 0])}px)`,
         }}>
-          תשלם על <span style={{ color: "#e8c96a" }}>משפט</span>.
+          ‎2026
+        </div>
+
+        {/* Main statement */}
+        <div style={{
+          fontSize: 46, fontWeight: 600, color: "white",
+          fontFamily: heebo, lineHeight: 1.4,
+          opacity: interpolate(punchS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(punchS, [0, 1], [30, 0])}px)`,
+          textShadow: "0 3px 20px rgba(0,0,0,0.7)",
+        }}>
+          רק <span style={{
+            color: "#e8c96a", fontWeight: 800,
+            fontSize: 64,
+            display: "inline-block",
+            transform: `scale(${interpolate(emphS, [0, 1], [0.7, 1])})`,
+            opacity: interpolate(emphS, [0, 1], [0, 1]),
+            textShadow: "0 0 30px rgba(232,201,106,0.4)",
+          }}>פראייר</span> משלם
         </div>
 
         <div style={{
-          fontSize: 54, fontWeight: 700, color: "white",
+          fontSize: 38, fontWeight: 500, color: "rgba(255,255,255,0.85)",
           fontFamily: heebo, lineHeight: 1.4, marginTop: 8,
-          opacity: interpolate(line2S, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(line2S, [0, 1], [30, 0])}px)`,
-          textShadow: "0 4px 20px rgba(0,0,0,0.7)",
+          opacity: interpolate(punchS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(punchS, [0, 1], [30, 0])}px)`,
+          textShadow: "0 3px 15px rgba(0,0,0,0.6)",
         }}>
-          לא על <span style={{ color: "#ff7b7b", textDecoration: "line-through" }}>פרוצדורה</span>.
+          על מה שטכנולוגיה עושה בשבילו.
         </div>
 
         {/* Divider */}
         <div style={{
           width: interpolate(
-            spring({ frame: frame - 35, fps, config: { damping: 15 } }),
+            spring({ frame: frame - 50, fps, config: { damping: 15 } }),
             [0, 1], [0, 350]
           ),
           height: 2,
@@ -60,20 +79,20 @@ export const Scene5CTA = () => {
           margin: "32px 0",
         }} />
 
-        {/* Punchline */}
+        {/* Closing line */}
         <div style={{
-          fontSize: 42, fontWeight: 600, color: "rgba(255,255,255,0.92)",
+          fontSize: 36, fontWeight: 700, color: "white",
           fontFamily: heebo, lineHeight: 1.4,
-          opacity: interpolate(line3S, [0, 1], [0, 1]),
-          transform: `scale(${interpolate(line3S, [0, 1], [0.9, 1])})`,
+          opacity: interpolate(closingS, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(closingS, [0, 1], [20, 0])}px)`,
           textShadow: "0 3px 15px rgba(0,0,0,0.6)",
         }}>
-          תהיה כמו כולם ב-2026.
+          אל תהיה אחד מהם.
         </div>
 
-        {/* URL with glow */}
+        {/* URL button */}
         <div style={{
-          marginTop: 50,
+          marginTop: 45,
           opacity: interpolate(urlS, [0, 1], [0, 1]),
           transform: `translateY(${interpolate(urlS, [0, 1], [20, 0])}px)`,
         }}>
@@ -94,10 +113,9 @@ export const Scene5CTA = () => {
 
         <div style={{
           marginTop: 22,
-          opacity: interpolate(firmS, [0, 1], [0, 0.55]),
-          fontSize: 22, color: "rgba(255,255,255,0.55)", fontFamily: heebo,
+          opacity: interpolate(firmS, [0, 1], [0, 0.6]),
+          fontSize: 22, color: "rgba(255,255,255,0.6)", fontFamily: heebo,
           letterSpacing: 2,
-          textShadow: "0 1px 5px rgba(0,0,0,0.5)",
         }}>
           משרד עו״ד אלון אלישע
         </div>

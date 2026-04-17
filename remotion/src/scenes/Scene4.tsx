@@ -5,11 +5,12 @@ export const Scene4Proof = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
 
-  const titleS = spring({ frame: frame - 3, fps, config: { damping: 14 } });
-  const oldCardS = spring({ frame: frame - 18, fps, config: { damping: 14 } });
-  const vsS = spring({ frame: frame - 38, fps, config: { damping: 8, stiffness: 180 } });
-  const newCardS = spring({ frame: frame - 50, fps, config: { damping: 12, stiffness: 140 } });
-  const newGlow = 0.3 + Math.sin(frame * 0.2) * 0.15;
+  const line1S = spring({ frame: frame - 8, fps, config: { damping: 14 } });
+  const line2S = spring({ frame: frame - 35, fps, config: { damping: 12, stiffness: 140 } });
+  const lineWidth = interpolate(
+    spring({ frame: frame - 28, fps, config: { damping: 15 } }),
+    [0, 1], [0, 550]
+  );
 
   return (
     <AbsoluteFill>
@@ -17,95 +18,39 @@ export const Scene4Proof = () => {
 
       <div style={{
         position: "absolute", inset: 0,
-        background: "linear-gradient(180deg, rgba(5,5,10,0.6) 0%, rgba(5,5,10,0.88) 100%)",
+        background: "linear-gradient(180deg, rgba(5,5,10,0.65) 0%, rgba(5,5,10,0.88) 100%)",
       }} />
 
       <div style={{
         position: "absolute", inset: 0,
         display: "flex", flexDirection: "column",
         justifyContent: "center", alignItems: "center",
-        direction: "rtl", padding: 50,
+        direction: "rtl", padding: 60, textAlign: "center",
       }}>
         <div style={{
-          fontSize: 46, fontWeight: 700, color: "white",
-          fontFamily: heebo, textAlign: "center", marginBottom: 50, lineHeight: 1.4,
-          opacity: interpolate(titleS, [0, 1], [0, 1]),
-          transform: `translateY(${interpolate(titleS, [0, 1], [30, 0])}px)`,
-          textShadow: "0 4px 20px rgba(0,0,0,0.6)",
+          fontSize: 52, fontWeight: 700, color: "white",
+          fontFamily: heebo, lineHeight: 1.4,
+          opacity: interpolate(line1S, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(line1S, [0, 1], [40, 0])}px)`,
+          textShadow: "0 4px 20px rgba(0,0,0,0.7)",
         }}>
-          אותה צוואה. <span style={{ color: "#e8c96a" }}>חצי מהמחיר.</span>
+          אז למה להמשיך לשלם
         </div>
 
-        {/* Comparison */}
         <div style={{
-          display: "flex", flexDirection: "column", gap: 18,
-          width: "100%", maxWidth: 780, position: "relative",
+          width: lineWidth, height: 2,
+          background: "linear-gradient(90deg, transparent, #e8c96a, transparent)",
+          margin: "28px 0", borderRadius: 2,
+        }} />
+
+        <div style={{
+          fontSize: 56, fontWeight: 800, color: "#e8c96a",
+          fontFamily: heebo, lineHeight: 1.3,
+          opacity: interpolate(line2S, [0, 1], [0, 1]),
+          transform: `translateY(${interpolate(line2S, [0, 1], [40, 0])}px) scale(${interpolate(line2S, [0, 1], [0.92, 1])})`,
+          textShadow: "0 0 30px rgba(232,201,106,0.3), 0 4px 20px rgba(0,0,0,0.6)",
         }}>
-          {/* OLD card */}
-          <div style={{
-            opacity: interpolate(oldCardS, [0, 1], [0, 0.55]),
-            transform: `translateX(${interpolate(oldCardS, [0, 1], [-50, 0])}px)`,
-            background: "rgba(255,123,123,0.08)",
-            border: "1.5px solid rgba(255,123,123,0.3)",
-            borderRadius: 14, padding: "22px 30px",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            filter: `grayscale(${interpolate(oldCardS, [0, 1], [0, 0.6])})`,
-          }}>
-            <div>
-              <div style={{ fontSize: 22, color: "rgba(255,255,255,0.5)", fontFamily: heebo, marginBottom: 4 }}>
-                השיטה הישנה
-              </div>
-              <div style={{ fontSize: 32, fontWeight: 600, color: "rgba(255,255,255,0.7)", fontFamily: heebo, textDecoration: "line-through", textDecorationColor: "#ff7b7b" }}>
-                ₪3,000 – ₪6,000
-              </div>
-            </div>
-            <div style={{ fontSize: 20, color: "rgba(255,255,255,0.45)", fontFamily: heebo, textAlign: "left" }}>
-              משפט<br />+ פרוצדורה
-            </div>
-          </div>
-
-          {/* VS badge */}
-          <div style={{
-            position: "absolute", left: "50%", top: "50%",
-            transform: `translate(-50%, -50%) scale(${interpolate(vsS, [0, 1], [0, 1])}) rotate(${interpolate(vsS, [0, 1], [-30, 0])}deg)`,
-            opacity: interpolate(vsS, [0, 1], [0, 1]),
-            zIndex: 5,
-          }}>
-            <div style={{
-              width: 70, height: 70, borderRadius: "50%",
-              background: "#0a0f18",
-              border: "2px solid #e8c96a",
-              display: "flex", alignItems: "center", justifyContent: "center",
-              fontSize: 24, fontWeight: 800, color: "#e8c96a",
-              fontFamily: heebo, letterSpacing: 1,
-              boxShadow: "0 0 30px rgba(232,201,106,0.4)",
-            }}>
-              VS
-            </div>
-          </div>
-
-          {/* NEW card */}
-          <div style={{
-            opacity: interpolate(newCardS, [0, 1], [0, 1]),
-            transform: `translateX(${interpolate(newCardS, [0, 1], [50, 0])}px) scale(${interpolate(newCardS, [0, 1], [0.95, 1])})`,
-            background: "linear-gradient(135deg, rgba(232,201,106,0.18) 0%, rgba(232,201,106,0.08) 100%)",
-            border: "2px solid rgba(232,201,106,0.7)",
-            borderRadius: 14, padding: "22px 30px",
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            boxShadow: `0 0 ${30 + newGlow * 30}px rgba(232,201,106,${newGlow})`,
-          }}>
-            <div>
-              <div style={{ fontSize: 22, color: "#e8c96a", fontFamily: heebo, marginBottom: 4, fontWeight: 600 }}>
-                השיטה שלנו
-              </div>
-              <div style={{ fontSize: 38, fontWeight: 800, color: "white", fontFamily: heebo }}>
-                רק על המשפט
-              </div>
-            </div>
-            <div style={{ fontSize: 20, color: "rgba(255,255,255,0.7)", fontFamily: heebo, textAlign: "left" }}>
-              AI עושה<br />את השאר
-            </div>
-          </div>
+          על מה שטכנולוגיה כבר עושה?
         </div>
       </div>
     </AbsoluteFill>
