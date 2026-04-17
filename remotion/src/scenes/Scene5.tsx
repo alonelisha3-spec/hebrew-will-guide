@@ -68,7 +68,7 @@ export const Scene5CTA = () => {
           transform: `scale(${interpolate(line3S, [0, 1], [0.9, 1])})`,
           textShadow: "0 3px 15px rgba(0,0,0,0.6)",
         }}>
-          תהיה כמו כולם ב-2025.
+          תהיה כמו כולם ב-2026.
         </div>
 
         {/* URL with glow */}
