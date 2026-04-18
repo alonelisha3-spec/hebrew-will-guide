@@ -42,7 +42,7 @@ export default async function handler(req) {
 
   const results = { formspree: false, ntfy: false, formsubmit: false };
 
-  // 1. Formspree — server-side with URL-encoded (avoids browser CORS/encoding issues)
+  // 1. Formspree — server-side with URL-encoded + UTF-8 charset for Hebrew
   try {
     const params = new URLSearchParams();
     params.append("_subject", `ליד חדש - צוואות | ${fullName} | ${willType || "לא ידוע"}`);
@@ -60,7 +60,7 @@ export default async function handler(req) {
       body: params.toString(),
       headers: {
         "Accept": "application/json",
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
       },
     });
     results.formspree = res.ok;
