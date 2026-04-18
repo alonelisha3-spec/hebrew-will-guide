@@ -40,38 +40,12 @@ export default async function handler(req) {
     });
   }
 
-  const results = { formspree: false, ntfy: false, formsubmit: false };
+  const results = { ntfy: false, formsubmit: false };
 
-  // 1. Formspree — server-side with URL-encoded + UTF-8 charset for Hebrew
-  try {
-    const params = new URLSearchParams();
-    params.append("_subject", `ליד חדש - צוואות | ${fullName} | ${willType || "לא ידוע"}`);
-    params.append("fullName", fullName);
-    params.append("phone", phone);
-    params.append("email", email || "לא נמסר");
-    params.append("intentType", intentType || "");
-    params.append("willType", willType || "");
-    params.append("timestamp", timestamp || new Date().toISOString());
-    params.append("marketingConsent", marketingConsent || "");
-    params.append("answersSummary", answersSummary || "");
+  // Formspree is sent directly from the browser (Hebrew encoding works there)
+  // This API route handles only ntfy + FormSubmit backups
 
-    const res = await fetch(FORMSPREE_URL, {
-      method: "POST",
-      body: params.toString(),
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/x-www-form-urlencoded; charset=utf-8",
-      },
-    });
-    results.formspree = res.ok;
-    if (!res.ok) {
-      console.error("Formspree error:", res.status, await res.text().catch(() => ""));
-    }
-  } catch (err) {
-    console.error("Formspree failed:", err);
-  }
-
-  // 2. ntfy.sh — push notification
+  // 1. ntfy.sh — push notification
   try {
     const msg = [
       `שם: ${fullName}`,
