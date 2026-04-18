@@ -9,7 +9,7 @@ export default async function handler() {
 
     const text = await res.text();
     if (!text.trim()) {
-      return jsonResponse({ leads: [] });
+      return jsonResponse({ leads: [], debug: { status: res.status, bodyLen: 0 } });
     }
 
     const lines = text.trim().split("\n").filter(Boolean);
