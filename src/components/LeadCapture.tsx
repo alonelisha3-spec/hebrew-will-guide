@@ -90,23 +90,46 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     params.append("marketingConsent", consentMarketing ? "כן" : "לא");
     params.append("answersSummary", buildSummary());
 
+    let formspreeOk = false;
     try {
       const res = await fetch("https://formspree.io/f/mgopabze", {
         method: "POST",
         body: params,
-        headers: {
-          "Accept": "application/json",
-        },
+        headers: { "Accept": "application/json" },
       });
+      formspreeOk = res.ok;
       if (!res.ok) {
         console.error("Formspree error:", res.status, await res.text().catch(() => ""));
-        return false;
       }
-      return true;
     } catch (err) {
       console.error("Formspree network error:", err);
-      return false;
     }
+
+    // Backup: push notification via ntfy.sh (always fires, even if Formspree works)
+    try {
+      const msg = [
+        `שם: ${fullName.trim()}`,
+        `טלפון: ${phone.trim()}`,
+        `אימייל: ${email.trim() || "לא נמסר"}`,
+        `סוג: ${intentLabel}`,
+        `צוואה: ${willDraftData?.willType || "לא ידוע"}`,
+        `זמן: ${timestamp}`,
+      ].join("\n");
+
+      await fetch("https://ntfy.sh/elisha-law-leads", {
+        method: "POST",
+        headers: {
+          "Title": `ליד חדש: ${fullName.trim()}`,
+          "Tags": "briefcase,moneybag",
+          "Priority": "high",
+        },
+        body: msg,
+      });
+    } catch {
+      // ntfy is best-effort backup
+    }
+
+    return formspreeOk;
   }
 
   async function handleSubmit(e: React.FormEvent) {
