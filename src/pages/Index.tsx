@@ -410,23 +410,31 @@ export default function Index() {
       resultRiskItems = commercialReview.issues;
     }
 
-    // Save lead to DB and send notification email
-    saveLead(
-      {
-        fullName: cleanLead.name,
-        phone: cleanLead.phone,
-        email: cleanLead.email || undefined,
-        answers,
-        timestamp: new Date().toISOString(),
-      },
-      {
-        willType: resultWillType,
-        riskLevel: resultRiskLevel,
-        headline: "",
-        riskItems: resultRiskItems,
-        fullDraft: resultFullDraft,
+    // Save lead to DB and send notification email (never block the user)
+    try {
+      const saveResult = await saveLead(
+        {
+          fullName: cleanLead.name,
+          phone: cleanLead.phone,
+          email: cleanLead.email || undefined,
+          answers,
+          timestamp: new Date().toISOString(),
+        },
+        {
+          willType: resultWillType,
+          riskLevel: resultRiskLevel,
+          headline: "",
+          riskItems: resultRiskItems,
+          fullDraft: resultFullDraft,
+        }
+      );
+
+      if (!saveResult.success) {
+        console.error("saveLead failed:", saveResult.error);
       }
-    ).catch((err) => console.error("saveLead error:", err));
+    } catch (err) {
+      console.error("saveLead threw:", err);
+    }
 
     trackEvent("lead_submitted", { metadata: { intent, track, temperature: analysis.temperature } });
     setStep("results");

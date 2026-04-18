@@ -5,7 +5,7 @@ interface Props {
   answers: Record<string, string>;
   intent: "full" | "email" | "callback";
   willDraftData?: { willType: string; fullDraft: string };
-  onSubmit: (info: { name: string; phone: string; email?: string }) => void;
+  onSubmit: (info: { name: string; phone: string; email?: string }) => void | Promise<void>;
 }
 
 export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props) {
@@ -74,29 +74,40 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     );
   }
 
-  async function sendLeadToEmail() {
+  async function sendLeadToEmail(): Promise<boolean> {
     const intentLabel = intent === "full" ? "צפייה בנוסח מלא" : intent === "email" ? "שליחה למייל" : "בקשת חזרה";
     const timestamp = new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" });
 
-    const payload = new FormData();
-    payload.append("_subject", `🔔 ליד חדש — צוואות | ${fullName.trim()} | ${willDraftData?.willType || "לא ידוע"}`);
-    payload.append("1. שם מלא", fullName.trim());
-    payload.append("2. טלפון", phone.trim());
-    payload.append("3. אימייל", email.trim() || "לא נמסר");
-    payload.append("4. סוג פנייה", intentLabel);
-    payload.append("5. סוג צוואה", willDraftData?.willType || "לא ידוע");
-    payload.append("6. תאריך ושעה", timestamp);
-    payload.append("7. אישור שיווק", consentMarketing ? "כן" : "לא");
-    payload.append("8. פירוט תשובות", buildSummary());
-    if (willDraftData?.fullDraft) {
-      payload.append("9. טיוטת צוואה", willDraftData.fullDraft);
-    }
+    const payload = {
+      _subject: `ליד חדש - צוואות | ${fullName.trim()} | ${willDraftData?.willType || "לא ידוע"}`,
+      fullName: fullName.trim(),
+      phone: phone.trim(),
+      email: email.trim() || "לא נמסר",
+      intentType: intentLabel,
+      willType: willDraftData?.willType || "לא ידוע",
+      timestamp,
+      marketingConsent: consentMarketing ? "כן" : "לא",
+      answersSummary: buildSummary(),
+    };
 
-    await fetch("https://formspree.io/f/mgopabze", {
-      method: "POST",
-      body: payload,
-      headers: { "Accept": "application/json" },
-    });
+    try {
+      const res = await fetch("https://formspree.io/f/mgopabze", {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      if (!res.ok) {
+        console.error("Formspree error:", res.status, await res.text().catch(() => ""));
+        return false;
+      }
+      return true;
+    } catch (err) {
+      console.error("Formspree network error:", err);
+      return false;
+    }
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -105,17 +116,25 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
 
     setSubmitting(true);
 
-    try {
-      await sendLeadToEmail();
+    const leadInfo = {
+      name: fullName.trim(),
+      phone: phone.trim(),
+      email: email.trim() || undefined,
+    };
 
-      onSubmit({
-        name: fullName.trim(),
-        phone: phone.trim(),
-        email: email.trim() || undefined,
-      });
+    try {
+      const emailSent = await sendLeadToEmail();
+      if (!emailSent) {
+        console.warn("Formspree failed, continuing to Supabase backup");
+      }
     } catch (error) {
-      console.error("Lead submit failed:", error);
-      alert("אירעה שגיאה בשליחת הפרטים. נסו שוב.");
+      console.error("Formspree send failed:", error);
+    }
+
+    try {
+      await onSubmit(leadInfo);
+    } catch (error) {
+      console.error("onSubmit (Supabase) failed:", error);
     } finally {
       setSubmitting(false);
     }

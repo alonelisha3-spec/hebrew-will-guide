@@ -152,43 +152,36 @@
   </div>
 
   <script>
-    const COUNTER_API = "https://api.counterapi.dev/v1/elisha-law-live";
-
-    async function getCount(name) {
-      try {
-        const res = await fetch(`${COUNTER_API}/${name}/`);
-        if (!res.ok) return 0;
-        const data = await res.json();
-        return data.count || 0;
-      } catch (e) {
-        console.error("Counter error:", e);
-        return 0;
-      }
-    }
-
     async function loadCounters() {
-      const [visits, starts, complete, leads] = await Promise.all([
-        getCount("page-views"),
-        getCount("quiz-start"),
-        getCount("quiz-complete"),
-        getCount("leads")
-      ]);
+      try {
+        const res = await fetch("/api/counters");
+        if (!res.ok) throw new Error("API error " + res.status);
+        const data = await res.json();
 
-      document.getElementById("tool-visits").textContent = visits;
-      document.getElementById("questionnaire-starts").textContent = starts;
-      document.getElementById("questionnaire-complete").textContent = complete;
-      document.getElementById("leads").textContent = leads;
+        const visits = data["page-views"] || 0;
+        const starts = data["quiz-start"] || 0;
+        const complete = data["quiz-complete"] || 0;
+        const leads = data["leads"] || 0;
 
-      document.getElementById("f-visits").textContent = visits;
-      document.getElementById("f-starts").textContent = starts;
-      document.getElementById("f-complete").textContent = leads;
+        document.getElementById("tool-visits").textContent = visits;
+        document.getElementById("questionnaire-starts").textContent = starts;
+        document.getElementById("questionnaire-complete").textContent = complete;
+        document.getElementById("leads").textContent = leads;
 
-      if (visits > 0) {
-        const startRate = ((starts / visits) * 100).toFixed(1);
-        const conversionRate = ((leads / visits) * 100).toFixed(1);
-        document.getElementById("conversion-rate").innerHTML =
-          `🎯 <strong>${startRate}%</strong> מהנכנסים התחילו שאלון · ` +
-          `<strong>${conversionRate}%</strong> הפכו ללידים`;
+        document.getElementById("f-visits").textContent = visits;
+        document.getElementById("f-starts").textContent = starts;
+        document.getElementById("f-complete").textContent = leads;
+
+        if (visits > 0) {
+          const startRate = ((starts / visits) * 100).toFixed(1);
+          const conversionRate = ((leads / visits) * 100).toFixed(1);
+          document.getElementById("conversion-rate").innerHTML =
+            `🎯 <strong>${startRate}%</strong> מהנכנסים התחילו שאלון · ` +
+            `<strong>${conversionRate}%</strong> הפכו ללידים`;
+        }
+      } catch (e) {
+        console.error("Failed to load counters:", e);
+        document.getElementById("conversion-rate").textContent = "שגיאה בטעינת נתונים — נסה לרענן";
       }
     }
 
