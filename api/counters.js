@@ -1,10 +1,9 @@
+export const config = { runtime: "edge" };
+
 const COUNTER_BASE = "https://api.counterapi.dev/v1/elisha-law-live";
 const COUNTERS = ["page-views", "quiz-start", "quiz-complete", "leads", "preview-action"];
 
-export default async function handler(req, res) {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Cache-Control", "s-maxage=30, stale-while-revalidate=60");
-
+export default async function handler() {
   const results = {};
 
   await Promise.all(
@@ -23,5 +22,11 @@ export default async function handler(req, res) {
     })
   );
 
-  res.json(results);
+  return new Response(JSON.stringify(results), {
+    headers: {
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*",
+      "Cache-Control": "s-maxage=30, stale-while-revalidate=60",
+    },
+  });
 }
