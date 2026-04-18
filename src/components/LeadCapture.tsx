@@ -79,19 +79,17 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     const timestamp = new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" });
     const summary = buildSummary();
 
-    // 1. Formspree — DIRECT from browser (Hebrew encoding works correctly this way)
+    // 1. Formspree — ASCII only (Formspree breaks Hebrew encoding)
+    //    Phone + email readable, link to dashboard for full Hebrew details
     let formspreeOk = false;
     try {
       const params = new URLSearchParams();
-      params.append("_subject", `ליד חדש - צוואות | ${fullName.trim()} | ${willDraftData?.willType || ""}`);
-      params.append("fullName", fullName.trim());
+      params.append("_subject", `New Lead | ${phone.trim()} | Will Tool`);
       params.append("phone", phone.trim());
-      params.append("email", email.trim() || "לא נמסר");
-      params.append("intentType", intentLabel);
-      params.append("willType", willDraftData?.willType || "לא ידוע");
+      params.append("email", email.trim() || "N/A");
       params.append("timestamp", timestamp);
-      params.append("marketingConsent", consentMarketing ? "כן" : "לא");
-      params.append("answersSummary", summary);
+      params.append("full_details", "https://hebrew-will-guide.vercel.app/dashboard.html");
+      params.append("message", `New lead from will tool. Phone: ${phone.trim()}. See dashboard for full details in Hebrew.`);
 
       const res = await fetch("https://formspree.io/f/mgopabze", {
         method: "POST",
