@@ -127,28 +127,8 @@
   </div>
 
   <div class="section">
-    <h2>✉️ מערכת לידים</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>נתיב</th>
-          <th>סטטוס</th>
-          <th>יעד</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Formspree (ראשי)</td>
-          <td><span class="badge badge-green">פעיל</span></td>
-          <td>alonelisha3@gmail.com</td>
-        </tr>
-        <tr>
-          <td>Supabase (גיבוי)</td>
-          <td><span class="badge badge-blue">פעיל דרך edge function</span></td>
-          <td>alonelisha3@gmail.com</td>
-        </tr>
-      </tbody>
-    </table>
+    <h2>📋 לידים אחרונים</h2>
+    <div id="leads-list"><p style="color:rgba(255,255,255,0.4)">טוען לידים...</p></div>
   </div>
 
   <script>
@@ -182,6 +162,40 @@
       } catch (e) {
         console.error("Failed to load counters:", e);
         document.getElementById("conversion-rate").textContent = "שגיאה בטעינת נתונים — נסה לרענן";
+      }
+    }
+
+    async function loadLeads() {
+      try {
+        const res = await fetch("/api/leads");
+        if (!res.ok) throw new Error("API error");
+        const data = await res.json();
+        const leads = data.leads || [];
+
+        if (leads.length === 0) {
+          document.getElementById("leads-list").innerHTML =
+            '<p style="color:rgba(255,255,255,0.5)">אין לידים עדיין</p>';
+          return;
+        }
+
+        let html = '<table><thead><tr><th>שם</th><th>טלפון</th><th>אימייל</th><th>סוג צוואה</th><th>זמן</th></tr></thead><tbody>';
+        for (const lead of leads) {
+          if (lead.name === "בדיקת מערכת" || lead.name === "בדיקת מערכת סופית" || lead.name === "System Test" || lead.name === "בדיקת DB") continue;
+          const date = lead.timestamp || new Date(lead.time * 1000).toLocaleString("he-IL", {timeZone:"Asia/Jerusalem"});
+          html += `<tr>
+            <td><strong>${lead.name || "—"}</strong></td>
+            <td dir="ltr"><a href="tel:${lead.phone}" style="color:#c8a96e">${lead.phone || "—"}</a></td>
+            <td>${lead.email || "—"}</td>
+            <td>${lead.willType || "—"}</td>
+            <td>${date}</td>
+          </tr>`;
+        }
+        html += '</tbody></table>';
+        document.getElementById("leads-list").innerHTML = html;
+      } catch (e) {
+        console.error("Failed to load leads:", e);
+        document.getElementById("leads-list").innerHTML =
+          '<p style="color:rgba(255,255,255,0.5)">שגיאה בטעינת לידים</p>';
       }
     }
 
@@ -227,7 +241,7 @@
 
     async function loadAll() {
       document.getElementById("last-update").textContent = "מעדכן...";
-      await Promise.all([loadCounters(), checkLinks()]);
+      await Promise.all([loadCounters(), checkLinks(), loadLeads()]);
       renderSystems();
       document.getElementById("last-update").textContent =
         `עדכון אחרון: ${new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" })}`;
