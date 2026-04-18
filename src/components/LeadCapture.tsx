@@ -101,14 +101,8 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
         headers: { "Accept": "application/json" },
       });
       formspreeOk = res.ok;
-      if (!res.ok) {
-        const errText = await res.text().catch(() => "");
-        console.error("Formspree rejected:", res.status, errText);
-        alert(`שגיאה בשליחת ליד (${res.status}). הפרטים נשמרו במערכת.`);
-      }
-    } catch (err) {
-      console.error("Formspree error:", err);
-      alert("שגיאת רשת בשליחת ליד. הפרטים נשמרו במערכת.");
+    } catch {
+      // continue to backup
     }
 
     // Backup: ntfy.sh for dashboard
