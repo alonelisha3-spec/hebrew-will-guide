@@ -2,8 +2,10 @@ export const config = { runtime: "edge" };
 
 export default async function handler() {
   try {
-    // ntfy.sh returns NDJSON (one JSON per line) — must accept text/plain
-    const res = await fetch("https://ntfy.sh/elisha-law-leads/json?poll=1&since=30d");
+    // ntfy.sh returns NDJSON (one JSON per line)
+    const res = await fetch("https://ntfy.sh/elisha-law-leads/json?poll=1&since=30d", {
+      headers: { "User-Agent": "ElishaLawDashboard/1.0" },
+    });
 
     const text = await res.text();
     if (!text.trim()) {
