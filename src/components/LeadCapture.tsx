@@ -78,25 +78,24 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     const intentLabel = intent === "full" ? "צפייה בנוסח מלא" : intent === "email" ? "שליחה למייל" : "בקשת חזרה";
     const timestamp = new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" });
 
-    const payload = {
-      _subject: `ליד חדש - צוואות | ${fullName.trim()} | ${willDraftData?.willType || "לא ידוע"}`,
-      fullName: fullName.trim(),
-      phone: phone.trim(),
-      email: email.trim() || "לא נמסר",
-      intentType: intentLabel,
-      willType: willDraftData?.willType || "לא ידוע",
-      timestamp,
-      marketingConsent: consentMarketing ? "כן" : "לא",
-      answersSummary: buildSummary(),
-    };
+    // Formspree rejects JSON with Hebrew characters — use URL-encoded form instead
+    const params = new URLSearchParams();
+    params.append("_subject", `ליד חדש - צוואות | ${fullName.trim()} | ${willDraftData?.willType || "לא ידוע"}`);
+    params.append("fullName", fullName.trim());
+    params.append("phone", phone.trim());
+    params.append("email", email.trim() || "לא נמסר");
+    params.append("intentType", intentLabel);
+    params.append("willType", willDraftData?.willType || "לא ידוע");
+    params.append("timestamp", timestamp);
+    params.append("marketingConsent", consentMarketing ? "כן" : "לא");
+    params.append("answersSummary", buildSummary());
 
     try {
       const res = await fetch("https://formspree.io/f/mgopabze", {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: params,
         headers: {
           "Accept": "application/json",
-          "Content-Type": "application/json",
         },
       });
       if (!res.ok) {
