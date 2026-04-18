@@ -2,7 +2,7 @@ export const config = { runtime: "edge" };
 
 export default async function handler() {
   try {
-    const res = await fetch("https://ntfy.sh/elisha-law-leads/json?poll=1&since=30d", {
+    const res = await fetch("https://ntfy.sh/elisha-law-leads/json?poll=1&since=all", {
       headers: { "User-Agent": "ElishaLawDashboard/1.0" },
     });
 
