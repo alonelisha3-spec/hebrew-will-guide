@@ -78,58 +78,54 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
     const intentLabel = intent === "full" ? "צפייה בנוסח מלא" : intent === "email" ? "שליחה למייל" : "בקשת חזרה";
     const timestamp = new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" });
 
-    // Formspree rejects JSON with Hebrew characters — use URL-encoded form instead
-    const params = new URLSearchParams();
-    params.append("_subject", `ליד חדש - צוואות | ${fullName.trim()} | ${willDraftData?.willType || "לא ידוע"}`);
-    params.append("fullName", fullName.trim());
-    params.append("phone", phone.trim());
-    params.append("email", email.trim() || "לא נמסר");
-    params.append("intentType", intentLabel);
-    params.append("willType", willDraftData?.willType || "לא ידוע");
-    params.append("timestamp", timestamp);
-    params.append("marketingConsent", consentMarketing ? "כן" : "לא");
-    params.append("answersSummary", buildSummary());
+    const payload = {
+      fullName: fullName.trim(),
+      phone: phone.trim(),
+      email: email.trim() || "לא נמסר",
+      intentType: intentLabel,
+      willType: willDraftData?.willType || "לא ידוע",
+      timestamp,
+      marketingConsent: consentMarketing ? "כן" : "לא",
+      answersSummary: buildSummary(),
+    };
 
-    let formspreeOk = false;
+    // Send via our API route (server-side — handles Formspree + ntfy + FormSubmit)
     try {
+      const res = await fetch("/api/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Lead API results:", data.results);
+        return true;
+      }
+      console.error("Lead API error:", res.status);
+    } catch (err) {
+      console.error("Lead API network error:", err);
+    }
+
+    // Fallback: direct Formspree from browser if API route fails
+    try {
+      const params = new URLSearchParams();
+      params.append("_subject", `ליד חדש - צוואות | ${fullName.trim()}`);
+      params.append("fullName", fullName.trim());
+      params.append("phone", phone.trim());
+      params.append("email", email.trim() || "לא נמסר");
+      params.append("intentType", intentLabel);
+      params.append("willType", willDraftData?.willType || "לא ידוע");
+      params.append("timestamp", timestamp);
+
       const res = await fetch("https://formspree.io/f/mgopabze", {
         method: "POST",
         body: params,
         headers: { "Accept": "application/json" },
       });
-      formspreeOk = res.ok;
-      if (!res.ok) {
-        console.error("Formspree error:", res.status, await res.text().catch(() => ""));
-      }
-    } catch (err) {
-      console.error("Formspree network error:", err);
-    }
-
-    // Backup: push notification via ntfy.sh (always fires, even if Formspree works)
-    try {
-      const msg = [
-        `שם: ${fullName.trim()}`,
-        `טלפון: ${phone.trim()}`,
-        `אימייל: ${email.trim() || "לא נמסר"}`,
-        `סוג: ${intentLabel}`,
-        `צוואה: ${willDraftData?.willType || "לא ידוע"}`,
-        `זמן: ${timestamp}`,
-      ].join("\n");
-
-      await fetch("https://ntfy.sh/elisha-law-leads", {
-        method: "POST",
-        headers: {
-          "Title": `ליד חדש: ${fullName.trim()}`,
-          "Tags": "briefcase,moneybag",
-          "Priority": "high",
-        },
-        body: msg,
-      });
+      return res.ok;
     } catch {
-      // ntfy is best-effort backup
+      return false;
     }
-
-    return formspreeOk;
   }
 
   async function handleSubmit(e: React.FormEvent) {
