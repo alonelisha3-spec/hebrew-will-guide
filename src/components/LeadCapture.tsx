@@ -77,31 +77,35 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
   async function sendLeadToEmail(): Promise<boolean> {
     const intentLabel = intent === "full" ? "צפייה בנוסח מלא" : intent === "email" ? "שליחה למייל" : "בקשת חזרה";
     const timestamp = new Date().toLocaleString("he-IL", { timeZone: "Asia/Jerusalem" });
-    const summary = buildSummary();
 
-    // 1. Formspree — ASCII only (Formspree breaks Hebrew encoding)
-    //    Phone + email readable, link to dashboard for full Hebrew details
+    // Original FormData format — this is what worked and delivered Hebrew emails correctly
+    const payload = new FormData();
+    payload.append("_subject", `🔔 ליד חדש — צוואות | ${fullName.trim()} | ${willDraftData?.willType || "לא ידוע"}`);
+    payload.append("1. שם מלא", fullName.trim());
+    payload.append("2. טלפון", phone.trim());
+    payload.append("3. אימייל", email.trim() || "לא נמסר");
+    payload.append("4. סוג פנייה", intentLabel);
+    payload.append("5. סוג צוואה", willDraftData?.willType || "לא ידוע");
+    payload.append("6. תאריך ושעה", timestamp);
+    payload.append("7. אישור שיווק", consentMarketing ? "כן" : "לא");
+    payload.append("8. פירוט תשובות", buildSummary());
+    if (willDraftData?.fullDraft) {
+      payload.append("9. טיוטת צוואה", willDraftData.fullDraft);
+    }
+
     let formspreeOk = false;
     try {
-      const params = new URLSearchParams();
-      params.append("_subject", `New Lead | ${phone.trim()} | Will Tool`);
-      params.append("phone", phone.trim());
-      params.append("email", email.trim() || "N/A");
-      params.append("timestamp", timestamp);
-      params.append("full_details", "https://hebrew-will-guide.vercel.app/dashboard.html");
-      params.append("message", `New lead from will tool. Phone: ${phone.trim()}. See dashboard for full details in Hebrew.`);
-
       const res = await fetch("https://formspree.io/f/mgopabze", {
         method: "POST",
-        body: params,
+        body: payload,
         headers: { "Accept": "application/json" },
       });
       formspreeOk = res.ok;
     } catch {
-      // continue to backups
+      // continue
     }
 
-    // 2. API route — for ntfy.sh push notification + FormSubmit backup
+    // Backup: ntfy.sh for dashboard
     try {
       await fetch("/api/lead", {
         method: "POST",
@@ -113,8 +117,7 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
           intentType: intentLabel,
           willType: willDraftData?.willType || "לא ידוע",
           timestamp,
-          marketingConsent: consentMarketing ? "כן" : "לא",
-          answersSummary: summary,
+          answersSummary: buildSummary(),
         }),
       });
     } catch {
