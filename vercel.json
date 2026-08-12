@@ -1,6 +1,8 @@
 {
   "rewrites": [
     { "source": "/dashboard.html", "destination": "/dashboard.html" },
+    { "source": "/sitemap.xml", "destination": "/sitemap.xml" },
+    { "source": "/robots.txt", "destination": "/robots.txt" },
     { "source": "/((?!api/).*)", "destination": "/index.html" }
   ]
 }
