@@ -18,13 +18,13 @@ export function LandingPage({ onNoWill, onExistingWill }: Props) {
           </p>
 
           <h1 className="text-2xl md:text-4xl font-bold leading-tight text-white">
-            בדקו את מצב הצוואה שלכם
+            צוואה דיגיטלית — הכינו נוסח צוואה
             <br />
             <span className="text-primary">תוך 2 דקות</span>
           </h1>
 
           <p className="mt-4 text-sm md:text-base text-accent-foreground/80 leading-relaxed max-w-lg mx-auto">
-            ענו על כמה שאלות פשוטות וקבלו טיוטת צוואה ראשונית — בחינם, ללא התחייבות.
+            ענו על כמה שאלות פשוטות וקבלו טיוטת צוואה דיגיטלית ראשונית — בחינם, ללא התחייבות.
           </p>
 
           {/* Trust badges */}
