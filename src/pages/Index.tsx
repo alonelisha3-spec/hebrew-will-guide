@@ -353,6 +353,9 @@ export default function Index() {
   function startTrack(nextTrack: Track) {
     resetFlowForTrack(nextTrack);
     trackEvent("cta_click", { metadata: { track: nextTrack } });
+    if (typeof window.fbq === "function") {
+      window.fbq("trackCustom", "QuizStart");
+    }
     setStep("questionnaire");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -437,6 +440,12 @@ export default function Index() {
     }
 
     trackEvent("lead_submitted", { metadata: { intent, track, temperature: analysis.temperature } });
+
+    if (typeof window.fbq === "function") {
+      window.fbq("track", "CompleteRegistration");
+      window.fbq("track", "Lead");
+    }
+
     setStep("results");
 
     if (intent === "callback") {
