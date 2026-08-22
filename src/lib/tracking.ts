@@ -27,6 +27,7 @@ export function trackEvent(
   const ga4Map: Record<string, string> = {
     "page_view": "page_view",
     "cta_click": "quiz_start",
+    "question_answered": "quiz_step",
     "questionnaire_complete": "quiz_complete",
     "lead_submitted": "generate_lead",
     "preview_action": "preview_action",
@@ -34,7 +35,12 @@ export function trackEvent(
 
   const ga4Event = ga4Map[eventName];
   if (ga4Event) {
-    sendToGA4(ga4Event, extra?.metadata);
+    const params: Record<string, string | number | boolean> = { ...(extra?.metadata ?? {}) };
+    if (ga4Event === "quiz_step") {
+      params.step_number = (extra?.stepIndex ?? 0) + 1;
+      if (extra?.questionId) params.question_id = extra.questionId;
+    }
+    sendToGA4(ga4Event, params);
   }
 
   // Also send to Supabase (legacy - may be blocked by RLS)

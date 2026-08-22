@@ -26,6 +26,21 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
     }
   }, [activeQuestions.length, currentIndex]);
 
+  // Track quiz_abandon on page unload if quiz started but not completed
+  useEffect(() => {
+    function handleBeforeUnload() {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", "quiz_abandon", {
+          step_number: currentIndex + 1,
+          question_id: question?.id ?? "",
+          total_steps: totalSteps,
+        });
+      }
+    }
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [currentIndex, question?.id, totalSteps]);
+
   if (!question) return null;
 
   const currentAnswer = answers[question.id] || "";
