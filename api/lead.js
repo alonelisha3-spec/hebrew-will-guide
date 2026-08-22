@@ -1,6 +1,5 @@
 export const config = { runtime: "edge" };
 
-const FORMSPREE_URL = "https://formspree.io/f/mgopabze";
 const NTFY_TOPIC = "https://ntfy.sh/elisha-law-leads";
 const NOTIFY_EMAIL = "alonelisha3@gmail.com";
 
@@ -99,7 +98,7 @@ export default async function handler(req) {
     console.error("FormSubmit failed:", err);
   }
 
-  const anySuccess = results.formspree || results.ntfy || results.formsubmit;
+  const anySuccess = results.ntfy || results.formsubmit;
 
   return new Response(JSON.stringify({ success: anySuccess, results }), {
     status: anySuccess ? 200 : 502,
