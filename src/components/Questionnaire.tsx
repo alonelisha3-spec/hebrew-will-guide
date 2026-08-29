@@ -156,7 +156,7 @@ export function Questionnaire({ questions: questionList, track, onComplete }: Pr
                 <button
                   key={option}
                   onClick={() => selectOption(option)}
-                  className={`w-full text-right rounded-lg border px-5 py-4 text-sm md:text-base font-medium transition-all duration-200 active:scale-[0.98] animate-slide-up ${
+                  className={`w-full text-right rounded-lg border px-5 py-4 text-base font-medium leading-snug transition-all duration-200 active:scale-[0.98] animate-slide-up ${
                     currentAnswer === option
                       ? "border-primary bg-primary/10 shadow-sm text-foreground"
                       : "border-border bg-card hover:border-primary/40 hover:shadow-sm text-foreground"
