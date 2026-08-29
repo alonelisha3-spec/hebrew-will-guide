@@ -1,14 +1,18 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { getUtmData } from "@/lib/utm";
+import { describeAnswers, questionsForTrack } from "@/lib/questions";
+import { getSessionId } from "@/lib/tracking";
 
 interface Props {
   answers: Record<string, string>;
+  track?: "noWill" | "existingWill";
   intent: "full" | "email" | "callback";
   willDraftData?: { willType: string; fullDraft: string };
   onSubmit: (info: { name: string; phone: string; email?: string }) => void | Promise<void>;
 }
 
-export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props) {
+export function LeadCapture({ answers, track = "noWill", intent, willDraftData, onSubmit }: Props) {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -105,7 +109,9 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
       // continue to backup
     }
 
-    // Backup: ntfy.sh for dashboard
+    // Backup: ntfy.sh + FormSubmit, and forward to the dashboard intake endpoint.
+    // The intake call is made server-side inside /api/lead so the shared secret
+    // never ships in the browser bundle.
     try {
       await fetch("/api/lead", {
         method: "POST",
@@ -117,7 +123,13 @@ export function LeadCapture({ answers, intent, willDraftData, onSubmit }: Props)
           intentType: intentLabel,
           willType: willDraftData?.willType || "לא ידוע",
           timestamp,
+          marketingConsent: consentMarketing,
           answersSummary: buildSummary(),
+          sessionId: getSessionId(),
+          track,
+          answers,
+          answersDetailed: describeAnswers(questionsForTrack(track), answers),
+          attribution: getUtmData(),
         }),
       });
     } catch {

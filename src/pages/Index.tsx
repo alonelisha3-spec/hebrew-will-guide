@@ -10,6 +10,7 @@ import { LeadCapture } from "@/components/LeadCapture";
 import { ResultPage } from "@/components/ResultPage";
 import { ExitIntentPopup } from "@/components/ExitIntentPopup";
 import { noWillQuestions, existingWillQuestions } from "@/lib/questions";
+import { resetPartialQuizState } from "@/lib/partialQuiz";
 import { isFromSource } from "@/lib/utm";
 import {
   generateWillPreview,
@@ -340,6 +341,7 @@ export default function Index() {
   }, [track, answers]);
 
   function resetFlowForTrack(nextTrack: Track) {
+    resetPartialQuizState();
     setTrack(nextTrack);
     setAnswers({});
     setIntent("callback");
@@ -490,6 +492,7 @@ export default function Index() {
       {step === "questionnaire" && (
         <Questionnaire
           questions={track === "noWill" ? noWillQuestions : existingWillQuestions}
+          track={track}
           onComplete={handleQuestionnaireComplete}
         />
       )}
@@ -507,6 +510,7 @@ export default function Index() {
       {step === "lead" && (
         <LeadCapture
           answers={answers}
+          track={track}
           intent={intent}
           willDraftData={noWillDraftPreviewData}
           onSubmit={handleLeadSubmit}

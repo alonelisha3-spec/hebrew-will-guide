@@ -2,13 +2,15 @@ import { useState, useEffect } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Question } from "@/lib/questions";
 import { trackEvent } from "@/lib/tracking";
+import { markQuizCompleted, sendPartialQuiz } from "@/lib/partialQuiz";
 
 interface Props {
   questions: Question[];
+  track: "noWill" | "existingWill";
   onComplete: (answers: Record<string, string>) => void;
 }
 
-export function Questionnaire({ questions: questionList, onComplete }: Props) {
+export function Questionnaire({ questions: questionList, track, onComplete }: Props) {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -26,9 +28,11 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
     }
   }, [activeQuestions.length, currentIndex]);
 
-  // Track quiz_abandon on page unload if quiz started but not completed
+  // Track quiz_abandon on page unload if quiz started but not completed.
+  // beforeunload is unreliable on mobile Safari, so the partial-answer snapshot
+  // hangs off visibilitychange/pagehide, which do fire there.
   useEffect(() => {
-    function handleBeforeUnload() {
+    function reportAbandon() {
       if (typeof window.gtag === "function") {
         window.gtag("event", "quiz_abandon", {
           step_number: currentIndex + 1,
@@ -37,9 +41,35 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
         });
       }
     }
+
+    function sendSnapshot() {
+      sendPartialQuiz({
+        track,
+        questionList,
+        answers,
+        stepIndex: currentIndex,
+        totalSteps,
+      });
+    }
+
+    function handleBeforeUnload() {
+      reportAbandon();
+      sendSnapshot();
+    }
+
+    function handleVisibilityChange() {
+      if (document.visibilityState === "hidden") sendSnapshot();
+    }
+
     window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [currentIndex, question?.id, totalSteps]);
+    window.addEventListener("pagehide", sendSnapshot);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+      window.removeEventListener("pagehide", sendSnapshot);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [currentIndex, question?.id, totalSteps, track, questionList, answers]);
 
   if (!question) return null;
 
@@ -67,6 +97,7 @@ export function Questionnaire({ questions: questionList, onComplete }: Props) {
     if (nextIdx < nextActive.length) {
       setCurrentIndex(nextIdx);
     } else {
+      markQuizCompleted();
       onComplete(currentAnswers);
     }
   }

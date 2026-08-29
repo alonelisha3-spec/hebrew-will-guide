@@ -353,3 +353,41 @@ export const existingWillQuestions: Question[] = [
     options: ["כן", "לא", "לא בטוח/ה"],
   },
 ];
+
+export interface AnsweredQuestion {
+  question: string;
+  answer: string;
+  type: Question["type"];
+}
+
+/**
+ * Resolve a raw answers map into an object keyed by question id, carrying the
+ * question text alongside the answer. The raw map is only id -> string, which
+ * is useless in the dashboard without the question bank to join against.
+ * Unknown ids (e.g. the `source` marker QuickAssessment injects) are kept with
+ * an empty question text rather than dropped.
+ */
+export function describeAnswers(
+  questionList: Question[],
+  answers: Record<string, string>
+): Record<string, AnsweredQuestion> {
+  const byId = new Map(questionList.map((q) => [q.id, q]));
+  const out: Record<string, AnsweredQuestion> = {};
+
+  for (const [id, answer] of Object.entries(answers)) {
+    if (answer === undefined || answer === null || String(answer).trim() === "") continue;
+    const q = byId.get(id);
+    out[id] = {
+      question: q?.text ?? "",
+      answer: String(answer),
+      type: q?.type ?? "text",
+    };
+  }
+
+  return out;
+}
+
+/** Question bank for a track, so callers don't repeat the ternary */
+export function questionsForTrack(track: "noWill" | "existingWill"): Question[] {
+  return track === "noWill" ? noWillQuestions : existingWillQuestions;
+}

@@ -2,7 +2,8 @@ import { supabase } from "@/integrations/supabase/client";
 
 const SESSION_KEY = "funnel_session_id";
 
-function getSessionId(): string {
+/** Stable per-session id, shared by funnel events, partial quiz posts and the lead intake */
+export function getSessionId(): string {
   let id = sessionStorage.getItem(SESSION_KEY);
   if (!id) {
     id = crypto.randomUUID();
