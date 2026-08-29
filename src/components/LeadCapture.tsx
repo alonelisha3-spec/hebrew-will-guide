@@ -7,12 +7,14 @@ import { getSessionId } from "@/lib/tracking";
 interface Props {
   answers: Record<string, string>;
   track?: "noWill" | "existingWill";
+  /** Rendered under an already-visible draft: no full-screen wrapper, value-exchange copy */
+  embedded?: boolean;
   intent: "full" | "email" | "callback";
   willDraftData?: { willType: string; fullDraft: string };
   onSubmit: (info: { name: string; phone: string; email?: string }) => void | Promise<void>;
 }
 
-export function LeadCapture({ answers, track = "noWill", intent, willDraftData, onSubmit }: Props) {
+export function LeadCapture({ answers, track = "noWill", intent, willDraftData, embedded = false, onSubmit }: Props) {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -169,30 +171,39 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
     }
   }
 
-  const title =
-    intent === "full"
-      ? "כדי לצפות בנוסח הצוואה המלא"
-      : intent === "email"
-      ? "כדי לשלוח אליך את נוסח הצוואה"
-      : "כדי לקבל התייחסות אישית";
+  const title = embedded
+    ? "לאן לשלוח את הטיוטה?"
+    : intent === "full"
+    ? "כדי לצפות בנוסח הצוואה המלא"
+    : intent === "email"
+    ? "כדי לשלוח אליך את נוסח הצוואה"
+    : "כדי לקבל התייחסות אישית";
 
-  const subtitle =
-    intent === "full"
-      ? "השאירו פרטים קצרים כדי לצפות בנוסח הצוואה המלא"
-      : intent === "email"
-      ? "השאירו פרטים קצרים כדי לקבל את נוסח הצוואה בדוא״ל"
-      : "השאירו פרטים ואחזור אליכם לגבי הצוואה והנושאים שעלו";
+  const subtitle = embedded
+    ? "הטיוטה שלמעלה נשארת פתוחה בכל מקרה — היא כבר שלך."
+    : intent === "full"
+    ? "השאירו פרטים קצרים כדי לצפות בנוסח הצוואה המלא"
+    : intent === "email"
+    ? "השאירו פרטים קצרים כדי לקבל את נוסח הצוואה בדוא״ל"
+    : "השאירו פרטים ואחזור אליכם לגבי הצוואה והנושאים שעלו";
 
-  const buttonLabel =
-    intent === "full"
-      ? "הצג את נוסח הצוואה המלא"
-      : intent === "email"
-      ? "שלח לי את נוסח הצוואה"
-      : "אני רוצה שיחזרו אליי";
+  const buttonLabel = embedded
+    ? "שלחו לי את הטיוטה ובדיקת עו״ד"
+    : intent === "full"
+    ? "הצג את נוסח הצוואה המלא"
+    : intent === "email"
+    ? "שלח לי את נוסח הצוואה"
+    : "אני רוצה שיחזרו אליי";
 
   return (
-    <div className="min-h-screen flex items-center justify-center py-12 px-4 bg-background">
-      <div className="w-full max-w-md">
+    <div
+      className={
+        embedded
+          ? "w-full"
+          : "min-h-screen flex items-center justify-center py-12 px-4 bg-background"
+      }
+    >
+      <div className={embedded ? "w-full" : "w-full max-w-md"}>
         <div className="bg-card rounded-xl border border-border shadow-md p-6 md:p-8 animate-slide-up">
           <div className="gold-line mx-auto mb-6" />
 
@@ -204,10 +215,38 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
             {subtitle}
           </p>
 
-          <p className="text-xs text-muted-foreground/70 text-center mb-8 leading-relaxed">
-            בשלב זה אין חובה להשלים תעודת זהות, כתובת או שמות מלאים של בני
-            משפחה כדי לצפות בנוסח הראשוני או לבקש התייחסות.
-          </p>
+          {embedded ? (
+            <div className="mb-8 rounded-lg border border-primary/25 bg-primary/5 p-4">
+              <p className="text-sm font-semibold text-foreground mb-3 text-center">
+                מה מקבלים תמורת הפרטים:
+              </p>
+              <ul className="space-y-2.5 text-sm text-foreground/85 leading-relaxed">
+                <li className="flex gap-2.5">
+                  <span className="text-primary font-bold">✓</span>
+                  <span>הטיוטה נשלחת אליכם בדוא״ל אם תשאירו כתובת, כך שהיא נשמרת ואפשר לחזור אליה.</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="text-primary font-bold">✓</span>
+                  <span>
+                    עורך דין עובר על הטיוטה ומסמן מה חסר בה כדי שתהיה תקפה — ללא
+                    עלות וללא התחייבות.
+                  </span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="text-primary font-bold">✓</span>
+                  <span>
+                    את הערות עורך הדין מוסרים בשיחה קצרה, ולכן צריך מספר טלפון
+                    אמיתי — בלעדיו אי אפשר למסור אותן.
+                  </span>
+                </li>
+              </ul>
+            </div>
+          ) : (
+            <p className="text-xs text-muted-foreground/70 text-center mb-8 leading-relaxed">
+              בשלב זה אין חובה להשלים תעודת זהות, כתובת או שמות מלאים של בני
+              משפחה כדי לצפות בנוסח הראשוני או לבקש התייחסות.
+            </p>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -218,7 +257,7 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
                 type="text"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
-                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-base text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                 placeholder="שם פרטי ומשפחה"
                 maxLength={100}
               />
@@ -235,7 +274,7 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
                 type="tel"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-base text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                 placeholder="050-0000000"
                 dir="ltr"
                 maxLength={15}
@@ -258,7 +297,7 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
+                className="w-full rounded-lg border border-border bg-secondary/50 px-4 py-3 text-base text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all"
                 placeholder="email@example.com"
                 dir="ltr"
                 maxLength={255}

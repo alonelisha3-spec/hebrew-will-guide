@@ -5,7 +5,6 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { LandingPage } from "@/components/LandingPage";
 import { Questionnaire } from "@/components/Questionnaire";
-import { PreviewPage } from "@/components/PreviewPage";
 import { LeadCapture } from "@/components/LeadCapture";
 import { ResultPage } from "@/components/ResultPage";
 import { ExitIntentPopup } from "@/components/ExitIntentPopup";
@@ -20,7 +19,7 @@ import {
 import { analyzeWillGaps } from "@/lib/willGapsEngine";
 import { toast } from "sonner";
 
-type AppStep = "landing" | "questionnaire" | "preview" | "lead" | "results";
+type AppStep = "landing" | "questionnaire" | "results";
 type Track = "noWill" | "existingWill";
 type Intent = "full" | "email" | "callback";
 type LeadTemperature = "hot" | "warm" | "cold";
@@ -331,8 +330,8 @@ export default function Index() {
   });
 
   const [previewType, setPreviewType] = useState("");
-  const [previewPoints, setPreviewPoints] = useState<string[]>([]);
 
+  const [leadSubmitted, setLeadSubmitted] = useState(false);
   const [draftData, setDraftData] = useState<DraftData | null>(null);
   const [reviewData, setReviewData] = useState<ReviewData | null>(null);
 
@@ -345,9 +344,9 @@ export default function Index() {
     setTrack(nextTrack);
     setAnswers({});
     setIntent("callback");
+    setLeadSubmitted(false);
     setLeadInfo({ name: "", phone: "", email: "" });
     setPreviewType("");
-    setPreviewPoints([]);
     setDraftData(null);
     setReviewData(null);
   }
@@ -362,22 +361,52 @@ export default function Index() {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
+  /**
+   * Produce the draft/review from the answers alone. Deliberately independent of
+   * any identity: the visitor has earned this output by answering the questions,
+   * so it is generated and shown before we ask who they are.
+   */
+  function buildResults(ans: Record<string, string>) {
+    const analysis = calculateLeadScore(track, ans);
+
+    if (track === "noWill") {
+      const draft = generateFullWillDraft(ans);
+      const commercialDraft = buildCommercialDraft(
+        { willType: draft.willType, fullDraft: draft.fullDraft },
+        analysis
+      );
+      setDraftData(commercialDraft);
+      return {
+        analysis,
+        willType: commercialDraft.willType,
+        riskLevel: "",
+        riskItems: [] as string[],
+        fullDraft: commercialDraft.fullDraft,
+      };
+    }
+
+    const review = generateExistingWillReview(ans);
+    const commercialReview = buildCommercialReview(review, analysis);
+    setReviewData(commercialReview);
+    return {
+      analysis,
+      willType: commercialReview.willType,
+      riskLevel: commercialReview.riskLevel,
+      riskItems: commercialReview.issues,
+      fullDraft: "",
+    };
+  }
+
   function handleQuestionnaireComplete(ans: Record<string, string>) {
     setAnswers(ans);
     trackEvent("questionnaire_complete", { metadata: { track } });
 
     const commercialPreview = buildCommercialPreview(track, ans);
     setPreviewType(commercialPreview.willType);
-    setPreviewPoints(commercialPreview.keyPoints);
 
-    setStep("preview");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }
-
-  function handlePreviewAction(action: Intent) {
-    setIntent(action);
-    trackEvent("preview_action", { metadata: { intent: action } });
-    setStep("lead");
+    // Straight to the result. No identity gate in between.
+    buildResults(ans);
+    setStep("results");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -390,30 +419,12 @@ export default function Index() {
 
     setLeadInfo(cleanLead);
 
-    const analysis = calculateLeadScore(track, answers);
+    // The draft already exists and is on screen. Fold the name in so the copy
+    // is personalised from here on, and regenerate so the name appears in the text.
+    const answersWithName = { ...answers, fullName: cleanLead.name };
+    setAnswers(answersWithName);
 
-    let resultWillType = "";
-    let resultRiskLevel = "";
-    let resultRiskItems: string[] = [];
-    let resultFullDraft = "";
-
-    if (track === "noWill") {
-      const draft = generateFullWillDraft(answers);
-      const commercialDraft = buildCommercialDraft(
-        { willType: draft.willType, fullDraft: draft.fullDraft },
-        analysis
-      );
-      setDraftData(commercialDraft);
-      resultWillType = commercialDraft.willType;
-      resultFullDraft = commercialDraft.fullDraft;
-    } else {
-      const review = generateExistingWillReview(answers);
-      const commercialReview = buildCommercialReview(review, analysis);
-      setReviewData(commercialReview);
-      resultWillType = commercialReview.willType;
-      resultRiskLevel = commercialReview.riskLevel;
-      resultRiskItems = commercialReview.issues;
-    }
+    const { analysis, willType, riskLevel, riskItems, fullDraft } = buildResults(answersWithName);
 
     // Save lead to DB and send notification email (never block the user)
     try {
@@ -422,15 +433,15 @@ export default function Index() {
           fullName: cleanLead.name,
           phone: cleanLead.phone,
           email: cleanLead.email || undefined,
-          answers,
+          answers: answersWithName,
           timestamp: new Date().toISOString(),
         },
         {
-          willType: resultWillType,
-          riskLevel: resultRiskLevel,
+          willType,
+          riskLevel,
           headline: "",
-          riskItems: resultRiskItems,
-          fullDraft: resultFullDraft,
+          riskItems,
+          fullDraft,
         }
       );
 
@@ -448,17 +459,9 @@ export default function Index() {
       window.fbq("track", "Lead");
     }
 
-    setStep("results");
-
-    if (intent === "callback") {
-      toast.success("הפרטים נקלטו בהצלחה.");
-    } else if (analysis.temperature === "hot") {
-      toast.success("הפרטים נקלטו בהצלחה. נוסח הצוואה מוכן לצפייה.");
-    } else {
-      toast.success("הפרטים נקלטו בהצלחה.");
-    }
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    // Stay on the result. The draft was never gated and does not disappear now.
+    setLeadSubmitted(true);
+    toast.success("הפרטים נקלטו. הטיוטה נשארת פתוחה כאן.");
   }
 
   const showHeaderFooter = step === "landing" || step === "results";
@@ -497,26 +500,6 @@ export default function Index() {
         />
       )}
 
-      {step === "preview" && (
-        <PreviewPage
-          willType={previewType}
-          keyPoints={previewPoints}
-          onShowFull={() => handlePreviewAction("full")}
-          onSendEmail={() => handlePreviewAction("email")}
-          onCallback={() => handlePreviewAction("callback")}
-        />
-      )}
-
-      {step === "lead" && (
-        <LeadCapture
-          answers={answers}
-          track={track}
-          intent={intent}
-          willDraftData={noWillDraftPreviewData}
-          onSubmit={handleLeadSubmit}
-        />
-      )}
-
       {step === "results" && track === "noWill" && draftData && (
         <ResultPage
           mode="draft"
@@ -526,6 +509,18 @@ export default function Index() {
           leadName={leadInfo.name}
           leadPhone={leadInfo.phone}
           leadEmail={leadInfo.email}
+          leadForm={
+            leadSubmitted ? undefined : (
+              <LeadCapture
+                answers={answers}
+                track={track}
+                intent={intent}
+                willDraftData={noWillDraftPreviewData}
+                embedded
+                onSubmit={handleLeadSubmit}
+              />
+            )
+          }
         />
       )}
 
@@ -540,6 +535,18 @@ export default function Index() {
           leadName={leadInfo.name}
           leadPhone={leadInfo.phone}
           leadEmail={leadInfo.email}
+          leadForm={
+            leadSubmitted ? undefined : (
+              <LeadCapture
+                answers={answers}
+                track={track}
+                intent={intent}
+                willDraftData={noWillDraftPreviewData}
+                embedded
+                onSubmit={handleLeadSubmit}
+              />
+            )
+          }
         />
       )}
 

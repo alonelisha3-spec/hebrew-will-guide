@@ -16,6 +16,8 @@ interface Props {
   leadName: string;
   leadPhone: string;
   leadEmail?: string;
+  /** Identity form, rendered under the draft. The draft stays visible either way. */
+  leadForm?: React.ReactNode;
 }
 
 const ALWAYS_SHOW_GAPS = [
@@ -47,6 +49,7 @@ export function ResultPage({
   leadName,
   leadPhone,
   leadEmail,
+  leadForm,
 }: Props) {
   const extraGaps = gaps?.filter((g) => g.severity === "high").slice(0, 2) || [];
   const displayGapCount = ALWAYS_SHOW_GAPS.length + extraGaps.length;
@@ -89,7 +92,7 @@ export function ResultPage({
                 הטיוטה מוכנה
               </div>
               <h1 className="text-lg md:text-2xl font-bold mb-2 md:mb-3 text-foreground leading-snug md:leading-relaxed">
-                {leadName}, הטיוטה שלך מוכנה — אך זיהינו {displayGapCount} נקודות לשיפור
+                {leadName ? `${leadName}, ` : ""}הטיוטה שלך מוכנה — אך זיהינו {displayGapCount} נקודות לשיפור
               </h1>
               <p className="text-xs md:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
                 הנוסח נותן בסיס טוב, אבל בלי התאמה משפטית אישית הוא עלול להיות חסר תוקף או לגרום לסכסוכים
@@ -102,7 +105,8 @@ export function ResultPage({
                 רמת סיכון: {riskBadge}
               </div>
               <h1 className="text-lg md:text-2xl font-bold mb-2 md:mb-3 text-foreground leading-snug md:leading-relaxed">
-                {reviewHeadline || `${leadName}, הצוואה הקיימת שלך דורשת עדכון`}
+                {reviewHeadline ||
+                  `${leadName ? `${leadName}, ` : ""}הצוואה הקיימת שלך דורשת עדכון`}
               </h1>
               <p className="text-xs md:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto">
                 הבדיקה העלתה נושאים שעלולים להשפיע על תוקף הצוואה או על חלוקת העיזבון
@@ -131,6 +135,16 @@ export function ResultPage({
               <Download className="w-5 h-5 md:w-4 md:h-4" />
               {generatingPdf ? "מכין PDF..." : "הורד טיוטה כ-PDF"}
             </button>
+          </div>
+        )}
+
+        {/* ── Identity form — sits UNDER the draft, never in front of it ── */}
+        {leadForm && (
+          <div
+            className="animate-slide-up"
+            style={{ animationDelay: "150ms", animationFillMode: "backwards" }}
+          >
+            {leadForm}
           </div>
         )}
 

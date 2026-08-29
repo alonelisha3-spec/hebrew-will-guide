@@ -187,7 +187,7 @@ export function Questionnaire({ questions: questionList, track, onComplete }: Pr
                   setAnswers({ ...answers, [question.id]: e.target.value })
                 }
                 placeholder={question.placeholder || ""}
-                className="w-full rounded-lg border border-border bg-card px-5 py-4 text-sm md:text-base text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
+                className="w-full rounded-lg border border-border bg-card px-5 py-4 text-base text-foreground outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary transition-all placeholder:text-muted-foreground/50"
                 autoFocus
                 maxLength={300}
               />
@@ -209,7 +209,7 @@ export function Questionnaire({ questions: questionList, track, onComplete }: Pr
           <button
             onClick={goBack}
             disabled={currentIndex === 0}
-            className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 min-h-[44px] px-3 -mr-3 text-base font-medium text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
           >
             <ArrowRight className="w-4 h-4" />
             חזרה

@@ -9,14 +9,11 @@ export interface Question {
   condition?: (answers: Record<string, string>) => boolean;
 }
 
+// Identity (full name, phone, email) is deliberately NOT asked here. It is
+// collected once, after the draft is generated and visible on screen — asking
+// for a name on screen 1 lost 3 of every 5 starters and produced false names
+// from people who wanted the draft without identifying themselves.
 export const noWillQuestions: Question[] = [
-  {
-    id: "fullName",
-    text: "מה השם המלא שלך?",
-    type: "text",
-    placeholder: "שם פרטי ושם משפחה",
-    explanation: "השם ישמש בנוסח הצוואה הראשוני בלבד.",
-  },
   {
     id: "familyStructure",
     text: "מה המצב המשפחתי שלך?",
