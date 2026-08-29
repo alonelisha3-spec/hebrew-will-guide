@@ -3,6 +3,20 @@ export const config = { runtime: "edge" };
 const NTFY_TOPIC = "https://ntfy.sh/elisha-law-leads";
 const NOTIFY_EMAIL = "alonelisha3@gmail.com";
 
+const EMAIL_NOT_PROVIDED = "לא נמסר";
+
+/**
+ * The form posts the Hebrew placeholder "לא נמסר" when no address was given,
+ * and the intake endpoint rejects the whole lead with 422 "email is malformed".
+ * A missing or unusable address must cost us the address, never the lead.
+ */
+function normalizeEmail(value) {
+  if (!value) return null;
+  const trimmed = String(value).trim();
+  if (!trimmed || trimmed === EMAIL_NOT_PROVIDED) return null;
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed) ? trimmed : null;
+}
+
 export default async function handler(req) {
   if (req.method === "OPTIONS") {
     return new Response(null, {
@@ -134,7 +148,7 @@ export default async function handler(req) {
           session_id: sessionId || null,
           name: fullName,
           phone,
-          email: email || null,
+          email: normalizeEmail(email),
           inquiry_type: intentType || null,
           will_type: willType || null,
           marketing_consent: Boolean(marketingConsent),
