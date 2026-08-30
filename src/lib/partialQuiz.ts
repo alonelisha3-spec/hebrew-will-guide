@@ -42,6 +42,14 @@ export function sendPartialQuiz({ track, questionList, answers, stepIndex, total
   const answeredCount = Object.keys(answered).length;
   if (answeredCount === 0) return;
 
+  // Which question was actually on screen when they left. A step number alone is
+  // meaningless here: the two tracks differ and conditional questions make the
+  // active list vary between 13 and 36 steps, so "step 6" is a different question
+  // for every visitor. Derived from the same filter Questionnaire renders from,
+  // so the id can never drift from the stepIndex sent alongside it.
+  const activeQuestions = questionList.filter((q) => !q.condition || q.condition(answers));
+  const currentQuestion = activeQuestions[stepIndex];
+
   // Only re-send when the visitor has actually told us something new
   const fingerprint = `${track}:${answeredCount}:${stepIndex}`;
   if (fingerprint === lastSentFingerprint) return;
@@ -53,6 +61,7 @@ export function sendPartialQuiz({ track, questionList, answers, stepIndex, total
     stepIndex,
     stepNumber: stepIndex + 1,
     totalSteps,
+    questionId: currentQuestion?.id ?? null,
     answeredCount,
     answers,
     answersDetailed: answered,

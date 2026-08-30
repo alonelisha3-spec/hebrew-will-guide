@@ -41,6 +41,7 @@ export default async function handler(req) {
     stepIndex,
     stepNumber,
     totalSteps,
+    questionId,
     answeredCount,
     answers,
     answersDetailed,
@@ -67,6 +68,10 @@ export default async function handler(req) {
   }
 
   let ok = false;
+  let intakeStatus = null;
+  let intakeBody = null;
+  let intakeError = null;
+
   try {
     const res = await fetch(intakeUrl, {
       method: "POST",
@@ -84,6 +89,10 @@ export default async function handler(req) {
         track: track || null,
         step_index: typeof stepIndex === "number" ? stepIndex : null,
         step_number: typeof stepNumber === "number" ? stepNumber : null,
+        // The step number is only meaningful next to this: the active question list
+        // is 13-36 steps depending on track and conditional answers.
+        step_reached: typeof stepNumber === "number" ? stepNumber : null,
+        question_id: questionId || null,
         total_steps: typeof totalSteps === "number" ? totalSteps : null,
         answered_count: answeredCount,
         quiz_answers: answers || {},
@@ -104,15 +113,30 @@ export default async function handler(req) {
       signal: AbortSignal.timeout(8000),
     });
     ok = res.ok;
-    if (!res.ok) {
-      console.error("Partial intake failed:", res.status, await res.text().catch(() => ""));
+    intakeStatus = res.status;
+    intakeBody = await res.text().catch(() => "");
+    if (!ok) {
+      console.error("Partial intake rejected:", intakeStatus, intakeBody);
     }
   } catch (err) {
-    console.error("Partial intake failed:", err);
+    intakeError = err?.message || String(err);
+    console.error("Partial intake failed:", intakeError);
   }
 
-  return new Response(JSON.stringify({ success: ok }), {
-    status: 200,
-    headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-  });
+  // Report what the dashboard actually said. Answering 200/success for a
+  // rejected intake is how a silent upstream 400 turns into weeks of lost
+  // abandonments that nobody notices — the browser ignores this response
+  // (sendBeacon), so the status is what makes a failure visible in the logs.
+  return new Response(
+    JSON.stringify({
+      success: ok,
+      intake_status: intakeStatus,
+      intake_body: intakeBody ? intakeBody.slice(0, 500) : null,
+      intake_error: intakeError,
+    }),
+    {
+      status: ok ? 200 : 502,
+      headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+    }
+  );
 }
