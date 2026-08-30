@@ -5,29 +5,15 @@ import { getUtmData } from "./utm";
 const PARTIAL_ENDPOINT = "/api/quiz-partial";
 
 /**
- * sessionStorage key holding the session id we have already posted a partial for.
- * Deliberately not module state: the module is re-evaluated on every page load,
- * and a refresh mid-quiz would otherwise let the same session post a second row.
- * sessionStorage shares its lifetime with the session id itself (see getSessionId),
- * so the marker and the id it guards expire together.
+ * Fingerprint of the last state posted, so a tab that is hidden and shown
+ * repeatedly at the same question does not re-post identical data. Progress
+ * DOES re-post: the dashboard upserts by session_id and keeps the deepest
+ * step, so every snapshot can only improve the stored row. Deduplication is
+ * deliberately server-side — a client-side one-shot guard would freeze the row
+ * at the first hide, which is usually a transient tab switch, not the real
+ * abandonment point.
  */
-const SENT_SESSION_KEY = "partial_quiz_sent_session";
-
-function hasSentForSession(sessionId: string): boolean {
-  try {
-    return sessionStorage.getItem(SENT_SESSION_KEY) === sessionId;
-  } catch {
-    return false; // storage blocked (private mode) — better a duplicate than a silent loss
-  }
-}
-
-function markSentForSession(sessionId: string): void {
-  try {
-    sessionStorage.setItem(SENT_SESSION_KEY, sessionId);
-  } catch {
-    // best effort — never throw during unload
-  }
-}
+let lastSentFingerprint = "";
 
 /** Set once the quiz is completed — a finished quiz is a lead, not an abandonment */
 let quizCompleted = false;
@@ -36,12 +22,8 @@ export function markQuizCompleted(): void {
   quizCompleted = true;
 }
 
-/**
- * Called when the visitor returns to the landing page to start over. The sent
- * marker is intentionally NOT cleared: one browser session is one abandonment
- * row, even if the visitor restarts the quiz in the same tab.
- */
 export function resetPartialQuizState(): void {
+  lastSentFingerprint = "";
   quizCompleted = false;
 }
 
@@ -77,17 +59,13 @@ export function sendPartialQuiz({ track, questionList, answers, stepIndex, total
   const activeQuestions = questionList.filter((q) => !q.condition || q.condition(answers));
   const currentQuestion = activeQuestions[stepIndex];
 
-  // One abandonment, one row. Both visibilitychange and pagehide fire on a real
-  // leave, and a visitor who hides the tab, comes back and leaves again would
-  // post again — each landing as a separate partial row. Marked before the send,
-  // not after, because sendBeacon is fire-and-forget and a second event can be
-  // dispatched in the same task.
-  const sessionId = getSessionId();
-  if (hasSentForSession(sessionId)) return;
-  markSentForSession(sessionId);
+  // Only re-send when the visitor has actually reached a new state
+  const fingerprint = `${track}:${answeredCount}:${stepIndex}`;
+  if (fingerprint === lastSentFingerprint) return;
+  lastSentFingerprint = fingerprint;
 
   const payload = {
-    sessionId,
+    sessionId: getSessionId(),
     track,
     stepIndex,
     stepNumber: stepIndex + 1,
