@@ -517,6 +517,7 @@ export default function Index() {
                 intent={intent}
                 willDraftData={noWillDraftPreviewData}
                 embedded
+                draftVisible={Boolean(draftData.fullDraft)}
                 onSubmit={handleLeadSubmit}
               />
             )

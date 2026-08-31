@@ -115,26 +115,38 @@ export function ResultPage({
           )}
         </div>
 
-        {/* ── Download Section (draft mode) ── */}
+        {/* ── The draft itself, with its download button in the header. One card,
+             one heading: the visitor answered 16-38 questions and had no way to
+             read the result on screen. Never gated — the form below is optional. ── */}
         {isDraft && fullDraft && (
           <div
-            className="bg-card rounded-2xl border-2 border-primary/30 shadow-md p-5 md:p-8 animate-slide-up text-center"
+            className="bg-card rounded-2xl border border-border shadow-sm p-4 md:p-8 animate-slide-up"
             style={{ animationDelay: "100ms", animationFillMode: "backwards" }}
           >
-            <h2 className="text-base md:text-xl font-bold mb-1.5 md:mb-2 text-foreground">
-              הטיוטה שלך מוכנה להורדה
-            </h2>
-            <p className="text-xs md:text-sm text-muted-foreground mb-4 md:mb-6 leading-relaxed max-w-md mx-auto">
-              לחצ/י כדי להוריד או לשתף את הטיוטה
-            </p>
-            <button
-              onClick={handleDownloadPdf}
-              disabled={generatingPdf}
-              className="w-full md:w-auto inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary px-8 py-4 text-base md:text-sm font-bold text-primary-foreground shadow-lg hover:brightness-110 transition-all active:scale-[0.97] disabled:opacity-60"
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 md:gap-4 mb-4 md:mb-5">
+              <div className="flex items-center gap-2">
+                <FileText className="w-5 h-5 text-primary shrink-0" />
+                <h2 className="text-sm md:text-lg font-bold text-foreground">
+                  נוסח הטיוטה שנוצר מהתשובות שלך
+                </h2>
+              </div>
+              <button
+                onClick={handleDownloadPdf}
+                disabled={generatingPdf}
+                className="w-full md:w-auto shrink-0 inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary px-8 py-4 md:px-6 md:py-3 text-base md:text-sm font-bold text-primary-foreground shadow-lg hover:brightness-110 transition-all active:scale-[0.97] disabled:opacity-60"
+              >
+                <Download className="w-5 h-5 md:w-4 md:h-4" />
+                {generatingPdf ? "מכין PDF..." : "הורד טיוטה כ-PDF"}
+              </button>
+            </div>
+            <div
+              dir="rtl"
+              className="max-h-[60vh] overflow-y-auto rounded-lg border border-border bg-secondary/30 p-4 md:p-6"
             >
-              <Download className="w-5 h-5 md:w-4 md:h-4" />
-              {generatingPdf ? "מכין PDF..." : "הורד טיוטה כ-PDF"}
-            </button>
+              <pre className="whitespace-pre-wrap break-words text-right font-sans text-xs md:text-sm leading-7 text-foreground">
+                {fullDraft}
+              </pre>
+            </div>
           </div>
         )}
 
