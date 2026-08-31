@@ -9,18 +9,12 @@ interface Props {
   track?: "noWill" | "existingWill";
   /** Rendered under an already-visible draft: no full-screen wrapper, value-exchange copy */
   embedded?: boolean;
-  /**
-   * True only when the draft is actually rendered on the page above this form.
-   * Gates the sentence that refers to it — a claim about content the visitor
-   * cannot see is worse than no claim at all.
-   */
-  draftVisible?: boolean;
   intent: "full" | "email" | "callback";
   willDraftData?: { willType: string; fullDraft: string };
   onSubmit: (info: { name: string; phone: string; email?: string }) => void | Promise<void>;
 }
 
-export function LeadCapture({ answers, track = "noWill", intent, willDraftData, embedded = false, draftVisible = false, onSubmit }: Props) {
+export function LeadCapture({ answers, track = "noWill", intent, willDraftData, embedded = false, onSubmit }: Props) {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -177,14 +171,8 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
     }
   }
 
-  // The review track never renders a draft — Index passes mode="review" and no
-  // fullDraft — so its copy must talk about the findings on screen, not a document.
-  const isReviewTrack = track === "existingWill";
-
   const title = embedded
-    ? isReviewTrack
-      ? "עורך דין יעבור על ממצאי הבדיקה ויסמן מה צריך לתקן"
-      : "עורך דין יקרא את הטיוטה ויסמן מה חסר בה"
+    ? "לאן לשלוח את הטיוטה?"
     : intent === "full"
     ? "כדי לצפות בנוסח הצוואה המלא"
     : intent === "email"
@@ -192,9 +180,7 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
     : "כדי לקבל התייחסות אישית";
 
   const subtitle = embedded
-    ? isReviewTrack
-      ? "את ההערות מוסרים בשיחה קצרה, ולכן נדרש מספר טלפון אמיתי. השיחה ללא עלות וללא התחייבות."
-      : "את ההערות מוסרים בשיחה קצרה, ולכן נדרש מספר טלפון אמיתי. הבדיקה ללא עלות וללא התחייבות."
+    ? "הטיוטה שלמעלה נשארת פתוחה בכל מקרה — היא כבר שלך."
     : intent === "full"
     ? "השאירו פרטים קצרים כדי לצפות בנוסח הצוואה המלא"
     : intent === "email"
@@ -202,9 +188,7 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
     : "השאירו פרטים ואחזור אליכם לגבי הצוואה והנושאים שעלו";
 
   const buttonLabel = embedded
-    ? isReviewTrack
-      ? "אני רוצה שעו״ד יעבור על הממצאים"
-      : "אני רוצה שעו״ד יעבור על הטיוטה"
+    ? "שלחו לי את הטיוטה ובדיקת עו״ד"
     : intent === "full"
     ? "הצג את נוסח הצוואה המלא"
     : intent === "email"
@@ -223,12 +207,6 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
         <div className="bg-card rounded-xl border border-border shadow-md p-6 md:p-8 animate-slide-up">
           <div className="gold-line mx-auto mb-6" />
 
-          {embedded && (
-            <p className="text-[11px] text-muted-foreground/70 text-center mb-2">
-              השלב הבא — אינו חובה
-            </p>
-          )}
-
           <h2 className="text-xl md:text-2xl font-bold text-center mb-2 text-foreground">
             {title}
           </h2>
@@ -238,14 +216,31 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
           </p>
 
           {embedded ? (
-            draftVisible ? (
-              <p className="text-xs text-muted-foreground text-center mb-8 leading-relaxed">
-                הטיוטה שלמעלה נשארת פתוחה בכל מקרה, ואפשר להוריד אותה כ-PDF בלי
-                למלא כאן דבר.
+            <div className="mb-8 rounded-lg border border-primary/25 bg-primary/5 p-4">
+              <p className="text-sm font-semibold text-foreground mb-3 text-center">
+                מה מקבלים תמורת הפרטים:
               </p>
-            ) : (
-              <div className="mb-8" />
-            )
+              <ul className="space-y-2.5 text-sm text-foreground/85 leading-relaxed">
+                <li className="flex gap-2.5">
+                  <span className="text-primary font-bold">✓</span>
+                  <span>הטיוטה נשלחת אליכם בדוא״ל אם תשאירו כתובת, כך שהיא נשמרת ואפשר לחזור אליה.</span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="text-primary font-bold">✓</span>
+                  <span>
+                    עורך דין עובר על הטיוטה ומסמן מה חסר בה כדי שתהיה תקפה — ללא
+                    עלות וללא התחייבות.
+                  </span>
+                </li>
+                <li className="flex gap-2.5">
+                  <span className="text-primary font-bold">✓</span>
+                  <span>
+                    את הערות עורך הדין מוסרים בשיחה קצרה, ולכן צריך מספר טלפון
+                    אמיתי — בלעדיו אי אפשר למסור אותן.
+                  </span>
+                </li>
+              </ul>
+            </div>
           ) : (
             <p className="text-xs text-muted-foreground/70 text-center mb-8 leading-relaxed">
               בשלב זה אין חובה להשלים תעודת זהות, כתובת או שמות מלאים של בני
@@ -289,11 +284,6 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
               )}
             </div>
 
-            {/* Nothing on this screen emails the visitor — every delivery path
-                (Formspree, ntfy, FormSubmit, dashboard intake) goes to the office —
-                so embedded mode does not ask for an address it cannot justify.
-                Blank state is what the payload already sends: "לא נמסר". */}
-            {(!embedded || intent === "email") && (
             <div>
               <label className="block text-sm font-medium mb-1.5 text-foreground">
                 דוא״ל{" "}
@@ -316,7 +306,6 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
                 <p className="text-destructive text-xs mt-1">{errors.email}</p>
               )}
             </div>
-            )}
 
             <div className="space-y-3 pt-2">
               <label className="flex items-start gap-3 cursor-pointer">
@@ -361,7 +350,8 @@ export function LeadCapture({ answers, track = "noWill", intent, willDraftData, 
               לאחר השליחה, הפרטים יישלחו למשרד לצורך יצירת קשר והמשך טיפול.
             </p>
             <p className="text-[10px] text-muted-foreground/50 text-center leading-relaxed">
-              ניתן לבקש עיון, תיקון או מחיקה של מידע בהתאם לדין.
+              אם בחרת בשליחה בדוא״ל, ודא שהכתובת שהוזנה נכונה. ניתן לבקש עיון,
+              תיקון או מחיקה של מידע בהתאם לדין.
             </p>
           </div>
         </div>
