@@ -132,6 +132,10 @@ export default async function handler(req) {
   const intakeUrl = process.env.DASHBOARD_INTAKE_URL;
   const intakeSecret = process.env.DASHBOARD_INTAKE_SECRET;
 
+  let intakeStatus = null;
+  let intakeBody = null;
+  let intakeError = null;
+
   if (!intakeUrl || !intakeSecret) {
     results.dashboard = "not_configured";
   } else {
@@ -174,21 +178,42 @@ export default async function handler(req) {
         signal: AbortSignal.timeout(8000),
       });
       results.dashboard = res.ok;
+      intakeStatus = res.status;
+      // The dashboard's own body, never our request: the Authorization header
+      // is not read back here and the secret appears in no log and no response.
+      intakeBody = await res.text().catch(() => "");
       if (!res.ok) {
-        console.error("Dashboard intake failed:", res.status, await res.text().catch(() => ""));
+        console.error("Dashboard intake rejected:", intakeStatus, intakeBody);
       }
     } catch (err) {
-      console.error("Dashboard intake failed:", err);
+      intakeError = err?.message || String(err);
+      console.error("Dashboard intake failed:", intakeError);
     }
   }
 
+  // ntfy and FormSubmit only tell the office a lead arrived. The row the campaign
+  // is measured on lives in the dashboard, so a rejection there is a failed lead
+  // even when both notifications went out. Reporting 200/success on a 401 is how
+  // a rotated secret stayed invisible for as long as it did.
+  const intakeAttempted = Boolean(intakeUrl && intakeSecret);
+  const dashboardRejected = intakeAttempted && results.dashboard !== true;
   const anySuccess = results.ntfy || results.formsubmit || results.dashboard === true;
+  const success = anySuccess && !dashboardRejected;
 
-  return new Response(JSON.stringify({ success: anySuccess, results }), {
-    status: anySuccess ? 200 : 502,
-    headers: {
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
+  return new Response(
+    JSON.stringify({
+      success,
+      results,
+      intake_status: intakeStatus,
+      intake_body: intakeBody ? intakeBody.slice(0, 500) : null,
+      intake_error: intakeError,
+    }),
+    {
+      status: success ? 200 : 502,
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    }
+  );
 }
