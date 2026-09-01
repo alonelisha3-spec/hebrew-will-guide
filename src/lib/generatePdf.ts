@@ -93,9 +93,14 @@ export async function generateWillPdf(
 
     const fileName = `טיוטת_צוואה_${leadName.replace(/\s/g, "_")}.pdf`;
 
-    // On mobile: try share, fallback to open
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-    if (isMobile && navigator.share) {
+    // In-app browsers (Facebook, Instagram, Messenger) close the page when the
+    // native share sheet opens, which threw visitors back to the feed with nothing.
+    // Skip sharing there; the draft is on screen either way.
+    const ua = navigator.userAgent || "";
+    const inAppBrowser = /FBAN|FBAV|FB_IAB|Instagram|Messenger|Line\/|Twitter/i.test(ua);
+
+    const isMobile = /Mobi|Android/i.test(ua);
+    if (isMobile && !inAppBrowser && navigator.share) {
       const blob = pdf.output("blob");
       const file = new File([blob], fileName, { type: "application/pdf" });
       const canShare = navigator.canShare?.({ files: [file] });
